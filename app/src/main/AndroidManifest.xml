@@ -9,6 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Valhalla">
         <activity
+            android:name=".ui.drawlots.DrawLotsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Transparent">
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="false">
             <meta-data
