@@ -1,6 +1,7 @@
 package com.app.valhalla.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.widget.Toast
 import com.app.valhalla.databinding.ActivityLoginBinding
 
 import com.app.valhalla.R
+import com.app.valhalla.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -90,11 +92,12 @@ class LoginActivity : AppCompatActivity() {
                 }
                 false
             }
+        }
 
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
-            }
+        login.setOnClickListener {
+            startActivity(Intent(this,MainActivity::class.java))
+//            loading.visibility = View.VISIBLE
+//            loginViewModel.login(username.text.toString(), password.text.toString())
         }
     }
 

@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Valhalla">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

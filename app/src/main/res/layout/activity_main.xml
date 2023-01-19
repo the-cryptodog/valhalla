@@ -8,8 +8,9 @@
 
     <ImageButton
         android:id="@+id/img_totalBackground"
-        android:layout_width="405dp"
-        android:layout_height="497dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,74 +31,108 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="116dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_incense"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_secondBackground"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <ImageButton
         android:id="@+id/img_incense_burner"
         android:layout_width="103dp"
         android:layout_height="92dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="319dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/img_secondBackground"
+        app:layout_constraintEnd_toStartOf="@+id/img_candle_right"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/img_candle_left"
+        app:layout_constraintTop_toBottomOf="@+id/img_incense"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <ImageButton
         android:id="@+id/img_flower_left"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="201dp" />
+        app:layout_constraintBottom_toTopOf="@+id/img_vase_left"
+        app:layout_constraintEnd_toEndOf="@+id/img_vase_left"
+        app:layout_constraintStart_toStartOf="@+id/img_vase_left"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <ImageButton
         android:id="@+id/img_flower_right"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        tools:layout_editor_absoluteX="320dp"
-        tools:layout_editor_absoluteY="201dp" />
+        app:layout_constraintBottom_toTopOf="@+id/img_vase_right"
+        app:layout_constraintEnd_toEndOf="@+id/img_vase_right"
+        app:layout_constraintStart_toStartOf="@+id/img_vase_right"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <ImageButton
         android:id="@+id/img_incense"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        tools:layout_editor_absoluteX="179dp"
-        tools:layout_editor_absoluteY="275dp" />
+        app:layout_constraintBottom_toTopOf="@+id/img_incense_burner"
+        app:layout_constraintEnd_toEndOf="@+id/img_secondBackground"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/img_secondBackground"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
 
     <ImageButton
         android:id="@+id/img_candle_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/title_bar_tall"
-        tools:layout_editor_absoluteX="99dp"
-        tools:layout_editor_absoluteY="283dp" />
+        app:layout_constraintEnd_toStartOf="@+id/img_incense_burner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/img_vase_left"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss"
+        app:srcCompat="@android:drawable/title_bar_tall" />
 
     <ImageButton
         android:id="@+id/img_vase_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/title_bar_tall"
-        tools:layout_editor_absoluteX="331dp"
-        tools:layout_editor_absoluteY="261dp" />
+        app:layout_constraintEnd_toEndOf="@+id/img_secondBackground"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/img_candle_right"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss"
+        app:srcCompat="@android:drawable/title_bar_tall" />
 
     <ImageButton
         android:id="@+id/img_vase_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/title_bar_tall"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="261dp" />
+        app:layout_constraintEnd_toStartOf="@+id/img_candle_left"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/img_secondBackground"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss"
+        app:srcCompat="@android:drawable/title_bar_tall" />
 
     <ImageButton
         android:id="@+id/img_candle_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/title_bar_tall"
-        tools:layout_editor_absoluteX="272dp"
-        tools:layout_editor_absoluteY="283dp" />
+        app:layout_constraintEnd_toStartOf="@+id/img_vase_right"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/img_incense_burner"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss"
+        app:srcCompat="@android:drawable/title_bar_tall" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="更換"/>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
