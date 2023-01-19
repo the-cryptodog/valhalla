@@ -9,4 +9,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <!--求籤頁-->
+    <string name="text_title_heart">心\n誠\n則\n靈</string>
 </resources>
