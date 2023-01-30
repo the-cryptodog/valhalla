@@ -11,11 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.databinding.ActivityDrawLotsBinding
 import com.app.valhalla.util.FontUtil
+import com.app.valhalla.util.GifUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.droidsonroids.gif.GifDrawable
+import kotlin.random.Random
 
 class DrawLotsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDrawLotsBinding
@@ -24,23 +26,31 @@ class DrawLotsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        var gifDrawable: GifDrawable = GifDrawable(resources, R.drawable.step_shake)
-        binding.imgStepshake.setImageDrawable(gifDrawable)
+        binding.imgStepshake.setImageDrawable(GifUtil.f_generateGif(this,R.drawable.step_shake))
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
         binding.textTitleDivinationBlocks.typeface=FontUtil.f_chinese_traditional(this)
 
+        drawLotsViewModel.getStepShakeData.observe(this){
+            binding.viewStepshake.isVisible = it
+        }
+        drawLotsViewModel.getDivinationBlocks.observe(this){
+            binding.viewDivinationBlocks.isVisible = it
+        }
+        drawLotsViewModel.getStepThrowVisible.observe(this){
+            binding.viewStepthrow.isVisible = it
+        }
+        drawLotsViewModel.getStepAnswer.observe(this){
+            binding.imgStepthrow.setImageDrawable(GifUtil.f_generateGif(this,it))
+        }
+
         binding.imgDrawlots.setOnClickListener{
-            binding.viewDrawlots.isVisible = true
-            drawLotsViewModel.StepVisible()
-            drawLotsViewModel.getStepData.observe(this){
-                binding.imgStepshake.isVisible = drawLotsViewModel.getStepData.value == true
-                binding.imgStep.isVisible = drawLotsViewModel.getStepData.value != true
-                binding.textTitleDivinationBlocks.isVisible = drawLotsViewModel.getStepData.value != true
-            }
+            binding.viewSubfunction.isVisible = true
+            drawLotsViewModel.StepOne()
         }
 
         binding.textTitleDivinationBlocks.setOnClickListener {
-            
+            drawLotsViewModel.StepTwo()
         }
+
     }
 }
