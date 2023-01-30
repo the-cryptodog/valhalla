@@ -12,4 +12,6 @@
 
     <!--求籤頁-->
     <string name="text_title_heart">心\n誠\n則\n靈</string>
+    <string name="text_title_drawlots">求\n籤</string>
+    <string name="text_title_divination_block">擲\n筊</string>
 </resources>
