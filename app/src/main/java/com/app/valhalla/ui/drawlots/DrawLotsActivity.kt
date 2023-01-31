@@ -29,6 +29,7 @@ class DrawLotsActivity : AppCompatActivity() {
         binding.imgStepshake.setImageDrawable(GifUtil.f_generateGif(this,R.drawable.step_shake))
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
         binding.textTitleDivinationBlocks.typeface=FontUtil.f_chinese_traditional(this)
+        binding.textStepanswer.typeface=FontUtil.f_chinese_traditional(this)
 
         drawLotsViewModel.getStepShakeData.observe(this){
             binding.viewStepshake.isVisible = it
@@ -42,6 +43,9 @@ class DrawLotsActivity : AppCompatActivity() {
         drawLotsViewModel.getStepAnswer.observe(this){
             binding.imgStepthrow.setImageDrawable(GifUtil.f_generateGif(this,it))
         }
+        drawLotsViewModel.getStepAnswerString.observe(this){
+            binding.textStepanswer.setText(getString(it))
+        }
 
         binding.imgDrawlots.setOnClickListener{
             binding.viewSubfunction.isVisible = true
@@ -50,6 +54,9 @@ class DrawLotsActivity : AppCompatActivity() {
 
         binding.textTitleDivinationBlocks.setOnClickListener {
             drawLotsViewModel.StepTwo()
+        }
+        binding.textStepanswer.setOnClickListener {
+            drawLotsViewModel.StepThree()
         }
 
     }
