@@ -26,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        startActivity(Intent(this,MainActivity::class.java))
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -95,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         login.setOnClickListener {
-            startActivity(Intent(this,MainActivity::class.java))
 //            loading.visibility = View.VISIBLE
 //            loginViewModel.login(username.text.toString(), password.text.toString())
         }

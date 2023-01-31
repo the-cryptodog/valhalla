@@ -6,25 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
     <ImageButton
         android:id="@+id/img_totalBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
-        android:id="@+id/img_secondBackground"
-        android:layout_width="332dp"
+        android:id="@+id/img_left_couplet"
+        android:layout_width="0dp"
         android:layout_height="352dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_totalBackground"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
+        app:layout_constraintEnd_toStartOf="@+id/img_flower_left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
+
+
+
+    <ImageButton
+        android:id="@+id/img_upper_couplet"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_JossBackground"
+        app:layout_constraintEnd_toEndOf="@+id/img_flower_right"
+        app:layout_constraintStart_toStartOf="@+id/img_flower_left"
+        />
+
+
+    <ImageButton
+        android:id="@+id/img_table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_JossBackground"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/img_right_couplet"
+        android:layout_width="0dp"
+        android:layout_height="352dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_flower_right"
+        app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
+
+
+
+    <ImageButton
+        android:id="@+id/img_JossBackground"
+        android:layout_width="280dp"
+        android:layout_height="352dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_totalBackground"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
+
 
     <ImageButton
         android:id="@+id/img_joss"
@@ -32,17 +95,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="116dp"
         app:layout_constraintBottom_toTopOf="@+id/img_incense"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_secondBackground"
+        app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
+        app:layout_constraintTop_toTopOf="@+id/img_JossBackground"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <ImageButton
         android:id="@+id/img_incense_burner"
         android:layout_width="103dp"
         android:layout_height="92dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_secondBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_candle_left"
@@ -72,9 +135,9 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         app:layout_constraintBottom_toTopOf="@+id/img_incense_burner"
-        app:layout_constraintEnd_toEndOf="@+id/img_secondBackground"
+        app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/img_secondBackground"
+        app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
         app:layout_constraintTop_toBottomOf="@+id/img_joss"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
@@ -82,6 +145,7 @@
         android:id="@+id/img_candle_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_incense_burner"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_vase_left"
@@ -92,7 +156,7 @@
         android:id="@+id/img_vase_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/img_secondBackground"
+        app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_candle_right"
         app:layout_constraintTop_toBottomOf="@+id/img_joss"
@@ -104,7 +168,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_left"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/img_secondBackground"
+        app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
         app:layout_constraintTop_toBottomOf="@+id/img_joss"
         app:srcCompat="@android:drawable/title_bar_tall" />
 
@@ -112,6 +176,7 @@
         android:id="@+id/img_candle_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_vase_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_incense_burner"
@@ -119,18 +184,50 @@
         app:srcCompat="@android:drawable/title_bar_tall" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/bottom_constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
+            android:id="@+id/btn_function_one"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:gravity="center"
-            android:text="更換"/>
+            android:text="功能1"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_function_two"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
+        <TextView
+            android:id="@+id/btn_function_two"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="功能2"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_function_three"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_function_one"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/btn_function_three"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="功能3"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_function_two"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
