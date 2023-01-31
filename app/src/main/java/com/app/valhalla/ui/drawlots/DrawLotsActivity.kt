@@ -19,6 +19,9 @@ import kotlinx.coroutines.withContext
 import pl.droidsonroids.gif.GifDrawable
 import kotlin.random.Random
 
+/**
+ * 求籤頁面
+ */
 class DrawLotsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDrawLotsBinding
     private val drawLotsViewModel by viewModels<DrawLotsViewModel>()
