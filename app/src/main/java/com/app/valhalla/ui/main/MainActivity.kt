@@ -10,6 +10,7 @@ import com.app.valhalla.R
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MainViewModel
+import com.app.valhalla.util.Constant
 import com.app.valhalla.util.FontUtil
 
 
@@ -78,9 +79,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         })
 
         mainViewModel.btnFucntionOne.observe(this, Observer {
-            if(it == 1){
-                initItemDialog(it)
-            }
+
         })
 
         mainViewModel.btnFucntionOneImgId.observe(this, Observer {
@@ -102,9 +101,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mainViewModel.btnFucntionThreeImgId.observe(this, Observer {
             binding.btnFunctionThree.setBackgroundResource(it)
         })
+
+        mainViewModel.itemDialog.observe(this, Observer {
+            if(it == Constant.VIEW_OPEN){
+                initItemDialog()
+            }
+        })
     }
 
-    private fun initItemDialog(itemId:Int) {
+    private fun initItemDialog() {
         ItemFragment().show(supportFragmentManager, "ItemDialog")
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.valhalla.R
+import com.app.valhalla.util.Constant
 
 class MainViewModel : ViewModel() {
 
@@ -44,7 +45,7 @@ class MainViewModel : ViewModel() {
     private val _imgTable = MutableLiveData<Int>()
     val imgTable: LiveData<Int> = _imgTable
 
-
+    //功能按鈕切換
     private val _btnFucntionOneImgId = MutableLiveData<Int>()
     var btnFucntionOneImgId: LiveData<Int> = _btnFucntionOneImgId
     private val _btnFucntionOTwoImgId = MutableLiveData<Int>()
@@ -52,68 +53,80 @@ class MainViewModel : ViewModel() {
     private val _btnFucntionThreeImgId = MutableLiveData<Int>()
     val btnFucntionThreeImgId: LiveData<Int> = _btnFucntionThreeImgId
 
+    //api回傳資料
+    private var currentItem :String = ""
 
-    fun setCurrentItemId(itemId: Int) {
+    private val _itemData = MutableLiveData<Int>()
+    val itemData: LiveData<Int> = _itemData
 
-    }
+    //itemDialog狀態
+    private val _itemDialog = MutableLiveData<Int>()
+    val itemDialog: LiveData<Int> = _itemDialog
 
-    //1.點擊物件  點擊：1
+
+
+
+    //Constant.VIEW_OPEN.點擊物件  點擊：Constant.VIEW_OPEN
     fun itemStatus(viewEntryName: String) {
         Log.d("TAG",viewEntryName)
+
         //2.改變物件對應LiveData狀態
         when (viewEntryName) {
             "btn_function_one" -> {
-                _btnFucntionOne.postValue(1)
-
+                if(currentItem.isNotBlank()){
+                    _itemDialog.postValue(Constant.VIEW_OPEN)
+                }
+                _btnFucntionOne.postValue(Constant.VIEW_OPEN)
             }
             "btn_function_two" -> {
-                _btnFunctionTwo.postValue(1)
+                _btnFunctionTwo.postValue(Constant.VIEW_OPEN)
             }
             "btn_function_three" -> {
-                _btnFunctionThree.postValue(1)
+                _btnFunctionThree.postValue(Constant.VIEW_OPEN)
             }
             "img_incense" -> {
-                _imgIncense.postValue(1)
+                _imgIncense.postValue(Constant.VIEW_OPEN)
             }
             "img_incense_burner" -> {
-                _imgIncenseBurner.postValue(1)
+                _imgIncenseBurner.postValue(Constant.VIEW_OPEN)
             }
             "img_candle_right" -> {
-                _imgCandleRight.postValue(1)
+                _imgCandleRight.postValue(Constant.VIEW_OPEN)
             }
             "img_candle_left" -> {
-                _imgCandleLeft.postValue(1)
+                _imgCandleLeft.postValue(Constant.VIEW_OPEN)
             }
             "img_flower_left" -> {
-                _imgFlowerLeft.postValue(1)
+                _imgFlowerLeft.postValue(Constant.VIEW_OPEN)
             }
             "img_flower_right" -> {
-                _imgFlowerRight.postValue(1)
+                _imgFlowerRight.postValue(Constant.VIEW_OPEN)
             }
             "img_left_couplet" -> {
-                _imgLeftCouplet.postValue(1)
+                _imgLeftCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_right_couplet" -> {
-                _imgRightCouplet.postValue(1)
+                _imgRightCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_upper_cuplet" -> {
-                _imgUpperCouplet.postValue(1)
+                _imgUpperCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_joss" -> {
-                _imgJoss.postValue(1)
+                _imgJoss.postValue(Constant.VIEW_OPEN)
             }
             "img_joss_background" -> {
-                _imgJossBackground.postValue(1)
+                _imgJossBackground.postValue(Constant.VIEW_OPEN)
             }
             "img_vase_left" -> {
-                _imgVaseLeft.postValue(1)
+                _imgVaseLeft.postValue(Constant.VIEW_OPEN)
             }
             "img_vase_right" -> {
-                _imgVaseRight.postValue(1)
+                _imgVaseRight.postValue(Constant.VIEW_OPEN)
             }
             "img_table" -> {
                 //神明桌
-                _imgTable.postValue(1)
+                currentItem = "img_table"
+                _imgTable.postValue(Constant.VIEW_OPEN)
                 toggleFirstFunctionImg(R.drawable.icon_table)
             }
         }
