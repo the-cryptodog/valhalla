@@ -90,46 +90,56 @@ class MainViewModel : ViewModel() {
             "img_incense" -> {
                 currentItem = "img_incense"
                 _imgIncense.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.incence)
             }
             "img_incense_burner" -> {
                 currentItem = "img_incense_burner"
                 _imgIncenseBurner.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.insenceburner)
             }
             "img_candle_right" -> {
                 currentItem = "img_candle_right"
                 _imgCandleRight.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.candle)
             }
             "img_candle_left" -> {
                 currentItem = "img_candle_left"
                 _imgCandleLeft.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.candle)
             }
             "img_flower_left" -> {
                 currentItem = "img_flower_left"
                 _imgFlowerLeft.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.flowers)
             }
             "img_flower_right" -> {
                 currentItem = "img_flower_right"
                 _imgFlowerRight.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.flowers)
             }
             "img_left_couplet" -> {
                 currentItem = "img_left_couplet"
                 _imgLeftCouplet.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.couplet)
             }
             "img_right_couplet" -> {
                 currentItem = "img_right_couplet"
                 _imgRightCouplet.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.couplet)
             }
-            "img_upper_cuplet" -> {
+            "img_upper_couplet" -> {
                 currentItem = "img_upper_cuplet"
                 _imgUpperCouplet.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.uppercouplet)
             }
             "img_joss" -> {
                 currentItem = "img_joss"
                 _imgJoss.postValue(Constant.VIEW_OPEN)
             }
-            "img_joss_background" -> {
+            "img_JossBackground" -> {
                 currentItem = "img_joss_background"
                 _imgJossBackground.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.jossbackground)
             }
             "img_vase_left" -> {
                 currentItem = "img_vase_left"
