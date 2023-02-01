@@ -40,8 +40,9 @@
         android:id="@+id/img_left_couplet"
         android:layout_width="0dp"
         android:layout_height="352dp"
+        android:src="@drawable/couplet"
         app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
-        app:layout_constraintEnd_toStartOf="@+id/img_flower_left"
+        app:layout_constraintEnd_toStartOf="@+id/img_JossBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
 
@@ -51,6 +52,7 @@
         android:id="@+id/img_upper_couplet"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:src="@drawable/uppercouplet"
         app:layout_constraintBottom_toTopOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toEndOf="@+id/img_flower_right"
         app:layout_constraintStart_toStartOf="@+id/img_flower_left"
@@ -61,6 +63,8 @@
         android:id="@+id/img_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:src="@drawable/table"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -72,9 +76,10 @@
         android:id="@+id/img_right_couplet"
         android:layout_width="0dp"
         android:layout_height="352dp"
+        android:src="@drawable/couplet"
         app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_flower_right"
+        app:layout_constraintStart_toEndOf="@+id/img_JossBackground"
         app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
 
 
@@ -83,6 +88,7 @@
         android:id="@+id/img_JossBackground"
         android:layout_width="280dp"
         android:layout_height="352dp"
+        android:src="@drawable/jossbackground"
         app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +100,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="116dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/img_incense"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
+        app:layout_constraintStart_toEndOf="@+id/img_left_couplet"
         app:layout_constraintTop_toTopOf="@+id/img_JossBackground"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -105,83 +112,92 @@
         android:id="@+id/img_incense_burner"
         android:layout_width="103dp"
         android:layout_height="92dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/insenceburner"
         app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_candle_left"
-        app:layout_constraintTop_toBottomOf="@+id/img_incense"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintTop_toBottomOf="@+id/img_incense" />
 
     <ImageButton
         android:id="@+id/img_flower_left"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/flowers"
         app:layout_constraintBottom_toTopOf="@+id/img_vase_left"
         app:layout_constraintEnd_toEndOf="@+id/img_vase_left"
-        app:layout_constraintStart_toStartOf="@+id/img_vase_left"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintStart_toStartOf="@+id/img_vase_left" />
 
     <ImageButton
         android:id="@+id/img_flower_right"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/flowers"
         app:layout_constraintBottom_toTopOf="@+id/img_vase_right"
         app:layout_constraintEnd_toEndOf="@+id/img_vase_right"
-        app:layout_constraintStart_toStartOf="@+id/img_vase_right"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        app:layout_constraintStart_toStartOf="@+id/img_vase_right" />
 
     <ImageButton
         android:id="@+id/img_incense"
         android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_height="100dp"
+        android:src="@drawable/incence"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
         app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
+        />
 
     <ImageButton
         android:id="@+id/img_candle_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/candle"
         app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_incense_burner"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_vase_left"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        app:srcCompat="@android:drawable/title_bar_tall" />
+        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
 
     <ImageButton
         android:id="@+id/img_vase_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/vase"
+        android:layout_width="60dp"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_candle_right"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        app:srcCompat="@android:drawable/title_bar_tall" />
+        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
 
     <ImageButton
         android:id="@+id/img_vase_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/vase"
+        android:layout_width="60dp"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_left"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        app:srcCompat="@android:drawable/title_bar_tall" />
+        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
 
     <ImageButton
         android:id="@+id/img_candle_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/candle"
         app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintEnd_toStartOf="@+id/img_vase_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_incense_burner"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        app:srcCompat="@android:drawable/title_bar_tall" />
+        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_constraintLayout"

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.valhalla.R
+import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.util.Constant
 
 class MainViewModel : ViewModel() {
@@ -56,8 +57,8 @@ class MainViewModel : ViewModel() {
     //api回傳資料
     private var currentItem :String = ""
 
-    private val _itemData = MutableLiveData<Int>()
-    val itemData: LiveData<Int> = _itemData
+    private val _itemDataList = MutableLiveData<List<GameObject>>()
+    val itemDataList: LiveData<List<GameObject>> = _itemDataList
 
     //itemDialog狀態
     private val _itemDialog = MutableLiveData<Int>()
@@ -79,49 +80,66 @@ class MainViewModel : ViewModel() {
                 _btnFucntionOne.postValue(Constant.VIEW_OPEN)
             }
             "btn_function_two" -> {
+                currentItem = "btn_function_two"
                 _btnFunctionTwo.postValue(Constant.VIEW_OPEN)
             }
             "btn_function_three" -> {
+                currentItem = "btn_function_three"
                 _btnFunctionThree.postValue(Constant.VIEW_OPEN)
             }
             "img_incense" -> {
+                currentItem = "img_incense"
                 _imgIncense.postValue(Constant.VIEW_OPEN)
             }
             "img_incense_burner" -> {
+                currentItem = "img_incense_burner"
                 _imgIncenseBurner.postValue(Constant.VIEW_OPEN)
             }
             "img_candle_right" -> {
+                currentItem = "img_candle_right"
                 _imgCandleRight.postValue(Constant.VIEW_OPEN)
             }
             "img_candle_left" -> {
+                currentItem = "img_candle_left"
                 _imgCandleLeft.postValue(Constant.VIEW_OPEN)
             }
             "img_flower_left" -> {
+                currentItem = "img_flower_left"
                 _imgFlowerLeft.postValue(Constant.VIEW_OPEN)
             }
             "img_flower_right" -> {
+                currentItem = "img_flower_right"
                 _imgFlowerRight.postValue(Constant.VIEW_OPEN)
             }
             "img_left_couplet" -> {
+                currentItem = "img_left_couplet"
                 _imgLeftCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_right_couplet" -> {
+                currentItem = "img_right_couplet"
                 _imgRightCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_upper_cuplet" -> {
+                currentItem = "img_upper_cuplet"
                 _imgUpperCouplet.postValue(Constant.VIEW_OPEN)
             }
             "img_joss" -> {
+                currentItem = "img_joss"
                 _imgJoss.postValue(Constant.VIEW_OPEN)
             }
             "img_joss_background" -> {
+                currentItem = "img_joss_background"
                 _imgJossBackground.postValue(Constant.VIEW_OPEN)
             }
             "img_vase_left" -> {
+                currentItem = "img_vase_left"
                 _imgVaseLeft.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.vase)
             }
             "img_vase_right" -> {
+                currentItem = "img_vase_right"
                 _imgVaseRight.postValue(Constant.VIEW_OPEN)
+                toggleFirstFunctionImg(R.drawable.vase)
             }
             "img_table" -> {
                 //神明桌

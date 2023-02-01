@@ -6,7 +6,7 @@ import android.view.View.OnClickListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.app.valhalla.R
+import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MainViewModel
@@ -104,13 +104,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         mainViewModel.itemDialog.observe(this, Observer {
             if(it == Constant.VIEW_OPEN){
-                initItemDialog()
+                val itemList = listOf(GameObject(1,"table"))
+
+                initItemDialog(itemList)
             }
         })
     }
 
-    private fun initItemDialog() {
-        ItemFragment().show(supportFragmentManager, "ItemDialog")
+    private fun initItemDialog(itemList :List<GameObject>) {
+        ItemFragment(itemList).show(supportFragmentManager, "ItemDialog")
     }
 
 

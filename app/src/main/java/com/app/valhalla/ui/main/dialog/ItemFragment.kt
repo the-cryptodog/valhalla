@@ -1,6 +1,7 @@
 package com.app.valhalla.ui.main.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,20 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.valhalla.R
+import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.DialogItemsBinding
+import com.app.valhalla.databinding.ItemholderBinding
 
 
-class ItemFragment : DialogFragment() {
+class ItemFragment(
+    private var itemList : List<GameObject> ,
+) : DialogFragment() {
 
     private lateinit var binding: DialogItemsBinding
+
+    init {
+        Log.d("TAG","itemList=$itemList")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,6 +31,7 @@ class ItemFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogItemsBinding.inflate(inflater, container, false)
+        Log.d("TAG","ItemFragmentonCreateView")
         return binding.root
     }
 
@@ -32,7 +42,7 @@ class ItemFragment : DialogFragment() {
 
     private fun initGridRecyclerView() {
         binding.gridRecyclerView.apply {
-            adapter = ItemAdapter()
+            adapter = ItemAdapter(itemList)
             layoutManager = GridLayoutManager(context, 4)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
@@ -40,35 +50,28 @@ class ItemFragment : DialogFragment() {
 
 }
 
-class ItemAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ItemAdapter( private var itemList :List<GameObject>)
+    : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-    private val items = ArrayList<String>().also {
-        it.add("Item")
-        it.add("Item")
-        it.add("Item")
-        it.add("Item")
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+
+
+        val binding = ItemholderBinding
+            .inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ItemViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.itemholder, parent, false)
-        )
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        holder.binding.name.text = itemList[position].name
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-    }
 
     override fun getItemCount(): Int {
-        return items.size
+        return itemList.size
     }
 
-    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.setOnClickListener {
+    inner class ItemViewHolder(val binding: ItemholderBinding) : RecyclerView.ViewHolder(binding.root) {
 
-            }
-        }
     }
+
 }
