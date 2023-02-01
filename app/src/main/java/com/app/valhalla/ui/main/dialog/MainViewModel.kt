@@ -55,7 +55,7 @@ class MainViewModel : ViewModel() {
     val btnFucntionThreeImgId: LiveData<Int> = _btnFucntionThreeImgId
 
     //api回傳資料
-    private var currentItem :String = ""
+    private var currentItem: String = ""
 
     private val _itemDataList = MutableLiveData<List<GameObject>>()
     val itemDataList: LiveData<List<GameObject>> = _itemDataList
@@ -65,16 +65,14 @@ class MainViewModel : ViewModel() {
     val itemDialog: LiveData<Int> = _itemDialog
 
 
-
-
     //Constant.VIEW_OPEN.點擊物件  點擊：Constant.VIEW_OPEN
     fun itemStatus(viewEntryName: String) {
-        Log.d("TAG",viewEntryName)
+        Log.d("TAG", viewEntryName)
 
         //2.改變物件對應LiveData狀態
         when (viewEntryName) {
             "btn_function_one" -> {
-                if(currentItem.isNotBlank()){
+                if (currentItem.isNotBlank()) {
                     _itemDialog.postValue(Constant.VIEW_OPEN)
                 }
                 _btnFucntionOne.postValue(Constant.VIEW_OPEN)
@@ -141,7 +139,7 @@ class MainViewModel : ViewModel() {
                 _imgJossBackground.postValue(Constant.VIEW_OPEN)
                 toggleFirstFunctionImg(R.drawable.jossbackground)
             }
-            "img_vase_left" -> {
+            "img_vaＯse_left" -> {
                 currentItem = "img_vase_left"
                 _imgVaseLeft.postValue(Constant.VIEW_OPEN)
                 toggleFirstFunctionImg(R.drawable.vase)
@@ -155,13 +153,13 @@ class MainViewModel : ViewModel() {
                 //神明桌
                 currentItem = "img_table"
                 _imgTable.postValue(Constant.VIEW_OPEN)
-                toggleFirstFunctionImg(R.drawable.icon_table)
+                toggleFirstFunctionImg(R.drawable.table)
             }
         }
     }
 
     //3.切換底層圖樣
-    private fun toggleFirstFunctionImg(itemSelectedId:Int) {
+    private fun toggleFirstFunctionImg(itemSelectedId: Int) {
         _btnFucntionOneImgId.postValue(itemSelectedId)
     }
 }

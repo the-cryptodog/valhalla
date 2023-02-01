@@ -9,20 +9,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.valhalla.R
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.DialogItemsBinding
 import com.app.valhalla.databinding.ItemholderBinding
 
 
 class ItemFragment(
-    private var itemList : List<GameObject> ,
+    private var itemList: List<GameObject>,
 ) : DialogFragment() {
 
     private lateinit var binding: DialogItemsBinding
 
     init {
-        Log.d("TAG","itemList=$itemList")
+        Log.d("TAG", "itemList=$itemList")
     }
 
     override fun onCreateView(
@@ -31,7 +30,7 @@ class ItemFragment(
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogItemsBinding.inflate(inflater, container, false)
-        Log.d("TAG","ItemFragmentonCreateView")
+        Log.d("TAG", "ItemFragmentonCreateView")
         return binding.root
     }
 
@@ -43,15 +42,15 @@ class ItemFragment(
     private fun initGridRecyclerView() {
         binding.gridRecyclerView.apply {
             adapter = ItemAdapter(itemList)
-            layoutManager = GridLayoutManager(context, 4)
+            layoutManager = GridLayoutManager(context, 6)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
 
 }
 
-class ItemAdapter( private var itemList :List<GameObject>)
-    : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private var itemList: List<GameObject>) :
+    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
 
@@ -62,15 +61,16 @@ class ItemAdapter( private var itemList :List<GameObject>)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.binding.name.text = itemList[position].name
+        holder.binding.name.text = itemList[0].name
     }
 
 
     override fun getItemCount(): Int {
-        return itemList.size
+        return 33
     }
 
-    inner class ItemViewHolder(val binding: ItemholderBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemViewHolder(val binding: ItemholderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
     }
 

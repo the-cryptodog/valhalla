@@ -103,15 +103,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         })
 
         mainViewModel.itemDialog.observe(this, Observer {
-            if(it == Constant.VIEW_OPEN){
-                val itemList = listOf(GameObject(1,"table"))
+            if (it == Constant.VIEW_OPEN) {
+                val itemList = listOf(GameObject(1, "table"))
 
                 initItemDialog(itemList)
             }
         })
     }
 
-    private fun initItemDialog(itemList :List<GameObject>) {
+    private fun initItemDialog(itemList: List<GameObject>) {
         ItemFragment(itemList).show(supportFragmentManager, "ItemDialog")
     }
 
