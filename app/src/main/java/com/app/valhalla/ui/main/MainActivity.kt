@@ -1,19 +1,28 @@
 package com.app.valhalla.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import com.app.valhalla.data.api.Network
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.main.dialog.ItemFragment
-import com.app.valhalla.ui.main.dialog.MainViewModel
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.FontUtil
+import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.await
 
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -110,10 +119,56 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
         mainViewModel.itemDialog.observe(this, Observer {
             if (it == Constant.VIEW_OPEN) {
-                val itemList = listOf(GameObject(1, "table"))
-                initItemDialog(itemList)
+//                val itemList = listOf(GameObject(1, "table"))
+//                initItemDialog(itemList)
             }
         })
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                val call = Network.apiService.getDefault().await()
+                Log.d("TAG", "call internaet " + call.data[0].img_url)
+                withContext(Dispatchers.Main) {
+                    Glide.with(this@MainActivity)
+                        .load(call.data[0].img_url)
+                        .into(binding.imgTable)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[1].img_url)
+                        .into(binding.imgIncenseBurner)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[2].img_url)
+                        .into(binding.imgIncense)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[3].img_url)
+                        .into(binding.imgVaseLeft)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[3].img_url)
+                        .into(binding.imgVaseRight)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[4].img_url)
+                        .into(binding.imgJossBackground)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[5].img_url)
+                        .into(binding.imgLeftCouplet)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[5].img_url)
+                        .into(binding.imgRightCouplet)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[6].img_url)
+                        .into(binding.imgCandleRight)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[6].img_url)
+                        .into(binding.imgCandleLeft)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[7].img_url)
+                        .into(binding.imgFlowerLeft)
+                    Glide.with(this@MainActivity)
+                        .load(call.data[7].img_url)
+                        .into(binding.imgFlowerRight)
+
+                }
+            }
+        }
     }
 
     private fun initItemDialog(itemList: List<GameObject>) {

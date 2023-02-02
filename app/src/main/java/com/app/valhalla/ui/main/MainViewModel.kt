@@ -1,16 +1,24 @@
-package com.app.valhalla.ui.main.dialog
+package com.app.valhalla.ui.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.app.valhalla.R
+import com.app.valhalla.data.api.Network
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.util.Constant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.await
 
 class MainViewModel : ViewModel() {
 
 
+    private val _hasInitData = MutableLiveData<Boolean>()
+    val hasInitData: LiveData<Boolean> = _hasInitData
     private val _btnFucntionOne = MutableLiveData<Int>()
     val btnFucntionOne: LiveData<Int> = _btnFucntionOne
     private val _btnFunctionTwo = MutableLiveData<Int>()
@@ -78,6 +86,21 @@ class MainViewModel : ViewModel() {
                 _btnFucntionOne.postValue(Constant.VIEW_OPEN)
             }
             "btn_function_two" -> {
+                Log.d("TAG", "btn22222")
+
+
+
+//                val call = Network.apiService.test().enqueue(object : Callback<List<TestData>> {
+//                    override fun onResponse(
+//                        call: Call<List<TestData>>,
+//                        response: Response<List<TestData>>
+//                    ) {
+//                        Log.d("TAG",response.body()!!.get(0).title.toString())
+//                    }
+//
+//                    override fun onFailure(call: Call<List<TestData>>, t: Throwable) {
+//                    }
+//                })
                 currentItem = "btn_function_two"
                 _btnFunctionTwo.postValue(Constant.VIEW_OPEN)
             }
