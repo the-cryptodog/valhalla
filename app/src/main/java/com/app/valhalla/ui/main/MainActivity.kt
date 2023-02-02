@@ -12,6 +12,8 @@ import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MainViewModel
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.FontUtil
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -26,6 +28,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.btnFunctionTwo.typeface = FontUtil.f_chinese_traditional(context = this)
         binding.btnFunctionThree.typeface = FontUtil.f_chinese_traditional(context = this)
         initOnClick()
+
+        MobileAds.initialize(this) {}
+
+        binding.adView.loadAd(AdRequest.Builder().build())
 
         mainViewModel.imgIncense.observe(this, Observer {
         })
@@ -105,7 +111,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mainViewModel.itemDialog.observe(this, Observer {
             if (it == Constant.VIEW_OPEN) {
                 val itemList = listOf(GameObject(1, "table"))
-
                 initItemDialog(itemList)
             }
         })
