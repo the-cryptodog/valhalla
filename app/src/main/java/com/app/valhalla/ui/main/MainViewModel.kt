@@ -17,20 +17,15 @@ import retrofit2.await
 
 class MainViewModel : ViewModel() {
 
+
     private val _gameObjHashMap = MutableLiveData<MutableMap<String, GameObject>>()
     val gameObjHashMap: LiveData<MutableMap<String, GameObject>> = _gameObjHashMap
 
     private val _btnFunction = MutableLiveData<MutableMap<String, BaseUi>>()
     val btnFunction: LiveData<MutableMap<String, BaseUi>> = _btnFunction
 
-
-    init {
-        fetchData()
-        initFunctionButton()
-    }
-
-    //api回傳資料
-    private var currentItem: String = ""
+    private val _dialogGameObj = MutableLiveData<List<GameObject>>()
+    val dialogGameObj: LiveData<List<GameObject>> = _dialogGameObj
 
     private val _itemDataList = MutableLiveData<List<GameObject>>()
     val itemDataList: LiveData<List<GameObject>> = _itemDataList
@@ -38,6 +33,11 @@ class MainViewModel : ViewModel() {
     //itemDialog狀態
     private val _itemDialog = MutableLiveData<Int>()
     val itemDialog: LiveData<Int> = _itemDialog
+
+    init {
+        fetchData()
+        initFunctionButton()
+    }
 
 
     private fun fetchData() {
@@ -72,11 +72,11 @@ class MainViewModel : ViewModel() {
     }
 
     fun leftFunctionLaunch() {
-        val current = _btnFunction.value?.get(Constant.BUTTON_LEFT)
-        if (current != null) {
-            current.isClicked = true
-            _btnFunction.value?.put(Constant.BUTTON_LEFT, current)
-        }
+        _dialogGameObj.value = mutableListOf(GameObject())
+    }
+
+    fun rightFunctionLaunch() {
+
     }
 
 
@@ -119,5 +119,6 @@ class MainViewModel : ViewModel() {
     fun flowerSelected() {
         objectSelected(Constant.OBJ_FLOWER_ID)
     }
+
 
 }

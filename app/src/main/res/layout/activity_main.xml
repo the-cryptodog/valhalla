@@ -24,7 +24,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_add" />
 
-    <ImageButton
+
+    <ImageView
         android:id="@+id/img_totalBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,8 +35,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -49,13 +49,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_table"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
+        android:scaleType="center"
         android:src="@drawable/table"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/img_totalBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_JossBackground"
         android:layout_width="match_parent"
         android:layout_height="352dp"
@@ -72,34 +72,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adView"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:ignore="ImageContrastCheck,ImageContrastCheck" />
 
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_joss"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
         android:layout_marginTop="116dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/img_incense"
+        app:layout_constraintBottom_toBottomOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/img_JossBackground"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_incense_burner"
         android:layout_width="103dp"
         android:layout_height="92dp"
         android:scaleType="fitXY"
         android:src="@drawable/insenceburner"
-        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
+        android:translationY="-25dp"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_right"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/img_candle_left"
-        app:layout_constraintTop_toBottomOf="@+id/img_incense" />
+        app:layout_constraintTop_toTopOf="@+id/img_table" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_flower_left"
         android:layout_width="52dp"
         android:layout_height="52dp"
@@ -109,7 +111,7 @@
         app:layout_constraintEnd_toEndOf="@+id/img_vase_left"
         app:layout_constraintStart_toStartOf="@+id/img_vase_left" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_flower_right"
         android:layout_width="52dp"
         android:layout_height="52dp"
@@ -119,64 +121,63 @@
         app:layout_constraintEnd_toEndOf="@+id/img_vase_right"
         app:layout_constraintStart_toStartOf="@+id/img_vase_right" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_incense"
         android:layout_width="52dp"
         android:layout_height="100dp"
-        android:src="@drawable/incence"
+        android:background="#00000000"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/img_incense_burner"
+        app:layout_constraintBottom_toBottomOf="@+id/img_joss"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
         app:layout_constraintTop_toBottomOf="@+id/img_joss"
-        />
+        tools:src="@drawable/incence" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_candle_left"
         android:layout_width="60dp"
         android:layout_height="120dp"
         android:scaleType="fitXY"
         android:src="@drawable/candle"
-        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toStartOf="@+id/img_incense_burner"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/img_vase_left"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
+        app:layout_constraintStart_toEndOf="@+id/img_vase_left" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_vase_right"
-        android:src="@drawable/vase"
         android:layout_width="60dp"
         android:layout_height="150dp"
         android:scaleType="fitXY"
+        android:src="@drawable/vase"
+        app:layout_constraintBottom_toBottomOf="@+id/img_incense"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/img_candle_right"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
+        app:layout_constraintStart_toEndOf="@+id/img_candle_right" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_vase_left"
-        android:src="@drawable/vase"
         android:layout_width="60dp"
         android:layout_height="150dp"
         android:scaleType="fitXY"
+        android:src="@drawable/vase"
+        app:layout_constraintBottom_toBottomOf="@+id/img_incense"
         app:layout_constraintEnd_toStartOf="@+id/img_candle_left"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/img_JossBackground"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
+         />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/img_candle_right"
         android:layout_width="60dp"
         android:layout_height="120dp"
         android:scaleType="fitXY"
         android:src="@drawable/candle"
-        app:layout_constraintBottom_toBottomOf="@+id/img_JossBackground"
+        app:layout_constraintBottom_toBottomOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toStartOf="@+id/img_vase_right"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/img_incense_burner"
-        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
+        app:layout_constraintStart_toEndOf="@+id/img_incense_burner" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_constraintLayout"
@@ -203,6 +204,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:gravity="center"
+            android:src="@drawable/icon_byebye"
             android:text="功能2"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -217,6 +219,7 @@
             android:layout_height="100dp"
             android:gravity="center"
             android:text="功能3"
+            android:src="@drawable/chien_tung"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

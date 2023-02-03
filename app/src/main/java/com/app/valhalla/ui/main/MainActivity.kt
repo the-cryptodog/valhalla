@@ -1,5 +1,6 @@
 package com.app.valhalla.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
+import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.util.Constant
 import com.bumptech.glide.Glide
@@ -36,6 +38,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             Glide.with(this)
                 .load(img)
                 .into(binding.btnFunctionOne)
+        })
+
+        mainViewModel.dialogGameObj.observe(this, Observer {
+            initItemDialog(it)
         })
 
         mainViewModel.gameObjHashMap.observe(this, Observer {
@@ -96,11 +102,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         binding.imgVaseLeft.setOnClickListener(this)
         binding.imgVaseRight.setOnClickListener(this)
         binding.imgTable.setOnClickListener(this)
+        binding.btnFunctionThree.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         if (v?.id == binding.btnFunctionOne.id) {
             mainViewModel.leftFunctionLaunch()
+        }
+        if (v?.id == binding.btnFunctionThree.id) {
+            startActivity(Intent(this, DrawLotsActivity::class.java))
         }
         if (v != null) {
             when (v.id) {
