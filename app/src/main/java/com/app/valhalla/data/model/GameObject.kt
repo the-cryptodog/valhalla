@@ -7,6 +7,7 @@ data class GameObject (
     var type: String = "",
     var img_url: String = "",
     var timer: Int = 0,
+    var isSelected: Boolean = false
 //    var description: String = "",
 //    var image: String = "",
 //    var price: Double = 0.0,

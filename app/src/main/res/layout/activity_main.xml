@@ -36,36 +36,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageButton
-        android:id="@+id/img_left_couplet"
-        android:layout_width="0dp"
-        android:layout_height="352dp"
-        android:src="@drawable/couplet"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
-        app:layout_constraintEnd_toStartOf="@+id/img_JossBackground"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
-
-
-
-    <ImageButton
-        android:id="@+id/img_upper_couplet"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/uppercouplet"
-        app:layout_constraintBottom_toTopOf="@+id/img_JossBackground"
-        app:layout_constraintEnd_toEndOf="@+id/img_flower_right"
-        app:layout_constraintStart_toStartOf="@+id/img_flower_left"
-        />
-
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/img_JossBackground"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintBottom_toBottomOf="@+id/floatingActionButton2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -84,26 +62,16 @@
         app:layout_constraintTop_toBottomOf="@+id/img_JossBackground"
         app:layout_constraintVertical_bias="1.0" />
 
-    <ImageButton
-        android:id="@+id/img_right_couplet"
-        android:layout_width="0dp"
-        android:layout_height="352dp"
-        android:src="@drawable/couplet"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/img_JossBackground"
-        app:layout_constraintTop_toTopOf="@+id/img_totalBackground" />
-
 
     <ImageButton
         android:id="@+id/img_JossBackground"
-        android:layout_width="280dp"
+        android:layout_width="match_parent"
         android:layout_height="352dp"
         android:src="@drawable/jossbackground"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_constraintLayout"
+        app:layout_constraintBottom_toTopOf="@+id/img_table"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_totalBackground"
+        app:layout_constraintTop_toBottomOf="@+id/adView"
         tools:ignore="ImageContrastCheck,ImageContrastCheck" />
 
 
@@ -112,11 +80,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="116dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/img_incense"
         app:layout_constraintEnd_toEndOf="@+id/img_JossBackground"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/img_left_couplet"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/img_JossBackground"
         app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -217,7 +184,7 @@
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/btn_function_one"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -231,7 +198,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
+        <ImageView
             android:id="@+id/btn_function_two"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -244,7 +211,7 @@
             app:layout_constraintStart_toEndOf="@+id/btn_function_one"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <ImageView
             android:id="@+id/btn_function_three"
             android:layout_width="100dp"
             android:layout_height="100dp"
