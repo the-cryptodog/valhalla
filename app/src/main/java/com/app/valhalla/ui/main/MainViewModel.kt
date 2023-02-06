@@ -18,8 +18,10 @@ import retrofit2.await
 class MainViewModel : ViewModel() {
 
 
-    private val _gameObjHashMap = MutableLiveData<MutableMap<String, GameObject>>()
-    val gameObjHashMap: LiveData<MutableMap<String, GameObject>> = _gameObjHashMap
+    private var currentSelectedType :String = ""
+
+    private val _gameObjList = MutableLiveData<List<GameObject>>()
+    val gameObjList: LiveData<List<GameObject>> = _gameObjList
 
     private val _btnFunction = MutableLiveData<MutableMap<String, BaseUi>>()
     val btnFunction: LiveData<MutableMap<String, BaseUi>> = _btnFunction
@@ -45,34 +47,36 @@ class MainViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 val call = Network.apiService.getDefault().await()
                 Log.d("TAG", call.toString())
-                val r = call.data.associateBy { it.id }
+                //以 type為 key 建立map
+                val r = call.data
                 withContext(Dispatchers.Main) {
-                    _gameObjHashMap.value = r.toMutableMap()
+                    _gameObjList.value = r
                 }
             }
         }
     }
 
-    private fun objectSelected(objectId: String) {
+    private fun openItemBag(item: String) {
+        val list = _gameObjList.value?.filter { it.type == item}
+        Log.d("TAGG", list.toString())
+        _dialogGameObj.postValue(list!!)
+    }
+
+    private fun objectSelected(objectType: String) {
         //檢查map是否有該view
-        if (_gameObjHashMap.value?.contains(objectId) == true) {
-            val selectedGameObject: GameObject? = _gameObjHashMap.value?.get(objectId)
-            if (selectedGameObject != null) {
-                selectedGameObject.isSelected = true
-                _gameObjHashMap.value?.put(objectId, selectedGameObject)
-                //修改底部按鈕資料
-                val current = _btnFunction.value?.get(Constant.BUTTON_LEFT)
-                if (current != null) {
-                    current.imgUrl = selectedGameObject.img_url
-                    _btnFunction.value?.put(Constant.BUTTON_LEFT, current)
-                    _btnFunction.notifyObserver()
-                }
+        _gameObjList.value?.find { it.type == objectType && it.is_default }.let {
+            val current = _btnFunction.value?.get(Constant.BUTTON_LEFT)
+            if (current != null) {
+                current.imgUrl = it?.img_url.toString()
+                _btnFunction.value?.put(Constant.BUTTON_LEFT, current)
+                _btnFunction.notifyObserver()
             }
+            currentSelectedType = it?.type.toString()
         }
     }
 
     fun leftFunctionLaunch() {
-        _dialogGameObj.value = mutableListOf(GameObject())
+        openItemBag(currentSelectedType)
     }
 
     fun rightFunctionLaunch() {

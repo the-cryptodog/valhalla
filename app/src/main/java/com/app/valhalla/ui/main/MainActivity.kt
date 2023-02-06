@@ -44,39 +44,40 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             initItemDialog(it)
         })
 
-        mainViewModel.gameObjHashMap.observe(this, Observer {
+        mainViewModel.gameObjList.observe(this, Observer { list ->
+            Log.d("TAG", "DDDDDDD")
             Glide.with(this)
-                .load(it[Constant.OBJ_TABLE]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_TABLE }?.img_url)
                 .into(binding.imgTable)
             Glide.with(this)
-                .load(it[Constant.OBJ_INCENSE_BURNER_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_INCENSE_BURNER_ID }?.img_url)
                 .into(binding.imgIncenseBurner)
             Glide.with(this)
-                .load(it[Constant.OBJ_INCENSE_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_INCENSE_ID }?.img_url)
                 .into(binding.imgIncense)
             Glide.with(this)
-                .load(it[Constant.OBJ_VASE]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_VASE }?.img_url)
                 .into(binding.imgVaseRight)
             Glide.with(this)
-                .load(it[Constant.OBJ_VASE]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_VASE }?.img_url)
                 .into(binding.imgVaseLeft)
             Glide.with(this)
-                .load(it[Constant.OBJ_JOSS]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_JOSS }?.img_url)
                 .into(binding.imgJoss)
             Glide.with(this)
-                .load(it[Constant.OBJ_JOSS_BACKGROUND_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_JOSS_BACKGROUND_ID }?.img_url)
                 .into(binding.imgJossBackground)
             Glide.with(this)
-                .load(it[Constant.OBJ_CANDLE_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_CANDLE_ID }?.img_url)
                 .into(binding.imgCandleRight)
             Glide.with(this)
-                .load(it[Constant.OBJ_CANDLE_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_CANDLE_ID }?.img_url)
                 .into(binding.imgCandleLeft)
             Glide.with(this)
-                .load(it[Constant.OBJ_FLOWER_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_FLOWER_ID }?.img_url)
                 .into(binding.imgFlowerLeft)
             Glide.with(this)
-                .load(it[Constant.OBJ_FLOWER_ID]?.img_url)
+                .load(list.find { it.type == Constant.OBJ_FLOWER_ID }?.img_url)
                 .into(binding.imgFlowerRight)
         })
     }
@@ -106,14 +107,15 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (v?.id == binding.btnFunctionOne.id) {
-            mainViewModel.leftFunctionLaunch()
-        }
-        if (v?.id == binding.btnFunctionThree.id) {
-            startActivity(Intent(this, DrawLotsActivity::class.java))
-        }
         if (v != null) {
             when (v.id) {
+                binding.btnFunctionOne.id -> {
+                    mainViewModel.leftFunctionLaunch()
+                }
+                binding.btnFunctionThree.id -> {
+                    startActivity(Intent(this, DrawLotsActivity::class.java))
+                }
+
                 binding.imgTable.id -> {
                     mainViewModel.tableSelected()
                 }

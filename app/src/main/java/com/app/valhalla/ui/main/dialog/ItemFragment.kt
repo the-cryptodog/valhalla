@@ -1,5 +1,6 @@
 package com.app.valhalla.ui.main.dialog
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.DialogItemsBinding
 import com.app.valhalla.databinding.ItemholderBinding
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideContext
 
 
 class ItemFragment(
@@ -41,7 +44,7 @@ class ItemFragment(
 
     private fun initGridRecyclerView() {
         binding.gridRecyclerView.apply {
-            adapter = ItemAdapter(itemList)
+            adapter = ItemAdapter(itemList,context)
             layoutManager = GridLayoutManager(context, 6)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
@@ -49,7 +52,7 @@ class ItemFragment(
 
 }
 
-class ItemAdapter(private var itemList: List<GameObject>) :
+class ItemAdapter(private var itemList: List<GameObject>, val context: Context) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -61,12 +64,13 @@ class ItemAdapter(private var itemList: List<GameObject>) :
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.binding.name.text = itemList[0].name
+        holder.binding.name.text = itemList[position].name
+        Glide.with(context).load(itemList[position].img_url).into(  holder.binding.id)
     }
 
 
     override fun getItemCount(): Int {
-        return 33
+        return itemList.size
     }
 
     inner class ItemViewHolder(val binding: ItemholderBinding) :
