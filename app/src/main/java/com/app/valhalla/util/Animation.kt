@@ -1,5 +1,6 @@
 package com.app.valhalla.util
 
+import android.widget.ImageView
 import android.widget.TextView
 
 
@@ -81,24 +82,36 @@ import android.widget.TextView
  }
  **/
 
+
+/**  **/
+fun ImageView.moveInFromRight(duration:Long){
+    animate().translationX(-25f).translationY(-600f).setDuration(duration)
+}
+
+/**  **/
+fun ImageView.moveInFromLeft(duration:Long){
+    animate().translationX(25f).translationY(-600f).setDuration(duration)
+}
+
+
 /** 淡出 **/
-fun TextView.fadeOut(duration:Long){
+fun ImageView.fadeOut(duration:Long){
     animate().alpha(0f).setDuration(duration).start()
 }
 
 /** 淡出 **/
-fun TextView.fadeIn(duration:Long){
+fun ImageView.fadeIn(duration:Long){
     alpha = 0f
     animate().alpha(1f).setDuration(duration).start()
 }
 
 /** 順時針旋轉 **/
-fun TextView.rotateCW(degree:Float,duration:Long){
+fun ImageView.rotateCW(degree:Float,duration:Long){
         animate().rotationBy(degree).setDuration(duration).start()
 }
 
 /** 逆時針旋轉 **/
-fun TextView.rotateCCW(degree:Float,duration:Long){
+fun ImageView.rotateCCW(degree:Float,duration:Long){
     animate().rotation(degree).setDuration(duration).start()
 }
 

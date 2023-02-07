@@ -7,23 +7,23 @@
 
     <ImageView
         android:id="@+id/id"
-        android:layout_width="50dp"
-        android:layout_height="80dp"
-        android:scaleType="fitXY"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/step_shake" />
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:srcCompat="@drawable/step_shake" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="tessssxt"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id" />
+        app:layout_constraintTop_toBottomOf="@+id/id"
+        tools:text="tessssxt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,18 +7,19 @@ import android.view.View
 import android.view.View.OnClickListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
-import com.app.valhalla.util.Constant
+import com.app.valhalla.util.*
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -41,11 +42,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         })
 
         mainViewModel.dialogGameObj.observe(this, Observer {
+            Log.d("TAGS", it.toString())
             initItemDialog(it)
         })
 
-        mainViewModel.gameObjList.observe(this, Observer { list ->
-            Log.d("TAG", "DDDDDDD")
+        mainViewModel.defaultGameObjList.observe(this, Observer { list ->
             Glide.with(this)
                 .load(list.find { it.type == Constant.OBJ_TABLE }?.img_url)
                 .into(binding.imgTable)
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
 
     private fun initItemDialog(itemList: List<GameObject>) {
-        ItemFragment(itemList).show(supportFragmentManager, "ItemDialog")
+        ItemFragment(itemList, this).show(supportFragmentManager, "ItemDialog")
     }
 
 
@@ -112,8 +113,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 binding.btnFunctionOne.id -> {
                     mainViewModel.leftFunctionLaunch()
                 }
+                binding.btnFunctionTwo.id -> {
+                    testMove()
+                }
                 binding.btnFunctionThree.id -> {
-                    startActivity(Intent(this, DrawLotsActivity::class.java))
+//                    startActivity(Intent(this, DrawLotsActivity::class.java))
                 }
 
                 binding.imgTable.id -> {
@@ -142,5 +146,21 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 }
             }
         }
+    }
+
+    override fun onDialogItemClick(itemType: String, itemId: String, dialog: DialogFragment) {
+        mainViewModel.updateCurrentSelectedItem(itemType ,itemId,)
+        dialog.dismiss()
+    }
+
+
+    fun testMove(){
+        binding.leftHand.visibility = View.VISIBLE
+        binding.leftHand.fadeIn(1000)
+        binding.leftHand.moveInFromLeft(1000)
+
+        binding.rightHand.visibility = View.VISIBLE
+        binding.rightHand.fadeIn(1000)
+        binding.rightHand.moveInFromRight(1000)
     }
 }
