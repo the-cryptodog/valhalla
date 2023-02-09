@@ -1,5 +1,6 @@
 package com.app.valhalla.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,8 +9,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
+import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.fadeIn
@@ -20,7 +23,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 
 
-class MainActivity : AppCompatActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener {
+class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -118,7 +121,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, ItemFragment.OnDialog
                     testMove()
                 }
                 binding.btnFunctionThree.id -> {
-//                    startActivity(Intent(this, DrawLotsActivity::class.java))
+                    startActivity(Intent(this, DrawLotsActivity::class.java))
                 }
 
                 binding.imgTable.id -> {
