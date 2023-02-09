@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ItemholderBinding
 import com.app.valhalla.databinding.RvDialogItemsBinding
+import com.app.valhalla.util.FontUtil
 import com.bumptech.glide.Glide
 
 
@@ -82,7 +83,7 @@ class ItemAdapter(
             width = ViewGroup.LayoutParams.MATCH_PARENT
             height = ViewGroup.LayoutParams.MATCH_PARENT
         }
-        return ItemViewHolder(binding)
+        return ItemViewHolder(binding, context)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -98,6 +99,10 @@ class ItemAdapter(
         return itemList.size
     }
 
-    inner class ItemViewHolder(val binding: ItemholderBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class ItemViewHolder(val binding: ItemholderBinding, context: Context) :
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.name.typeface = FontUtil.f_chinese_traditional(context)
+        }
+    }
 }

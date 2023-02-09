@@ -31,9 +31,10 @@ class LaunchActivity : AppCompatActivity() {
         binding.imgLogoAnimation.setImageDrawable(
             GifUtil.f_generateGif(
                 this,
-                R.drawable.logo_launch
+                R.drawable.loading_logo
             )
         )
+
     }
 
     fun jumpToMainActivity() {

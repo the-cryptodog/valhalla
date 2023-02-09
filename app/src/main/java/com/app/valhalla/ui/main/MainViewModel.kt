@@ -100,7 +100,7 @@ class MainViewModel : ViewModel() {
         //先從dialog list物件中找到該id物件
         val obj = _dialogGameObj.value?.find { it.id == itemId }
         //更新預設設定組
-        Log.d("TAGG",obj.toString())
+        Log.d("TAGG", obj.toString())
         _defaultGameObjList.value?.set(index!!, obj!!)
         _defaultGameObjList.notifyObserver()
 
@@ -108,6 +108,7 @@ class MainViewModel : ViewModel() {
             updateFunctionIcon(obj)
         }
     }
+
     //更新功能圖icon
     private fun updateFunctionIcon(obj: GameObject) {
         val current = _btnFunction.value?.get(Constant.BUTTON_LEFT)
@@ -119,7 +120,7 @@ class MainViewModel : ViewModel() {
     }
 
 
-    fun initFunctionButton() {
+    private fun initFunctionButton() {
         _btnFunction.value = mutableMapOf(
             Constant.BUTTON_LEFT to BaseUi(Constant.BUTTON_LEFT),
             Constant.BUTTON_RIGHT to BaseUi(Constant.BUTTON_RIGHT),

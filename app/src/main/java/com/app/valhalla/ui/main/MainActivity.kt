@@ -1,6 +1,5 @@
 package com.app.valhalla.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,9 +10,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
-import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
-import com.app.valhalla.util.*
+import com.app.valhalla.util.Constant
+import com.app.valhalla.util.fadeIn
+import com.app.valhalla.util.moveInFromLeft
+import com.app.valhalla.util.moveInFromRight
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
@@ -149,12 +150,12 @@ class MainActivity : AppCompatActivity(), OnClickListener, ItemFragment.OnDialog
     }
 
     override fun onDialogItemClick(itemType: String, itemId: String, dialog: DialogFragment) {
-        mainViewModel.updateCurrentSelectedItem(itemType ,itemId,)
+        mainViewModel.updateCurrentSelectedItem(itemType, itemId)
         dialog.dismiss()
     }
 
 
-    fun testMove(){
+    fun testMove() {
         binding.leftHand.visibility = View.VISIBLE
         binding.leftHand.fadeIn(1000)
         binding.leftHand.moveInFromLeft(1000)
