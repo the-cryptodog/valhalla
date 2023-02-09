@@ -1,24 +1,31 @@
 package com.app.valhalla.ui.main
 
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.valhalla.data.api.Network
+import com.app.valhalla.R
+import com.app.valhalla.data.MainDataSource
+import com.app.valhalla.data.MainRepository
+import com.app.valhalla.data.Result
+import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.BaseUi
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.notifyObserver
-import com.blankj.utilcode.util.AppUtils
-import com.blankj.utilcode.util.BarUtils
+import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.await
 
 class MainViewModel : ViewModel() {
 
+    private val repository: MainRepository by lazy {
+        MainRepository(MainDataSource())
+    }
 
     private var currentSelectedId: String = ""
 
@@ -44,25 +51,41 @@ class MainViewModel : ViewModel() {
     val itemDialog: LiveData<Int> = _itemDialog
 
     init {
-        fetchData()
+//        fetchData()
         initFunctionButton()
     }
 
+    fun loadData(bundle: Bundle) {
+        val data: BaseResult? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable("data", BaseResult::class.java)
+        } else {
+            bundle.getParcelable("data")
+        }
+        Log.d("TAGB", "loadData: $data")
+        repository.setUserData(data!!)
+
+        initAllItem()
+        initDefaultGameObj()
+    }
+
+    private fun initAllItem() {
+        _gameObjList.value = repository.userData?.data?.toMutableList()
+    }
 
     private fun fetchData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val call = Network.apiService.getDefault().await()
-                Log.d("TAG", call.toString())
-                //以 type為 key 建立map
-                val r = call.data.toMutableList()
-                withContext(Dispatchers.Main) {
-                    _gameObjList.value = r
-                    initDefaultGameObj()
+                val result = repository.fetchData()
+                if (result is Result.Success) {
+                    withContext(Dispatchers.Main) {
+                        _gameObjList.value = result.baseResult.data.toMutableList()
+                        initDefaultGameObj()
+                    }
+                } else {
+                    ToastUtils.showShort(R.string.login_failed)
                 }
             }
         }
-
     }
 
     private fun initDefaultGameObj() {

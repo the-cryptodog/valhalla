@@ -1,5 +1,8 @@
 package com.app.valhalla.data.model
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class GameObject (
 
     var id: String = "",
@@ -22,11 +25,12 @@ data class GameObject (
 //    var deletedAt: String = "",
 //    var favorite: Boolean = false,
 //    var favoriteCount: Int = 0,
-)
+) : Parcelable
 
+@Parcelize
 data class BaseResult (
 
     var result: String = "",
     var message: String = "",
     val data : List<GameObject>
-)
+) : Parcelable

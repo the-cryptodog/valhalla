@@ -1,16 +1,19 @@
 package com.app.valhalla.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
-import com.app.valhalla.databinding.ActivityDrawLotsBinding
+import com.app.valhalla.data.api.Network
 import com.app.valhalla.databinding.ActivityLaunchBinding
 import com.app.valhalla.ui.main.MainActivity
 import com.app.valhalla.util.GifUtil
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.await
 
 class LaunchActivity : AppCompatActivity() {
 
@@ -24,20 +27,31 @@ class LaunchActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            delay(3000)
-            jumpToMainActivity()
+            withContext(Dispatchers.IO){
+                initData()
+            }
         }
 
         binding.imgLogoAnimation.setImageDrawable(
             GifUtil.f_generateGif(
                 this,
-                R.drawable.loading_logo
+                R.drawable.logo_launch
             )
         )
 
     }
 
-    fun jumpToMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+    private suspend fun initData() {
+        val bundle = Bundle()
+        bundle.putParcelable("data" ,Network.apiService.getDefault().await())
+        jumpToMainActivity(bundle)
+        Log.d("TAGB", bundle.toString())
     }
+
+    private fun jumpToMainActivity(bundle: Bundle) {
+        startActivity(Intent(this, MainActivity::class.java).putExtra("response", bundle))
+        finish()
+    }
+
+
 }

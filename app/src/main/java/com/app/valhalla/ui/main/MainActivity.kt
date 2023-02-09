@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity(), OnClickListener, ItemFragment.OnDialog
         setContentView(binding.root)
         initOnClick()
 
+        intent.getBundleExtra("response")?.let {
+            Log.d("TAGB", "bundle: $it")
+            mainViewModel.loadData(it)
+        }
+
         MobileAds.initialize(this) {}
 
         binding.adView.loadAd(AdRequest.Builder().build())

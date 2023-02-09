@@ -1,45 +1,41 @@
 package com.app.valhalla.data
 
-import com.app.valhalla.data.model.LoggedInUser
+import android.os.Bundle
+import com.app.valhalla.data.model.BaseResult
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class MainRepository(private val dataSource: MainDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
+    var userData: BaseResult? = null
         private set
 
     val isLoggedIn: Boolean
-        get() = user != null
+        get() = userData != null
 
     init {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
-        user = null
+        userData = null
     }
 
-    fun logout() {
-        user = null
-        dataSource.logout()
-    }
+    suspend fun fetchData(): Result<BaseResult> {
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
-        // handle login
-        val result = dataSource.login(username, password)
+        val result = dataSource.fetchData("")
 
         if (result is Result.Success) {
-            setLoggedInUser(result.baseResult)
+            setUserData(result.baseResult)
         }
-
         return result
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
+
+    fun setUserData(userData: BaseResult) {
+        this.userData = userData
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
