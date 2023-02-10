@@ -51,14 +51,7 @@ class ItemFragment(
             adapter = ItemAdapter(itemList, context, this@ItemFragment, listener)
         }
     }
-//
-//    private fun initGridRecyclerView() {
-//        binding.gridRecyclerView.apply {
-//            adapter = ItemAdapter(itemList, context, this@ItemFragment, listener)
-//            layoutManager = LinearLayoutManager(context)
-//            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-//        }
-//    }
+
 
     interface OnDialogItemClickListener {
         fun onDialogItemClick(itemType: String, itemId: String, dialog: DialogFragment)
@@ -87,7 +80,7 @@ class ItemAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.binding.name.text = itemList[position].name
-        Glide.with(context).load(itemList[position].img_url).into(holder.binding.id)
+        Glide.with(context).load(itemList[position].imgUrl()).into(holder.binding.id)
         holder.itemView.setOnClickListener {
             listener.onDialogItemClick(itemList[position].type, itemList[position].id, dialog)
         }

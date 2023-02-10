@@ -64,4 +64,7 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
     implementation 'com.blankj:utilcodex:1.31.0'
+
+    // lottie載入json動畫
+    implementation 'com.airbnb.android:lottie:3.4.0'
 }

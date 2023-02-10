@@ -31,6 +31,10 @@ class MainViewModel : ViewModel() {
 
     private var currentSelectedType: String = ""
 
+    private val _isLoadingFinished = MutableLiveData<Boolean>()
+    val isLoadingFinishedFlow: LiveData<Boolean> = _isLoadingFinished
+
+
     private val _defaultGameObjList = MutableLiveData<MutableList<GameObject>>()
     val defaultGameObjList: LiveData<MutableList<GameObject>> = _defaultGameObjList
 
@@ -89,6 +93,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun initDefaultGameObj() {
+
         val list = _gameObjList.value?.filter { it.is_default }
         _defaultGameObjList.postValue(list?.toMutableList())
     }
