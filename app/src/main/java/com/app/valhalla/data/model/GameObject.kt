@@ -1,5 +1,6 @@
 package com.app.valhalla.data.model
 import android.os.Parcelable
+import com.app.valhalla.util.Constant
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -8,7 +9,7 @@ data class GameObject (
     var id: String = "",
     var name: String = "",
     var type: String = "",
-    var img_url: String = "",
+    var img_url: String,
     var timer: Int = 0,
     var isSelected: Boolean = false,
     var is_default: Boolean = false
@@ -25,7 +26,11 @@ data class GameObject (
 //    var deletedAt: String = "",
 //    var favorite: Boolean = false,
 //    var favoriteCount: Int = 0,
-) : Parcelable
+) : Parcelable{
+    fun imgUrl(): String {
+        return Constant.BASE_URL+img_url
+    }
+}
 
 @Parcelize
 data class BaseResult (

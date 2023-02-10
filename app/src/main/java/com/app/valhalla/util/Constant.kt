@@ -3,6 +3,7 @@ package com.app.valhalla.util
 import android.widget.Button
 
 object Constant {
+
     const val ALL_MAIN_ITEM_COUNT = 7
     const val BUTTON_LEFT = "33"
     const val BUTTON_MID = "66"

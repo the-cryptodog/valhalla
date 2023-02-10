@@ -138,7 +138,7 @@ class MainViewModel : ViewModel() {
     private fun updateFunctionIcon(obj: GameObject) {
         val current = _btnFunction.value?.get(Constant.BUTTON_LEFT)
         if (current != null) {
-            current.imgUrl = obj?.img_url.toString()
+            current.imgUrl = obj.imgUrl()
             _btnFunction.value?.put(Constant.BUTTON_LEFT, current)
             _btnFunction.notifyObserver()
         }
