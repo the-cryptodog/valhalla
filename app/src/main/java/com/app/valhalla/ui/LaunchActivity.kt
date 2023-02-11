@@ -49,6 +49,7 @@ class LaunchActivity : BaseActivity() {
         val bundle = Bundle()
         try {
             bundle.putParcelable("data", Network.apiService.getDefault().await())
+            bundle.putParcelable("stepGodData", Network.apiService.getStepGod().await())
             Log.d("TAGB", bundle.toString())
             jumpToMainActivity(bundle)
         } catch (e: Exception) {
