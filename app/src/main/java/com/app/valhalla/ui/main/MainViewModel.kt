@@ -2,6 +2,7 @@ package com.app.valhalla.ui.main
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,9 +12,7 @@ import com.app.valhalla.R
 import com.app.valhalla.data.MainDataSource
 import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.Result
-import com.app.valhalla.data.model.BaseResult
-import com.app.valhalla.data.model.BaseUi
-import com.app.valhalla.data.model.GameObject
+import com.app.valhalla.data.model.*
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.notifyObserver
 import com.blankj.utilcode.util.ToastUtils
@@ -50,6 +49,9 @@ class MainViewModel : ViewModel() {
     private val _itemDataList = MutableLiveData<MutableList<GameObject>>()
     val itemDataList: LiveData<MutableList<GameObject>> = _itemDataList
 
+    private val _itemStepDataList = MutableLiveData<Parcelable>()
+    val get_itemStepDataList: LiveData<Parcelable> = _itemStepDataList
+
     //itemDialog狀態
     private val _itemDialog = MutableLiveData<Int>()
     val itemDialog: LiveData<Int> = _itemDialog
@@ -65,9 +67,14 @@ class MainViewModel : ViewModel() {
         } else {
             bundle.getParcelable("data")
         }
+        _itemStepDataList.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable("stepGodData", StepBaseResult::class.java)
+        } else {
+            bundle.getParcelable("stepGodData")
+        }
         Log.d("TAGB", "loadData: $data")
+        Log.d("Goddata", "$get_itemStepDataList")
         repository.setUserData(data!!)
-
         initAllItem()
         initDefaultGameObj()
     }

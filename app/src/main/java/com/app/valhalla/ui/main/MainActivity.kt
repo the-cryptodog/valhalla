@@ -1,16 +1,20 @@
 package com.app.valhalla.ui.main
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.app.valhalla.base.BaseActivity
+import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.GameObject
+import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
@@ -26,6 +30,8 @@ import com.google.android.gms.ads.MobileAds
 class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel>()
+    private val bundle:Bundle = Bundle()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +96,7 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
                 .load(list.find { it.type == Constant.OBJ_FLOWER_ID }?.imgUrl())
                 .into(binding.imgFlowerRight)
         })
+        getStepGodData()
     }
 
 
@@ -126,7 +133,7 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
                     testMove()
                 }
                 binding.btnFunctionThree.id -> {
-                    startActivity(Intent(this, DrawLotsActivity::class.java))
+                    startActivity(Intent(this, DrawLotsActivity::class.java).putExtra("responsestepgod", bundle))
                 }
 
                 binding.imgTable.id -> {
@@ -171,5 +178,10 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
         binding.rightHand.visibility = View.VISIBLE
         binding.rightHand.fadeIn(1000)
         binding.rightHand.moveInFromRight(1000)
+    }
+    fun getStepGodData(){
+        mainViewModel.get_itemStepDataList.observe(this){
+            bundle.putParcelable("stepGodData",it)
+        }
     }
 }
