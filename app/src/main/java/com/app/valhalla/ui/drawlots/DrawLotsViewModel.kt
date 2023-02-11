@@ -1,10 +1,14 @@
 package com.app.valhalla.ui.drawlots
 
+import android.os.Build
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.valhalla.R
+import com.app.valhalla.data.model.StepBaseResult
+import com.app.valhalla.data.model.StepObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,11 +21,13 @@ class DrawLotsViewModel : ViewModel() {
     private val _saveStepThrowVisible = MutableLiveData<Boolean>()//筊判斷
     private val _saveStepAnswer = MutableLiveData<Int>()//筊結果
     private val _saveStepAnswerString = MutableLiveData<Int>()//筊結果文字
+    private val _saveStepGodData = MutableLiveData<StepBaseResult>()
     val getStepShakeData: LiveData<Boolean> get() = _saveStepShakeVisible
     val getDivinationBlocks: LiveData<Boolean> get() = _saveDivinationBlocks
     val getStepThrowVisible: LiveData<Boolean> get() = _saveStepThrowVisible
     val getStepAnswer: LiveData<Int> get() = _saveStepAnswer
     val getStepAnswerString: LiveData<Int> get() = _saveStepAnswerString
+    val getStepGodData: LiveData<StepBaseResult> get() = _saveStepGodData
 
 
     private var int_throw_positive_count: Int = 0
@@ -101,5 +107,19 @@ class DrawLotsViewModel : ViewModel() {
         } else {
             return R.drawable.throw_positive
         }
+    }
+    fun f_DecodeStepData(bundle:Bundle){
+        _saveStepGodData.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable("stepGodData", StepBaseResult::class.java)
+        } else {
+            bundle.getParcelable("stepGodData")
+        }
+    }
+    fun f_randomtogetStep(stepCount:Int):Int{
+        var stepCollect:MutableList<Int> = mutableListOf()
+        for (i in 1 until stepCount){
+            stepCollect.add(i)
+        }
+        return stepCollect[Random.nextInt(stepCollect.size)]
     }
 }
