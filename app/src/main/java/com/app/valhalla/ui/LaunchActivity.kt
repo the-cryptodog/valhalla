@@ -1,6 +1,7 @@
 package com.app.valhalla.ui
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +19,7 @@ import retrofit2.await
 class LaunchActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLaunchBinding
-
+    private lateinit var mediaPlayer:MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,13 +33,16 @@ class LaunchActivity : BaseActivity() {
             }
         }
 
+        mediaPlayer = MediaPlayer.create(this,R.raw.launch_music)
+        if(mediaPlayer != null){
+            mediaPlayer.start()
+        }
         binding.imgLogoAnimation.setImageDrawable(
             GifUtil.f_generateGif(
                 this,
                 R.drawable.logo_launch
             )
         )
-
     }
 
     private suspend fun initData() {
@@ -55,6 +59,13 @@ class LaunchActivity : BaseActivity() {
     private fun jumpToMainActivity(bundle: Bundle) {
         startActivity(Intent(this, MainActivity::class.java).putExtra("response", bundle))
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(mediaPlayer != null){
+            mediaPlayer.stop()
+        }
     }
 
 
