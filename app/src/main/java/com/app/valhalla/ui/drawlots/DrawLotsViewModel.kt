@@ -95,9 +95,8 @@ class DrawLotsViewModel : ViewModel() {
     }
 
     fun f_randomtogetAnswer(): Int {
-        val list = listOf(0, 1)
-        val randomElement_left = list[Random.nextInt(list.size)]
-        val randomElement_right = list[Random.nextInt(list.size)]
+        val randomElement_left = (0..1).shuffled().last()
+        val randomElement_right = (0..1).shuffled().last()
         if (randomElement_left == randomElement_right) {
             if (randomElement_left == 1) {
                 return R.drawable.throw_laugh
@@ -116,10 +115,7 @@ class DrawLotsViewModel : ViewModel() {
         }
     }
     fun f_randomtogetStep(stepCount:Int):Int{
-        var stepCollect:MutableList<Int> = mutableListOf()
-        for (i in 1 until stepCount){
-            stepCollect.add(i)
-        }
-        return stepCollect[Random.nextInt(stepCollect.size)]
+        val randomStep = (1..stepCount).shuffled().last()
+        return randomStep
     }
 }
