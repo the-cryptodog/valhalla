@@ -22,12 +22,14 @@ class DrawLotsViewModel : ViewModel() {
     private val _saveStepAnswer = MutableLiveData<Int>()//筊結果
     private val _saveStepAnswerString = MutableLiveData<Int>()//筊結果文字
     private val _saveStepGodData = MutableLiveData<StepBaseResult>()
+    private val _saveIntentStepCotent = MutableLiveData<Boolean>()
     val getStepShakeData: LiveData<Boolean> get() = _saveStepShakeVisible
     val getDivinationBlocks: LiveData<Boolean> get() = _saveDivinationBlocks
     val getStepThrowVisible: LiveData<Boolean> get() = _saveStepThrowVisible
     val getStepAnswer: LiveData<Int> get() = _saveStepAnswer
     val getStepAnswerString: LiveData<Int> get() = _saveStepAnswerString
     val getStepGodData: LiveData<StepBaseResult> get() = _saveStepGodData
+    val getIntentStepContent: LiveData<Boolean> get() = _saveIntentStepCotent
 
 
     private var int_throw_positive_count: Int = 0
@@ -78,10 +80,14 @@ class DrawLotsViewModel : ViewModel() {
          * 判斷擲筊結果按鈕事件是要繼續擲筊還是重抽籤
          */
         when (getStepAnswer.value) {
-            R.drawable.throw_positive -> StepTwo()
+            R.drawable.throw_positive -> StepFinal()
             R.drawable.throw_negative -> StepOne()
             R.drawable.throw_laugh -> StepOne()
         }
+    }
+
+    fun StepFinal(){
+        _saveIntentStepCotent.value = true
     }
 
     fun f_subfunctionVisibleControl(

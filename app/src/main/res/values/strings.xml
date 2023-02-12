@@ -16,5 +16,5 @@
     <string name="text_title_divination_block">擲\n筊</string>
     <string name="text_title_throw_negative">陰筊\n請重新求籤</string>
     <string name="text_title_throw_laugh">笑筊\n請重新求籤</string>
-    <string name="text_title_throw_positve">聖筊\n還差%s次</string>
+    <string name="text_title_throw_positve">聖筊\n按下解籤</string>
 </resources>

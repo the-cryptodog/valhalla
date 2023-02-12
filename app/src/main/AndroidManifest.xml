@@ -16,6 +16,8 @@
         <activity
             android:name=".ui.drawlots.DrawLotsActivity"></activity>
         <activity
+            android:name=".ui.webview.CommonWebViewActivity"></activity>
+        <activity
             android:name=".ui.main.MainActivity"
             android:exported="false">
         </activity>

@@ -1,5 +1,6 @@
 package com.app.valhalla.ui.drawlots
 
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityDrawLotsBinding
+import com.app.valhalla.ui.webview.CommonWebViewActivity
 import com.app.valhalla.util.FontUtil
 import com.app.valhalla.util.GifUtil
 import com.app.valhalla.util.fadeIn
@@ -31,6 +33,7 @@ class DrawLotsActivity : BaseActivity() {
     private lateinit var binding: ActivityDrawLotsBinding
     private val drawLotsViewModel by viewModels<DrawLotsViewModel>()
     private var int_counttotal:Int=1
+    private var str_stepAnswer:String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
@@ -47,7 +50,8 @@ class DrawLotsActivity : BaseActivity() {
         }
         drawLotsViewModel.getDivinationBlocks.observe(this){
             binding.viewDivinationBlocks.isVisible = it
-            binding.textTitleStepNumber.text="${drawLotsViewModel.f_randomtogetStep(int_counttotal)}"
+            str_stepAnswer = "${drawLotsViewModel.f_randomtogetStep(int_counttotal)}"
+            binding.textTitleStepNumber.text = str_stepAnswer
         }
         drawLotsViewModel.getStepThrowVisible.observe(this){
             binding.viewStepthrow.isVisible = it
@@ -57,6 +61,16 @@ class DrawLotsActivity : BaseActivity() {
         }
         drawLotsViewModel.getStepAnswerString.observe(this){
             binding.textStepanswer.setText(getString(it))
+        }
+        drawLotsViewModel.getIntentStepContent.observe(this){
+            if(it){
+                var bundle:Bundle = Bundle()
+                bundle.putString("StepKey",str_stepAnswer)
+                val intent =Intent(this,CommonWebViewActivity::class.java).apply {
+                    putExtras(bundle)
+                }
+                startActivity(intent)
+            }
         }
 
         binding.imgDrawlots.setOnClickListener{
@@ -82,7 +96,7 @@ class DrawLotsActivity : BaseActivity() {
             Glide.with(this)
                 .load(it.data.imgUrl())
                 .into(binding.godImg)
-            binding.godImg.fadeIn(1000)
+            binding.godImg.fadeIn(2000)
         })
     }
 }
