@@ -19,6 +19,7 @@ class CommonWebViewActivity:BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showLoading()
         getbundleData()
         setWebView(Constant.BASE_URL+"api_getstep.php?step_count="+str_stepNO)
     }
@@ -50,11 +51,16 @@ class CommonWebViewActivity:BaseActivity() {
         binding.webBrowser.loadUrl("https://wantkenny.000webhostapp.com/goodbye/api_getstep.php?step_count="+str_stepNO)
 
     }
-    private class MyWebViewClient : WebViewClient() {
+    inner class MyWebViewClient : WebViewClient() {
 
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             url?.let { view?.loadUrl(it) }
             return true
+        }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            hideLoading()
         }
     }
 }
