@@ -112,7 +112,7 @@ class MainViewModel : ViewModel() {
 
     private fun objectSelected(itemType: String) {
         //從類別與預設值去搜尋
-        _defaultGameObjList.value?.find { it.type == itemType && it.is_default }.let {
+        _defaultGameObjList.value?.find { it.type == itemType }.let {
             Log.d("TAGG", it?.img_url.toString())
 
 
@@ -123,6 +123,8 @@ class MainViewModel : ViewModel() {
             //暫存選定物件之id與type
             currentSelectedId = it?.id.toString()
             currentSelectedType = it?.type.toString()
+            Log.d("TAGG", "1+$currentSelectedId")
+            Log.d("TAGG", "2+$currentSelectedType")
         }
     }
 

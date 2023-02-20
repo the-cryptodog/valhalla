@@ -67,4 +67,6 @@ dependencies {
 
     // lottie載入json動畫
     implementation 'com.airbnb.android:lottie:3.4.0'
+    //Google Play Payment
+    implementation "com.android.billingclient:billing:5.1.0"
 }

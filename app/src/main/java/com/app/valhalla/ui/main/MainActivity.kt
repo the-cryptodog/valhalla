@@ -1,6 +1,10 @@
 package com.app.valhalla.ui.main
 
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.GameObject
@@ -18,20 +24,34 @@ import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
-import com.app.valhalla.util.Constant
-import com.app.valhalla.util.fadeIn
-import com.app.valhalla.util.moveInFromLeft
-import com.app.valhalla.util.moveInFromRight
+import com.app.valhalla.util.*
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener {
+class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener,SensorEventListener  {
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel>()
     private val bundle:Bundle = Bundle()
 
+    private lateinit var sensorManager: SensorManager
+    private var accelerometerSensor: Sensor? = null
+
+
+
+    override fun onResume() {
+        super.onResume()
+        accelerometerSensor?.let { sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 解除註冊加速度計傳感器監聽器
+        sensorManager.unregisterListener(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +63,13 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
             Log.d("TAGB", "bundle: $it")
             mainViewModel.loadData(it)
         }
+
+        // 獲取 SensorManager 實例
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+
+        // 獲取加速度計傳感器實例
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
 
         MobileAds.initialize(this) {}
 
@@ -89,12 +116,6 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
             Glide.with(this)
                 .load(list.find { it.type == Constant.OBJ_CANDLE_ID }?.imgUrl())
                 .into(binding.imgCandleLeft)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_FLOWER_ID }?.imgUrl())
-                .into(binding.imgFlowerLeft)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_FLOWER_ID }?.imgUrl())
-                .into(binding.imgFlowerRight)
         })
         getStepGodData()
     }
@@ -113,8 +134,6 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
         binding.imgIncenseBurner.setOnClickListener(this)
         binding.imgCandleRight.setOnClickListener(this)
         binding.imgCandleLeft.setOnClickListener(this)
-        binding.imgFlowerLeft.setOnClickListener(this)
-        binding.imgFlowerRight.setOnClickListener(this)
         binding.imgJoss.setOnClickListener(this)
         binding.imgJossBackground.setOnClickListener(this)
         binding.imgVaseLeft.setOnClickListener(this)
@@ -151,9 +170,6 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
                 binding.imgCandleLeft.id, binding.imgCandleRight.id -> {
                     mainViewModel.candleSelected()
                 }
-                binding.imgFlowerLeft.id, binding.imgFlowerRight.id -> {
-                    mainViewModel.flowerSelected()
-                }
                 binding.imgJoss.id -> {
                     mainViewModel.jossSelected()
                 }
@@ -171,17 +187,63 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
 
 
     fun testMove() {
-        binding.leftHand.visibility = View.VISIBLE
-        binding.leftHand.fadeIn(1000)
-        binding.leftHand.moveInFromLeft(1000)
+        //按下按鈕出現手
+        if(binding.byeFix.isVisible || binding.byeGif.isVisible ){
+            return
+        }
+        binding.byeFix.visibility =View.VISIBLE
+        binding.byeFix.fadeIn(500)
 
-        binding.rightHand.visibility = View.VISIBLE
-        binding.rightHand.fadeIn(1000)
-        binding.rightHand.moveInFromRight(1000)
+    }
+
+    fun bye(){
+        //搖晃開始拜
+        if(binding.byeFix.isVisible) {
+            binding.byeFix.visibility = View.GONE
+            binding.byeGif.setImageDrawable(
+                GifUtil.f_generateGif(
+                    this,
+                    R.drawable.byebye_gif
+                )
+            )
+
+
+            binding.byeGif.visibility = View.VISIBLE
+            binding.byeGif.alpha = 1f
+
+            lifecycleScope.launch {
+                delay(3000)
+                binding.byeGif.fadeOut(1000)
+                delay(500)
+                binding.byeGif.visibility = View.GONE
+            }
+        }
     }
     fun getStepGodData(){
         mainViewModel.get_itemStepDataList.observe(this){
             bundle.putParcelable("stepGodData",it)
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        // 當加速度計數據發生變化時，這個方法將被調用
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+            // 獲取加速度計數據
+            val x = event.values[0].toInt()
+            val y = event.values[1].toInt()
+            val z = event.values[2].toInt()
+
+            // 在控制台上打印加速度計數據
+            Log.d("SensorActivity", "x: $x, y: $y, z: $z")
+
+            if(y+z >= 14){
+                bye()
+            }
+        }
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // 在傳感器精度發生變化時，這個方法將被調用，這裡我們不處理
     }
 }

@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="logobackground">#F4F3E1</color>
+    <color name="red">#BF271C</color>
+    <color name="yellow">#DAC82E</color>
 </resources>

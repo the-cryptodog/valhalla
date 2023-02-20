@@ -1,13 +1,9 @@
 package com.app.valhalla.ui.webview
 
-import android.Manifest
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.webkit.*
-import androidx.core.content.ContextCompat.startActivity
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityWebviewBinding
 import com.app.valhalla.util.Constant
