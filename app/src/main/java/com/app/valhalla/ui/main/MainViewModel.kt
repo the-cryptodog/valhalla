@@ -12,7 +12,10 @@ import com.app.valhalla.R
 import com.app.valhalla.data.MainDataSource
 import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.Result
-import com.app.valhalla.data.model.*
+import com.app.valhalla.data.model.BaseResult
+import com.app.valhalla.data.model.BaseUi
+import com.app.valhalla.data.model.GameObject
+import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.notifyObserver
 import com.blankj.utilcode.util.ToastUtils
@@ -25,6 +28,9 @@ class MainViewModel : ViewModel() {
     private val repository: MainRepository by lazy {
         MainRepository(MainDataSource())
     }
+
+    //    @Volatile
+    private var loadingCount = 0
 
     private var currentSelectedId: String = ""
 
@@ -51,6 +57,10 @@ class MainViewModel : ViewModel() {
 
     private val _itemStepDataList = MutableLiveData<Parcelable>()
     val get_itemStepDataList: LiveData<Parcelable> = _itemStepDataList
+
+    private val _isLoadingFinish = MutableLiveData<Boolean>()
+    val isLoadingFinish: LiveData<Boolean> = _isLoadingFinish
+
 
     //itemDialog狀態
     private val _itemDialog = MutableLiveData<Int>()
@@ -172,9 +182,6 @@ class MainViewModel : ViewModel() {
         objectSelected(Constant.OBJ_VASE)
     }
 
-    fun incenseSelected() {
-        objectSelected(Constant.OBJ_INCENSE_ID)
-    }
 
     fun incenseBurnerSelected() {
         objectSelected(Constant.OBJ_INCENSE_BURNER_ID)
@@ -196,8 +203,11 @@ class MainViewModel : ViewModel() {
         objectSelected(Constant.OBJ_CANDLE_ID)
     }
 
-    fun flowerSelected() {
-        objectSelected(Constant.OBJ_FLOWER_ID)
+    fun addLoadingCount() {
+        loadingCount++
+        Log.d("TAGB", "loadingCountViewModel = $loadingCount")
+        if (loadingCount == Constant.ALL_MAIN_ITEM_COUNT) {
+            _isLoadingFinish.postValue(true)
+        }
     }
-
 }
