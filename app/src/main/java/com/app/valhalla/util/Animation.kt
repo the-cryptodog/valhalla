@@ -1,5 +1,6 @@
 package com.app.valhalla.util
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -96,6 +97,11 @@ fun ImageView.moveInFromLeft(duration:Long){
 
 /** 淡出 **/
 fun ImageView.fadeOut(duration:Long){
+    animate().alpha(0f).setDuration(duration).start()
+}
+
+/** 淡出 **/
+fun View.fadeOut(duration:Long){
     animate().alpha(0f).setDuration(duration).start()
 }
 

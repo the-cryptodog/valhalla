@@ -1,4 +1,4 @@
-package com.app.valhalla.ui
+package com.app.valhalla.ui.launch
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -50,7 +50,7 @@ class LaunchActivity : BaseActivity() {
         try {
             bundle.putParcelable("data", Network.apiService.getDefault().await())
             bundle.putParcelable("stepGodData", Network.apiService.getStepGod().await())
-            Log.d("TAGB", bundle.toString())
+            Log.d("TAGB",  bundle.toString())
             jumpToMainActivity(bundle)
         } catch (e: Exception) {
             Log.d("TAGB",  e.message.toString())
