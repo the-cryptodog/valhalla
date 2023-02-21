@@ -38,10 +38,15 @@ class DrawLotsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         f_initData()
         binding.imgStepshake.setImageDrawable(GifUtil.f_generateGif(this,R.drawable.step_shake))
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
-        binding.textTitleDivinationBlocks.typeface=FontUtil.f_chinese_traditional(this)
         binding.textStepanswer.typeface=FontUtil.f_chinese_traditional(this)
         binding.textTitleStepNumber.typeface=FontUtil.f_chinese_traditional(this)
 
@@ -59,6 +64,9 @@ class DrawLotsActivity : BaseActivity() {
         drawLotsViewModel.getStepAnswer.observe(this){
             binding.imgStepthrow.setImageDrawable(GifUtil.f_generateGif(this,it))
         }
+        drawLotsViewModel.getIsCanDecodeStep.observe(this){
+            binding.imgStepanswerBtn.setImageDrawable(GifUtil.f_generateGif(this,it))
+        }
         drawLotsViewModel.getStepAnswerString.observe(this){
             binding.textStepanswer.setText(getString(it))
         }
@@ -72,19 +80,20 @@ class DrawLotsActivity : BaseActivity() {
                 startActivity(intent)
             }
         }
-
+        binding.viewSubfunction.setOnClickListener{
+            //攔截子功能view顯示後下層view可以點擊
+        }
         binding.imgDrawlots.setOnClickListener{
             binding.viewSubfunction.isVisible = true
             drawLotsViewModel.StepOne()
         }
 
-        binding.textTitleDivinationBlocks.setOnClickListener {
+        binding.imgTitleDivinationBlocks.setOnClickListener {
             drawLotsViewModel.StepTwo()
         }
-        binding.textStepanswer.setOnClickListener {
+        binding.imgStepanswerBtn.setOnClickListener {
             drawLotsViewModel.StepThree()
         }
-
     }
     fun f_initData(){
         intent.getBundleExtra("responsestepgod")?.let {

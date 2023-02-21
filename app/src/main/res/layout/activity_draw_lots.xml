@@ -65,7 +65,7 @@
             android:id="@+id/view_divination_blocks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:visibility="visible"
+            tools:visibility="gone"
             android:visibility="gone">
             <ImageView
                 android:id="@+id/img_step"
@@ -90,11 +90,11 @@
                 app:layout_constraintStart_toStartOf="@id/img_step"
                 app:layout_constraintEnd_toEndOf="@id/img_step"
                 tools:visibility="visible"/>
-            <TextView
-                android:id="@+id/text_title_divination_blocks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_title_divination_block"
+            <ImageView
+                android:id="@+id/img_title_divination_blocks"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/throw_stepbtn"
                 android:textSize="60dp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"
@@ -107,6 +107,7 @@
             android:id="@+id/view_stepthrow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:visibility="gone"
             android:visibility="gone">
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/img_stepthrow"
@@ -127,6 +128,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_stepthrow"/>
+            <ImageView
+                android:id="@+id/img_stepanswer_btn"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_stepanswer"
+                tools:visibility="visible"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

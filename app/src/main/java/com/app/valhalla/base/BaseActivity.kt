@@ -19,6 +19,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     /*
       顯示加載框，默認實現
    */
