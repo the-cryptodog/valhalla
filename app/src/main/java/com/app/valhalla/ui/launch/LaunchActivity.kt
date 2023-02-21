@@ -53,7 +53,7 @@ class LaunchActivity : BaseActivity() {
             Log.d("TAGB",  bundle.toString())
             jumpToMainActivity(bundle)
         } catch (e: Exception) {
-            Log.d("TAGB",  e.message.toString())
+            Log.d("TAGAA",  e.message.toString())
         }
     }
 

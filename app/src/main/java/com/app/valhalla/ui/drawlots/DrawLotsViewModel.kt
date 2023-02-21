@@ -21,7 +21,7 @@ class DrawLotsViewModel : ViewModel() {
     private val _saveStepThrowVisible = MutableLiveData<Boolean>()//筊判斷
     private val _saveStepAnswer = MutableLiveData<Int>()//筊結果
     private val _saveStepAnswerString = MutableLiveData<Int>()//筊結果文字
-    private val _saveIsCanDecodeStep = MutableLiveData<Int>()//是否可解籤
+    private val _saveDecodeStepImg = MutableLiveData<Int>()//是否可解籤
     private val _saveStepGodData = MutableLiveData<StepBaseResult>()
     private val _saveIntentStepCotent = MutableLiveData<Boolean>()
     val getStepShakeData: LiveData<Boolean> get() = _saveStepShakeVisible
@@ -29,7 +29,7 @@ class DrawLotsViewModel : ViewModel() {
     val getStepThrowVisible: LiveData<Boolean> get() = _saveStepThrowVisible
     val getStepAnswer: LiveData<Int> get() = _saveStepAnswer
     val getStepAnswerString: LiveData<Int> get() = _saveStepAnswerString
-    val getIsCanDecodeStep: LiveData<Int> get() = _saveIsCanDecodeStep
+    val getDecodeStepImg: LiveData<Int> get() = _saveDecodeStepImg
     val getStepGodData: LiveData<StepBaseResult> get() = _saveStepGodData
     val getIntentStepContent: LiveData<Boolean> get() = _saveIntentStepCotent
 
@@ -63,17 +63,17 @@ class DrawLotsViewModel : ViewModel() {
                     R.drawable.throw_positive -> {
                         int_throw_positive_count++
                         _saveStepAnswerString.value = R.string.text_title_throw_positve
-                        _saveIsCanDecodeStep.value = R.drawable.step_decodebtn
+                        _saveDecodeStepImg.value = R.drawable.step_decodebtn
                     }
                     R.drawable.throw_negative -> {
                         int_throw_positive_count = 0
                         _saveStepAnswerString.value = R.string.text_title_throw_negative
-                        _saveIsCanDecodeStep.value = R.drawable.step_shake
+                        _saveDecodeStepImg.value = R.drawable.step_shake
                     }
                     R.drawable.throw_laugh -> {
                         int_throw_positive_count = 0
                         _saveStepAnswerString.value = R.string.text_title_throw_laugh
-                        _saveIsCanDecodeStep.value = R.drawable.step_shake
+                        _saveDecodeStepImg.value = R.drawable.step_shake
                     }
                 }
             }

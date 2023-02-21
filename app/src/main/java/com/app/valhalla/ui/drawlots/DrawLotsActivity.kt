@@ -64,8 +64,10 @@ class DrawLotsActivity : BaseActivity() {
         drawLotsViewModel.getStepAnswer.observe(this){
             binding.imgStepthrow.setImageDrawable(GifUtil.f_generateGif(this,it))
         }
-        drawLotsViewModel.getIsCanDecodeStep.observe(this){
-            binding.imgStepanswerBtn.setImageDrawable(GifUtil.f_generateGif(this,it))
+        drawLotsViewModel.getDecodeStepImg.observe(this){
+            Glide.with(this)
+                .load(it)
+                .into(binding.imgStepanswerBtn)
         }
         drawLotsViewModel.getStepAnswerString.observe(this){
             binding.textStepanswer.setText(getString(it))
