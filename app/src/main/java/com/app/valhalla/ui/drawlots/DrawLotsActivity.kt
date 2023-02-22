@@ -38,12 +38,6 @@ class DrawLotsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         f_initData()
         binding.imgStepshake.setImageDrawable(GifUtil.f_generateGif(this,R.drawable.step_shake))
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
@@ -55,8 +49,10 @@ class DrawLotsActivity : BaseActivity() {
         }
         drawLotsViewModel.getDivinationBlocks.observe(this){
             binding.viewDivinationBlocks.isVisible = it
-            str_stepAnswer = "${drawLotsViewModel.f_randomtogetStep(int_counttotal)}"
-            binding.textTitleStepNumber.text = str_stepAnswer
+            if(it){
+                str_stepAnswer = "${drawLotsViewModel.f_randomtogetStep(int_counttotal)}"
+                binding.textTitleStepNumber.text = str_stepAnswer
+            }
         }
         drawLotsViewModel.getStepThrowVisible.observe(this){
             binding.viewStepthrow.isVisible = it
@@ -65,9 +61,7 @@ class DrawLotsActivity : BaseActivity() {
             binding.imgStepthrow.setImageDrawable(GifUtil.f_generateGif(this,it))
         }
         drawLotsViewModel.getDecodeStepImg.observe(this){
-            Glide.with(this)
-                .load(it)
-                .into(binding.imgStepanswerBtn)
+            binding.imgStepanswerBtn.setImageDrawable(getDrawable(it))
         }
         drawLotsViewModel.getStepAnswerString.observe(this){
             binding.textStepanswer.setText(getString(it))
@@ -96,6 +90,11 @@ class DrawLotsActivity : BaseActivity() {
         binding.imgStepanswerBtn.setOnClickListener {
             drawLotsViewModel.StepThree()
         }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
     fun f_initData(){
         intent.getBundleExtra("responsestepgod")?.let {
