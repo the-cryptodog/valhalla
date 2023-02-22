@@ -50,7 +50,6 @@ class LaunchActivity : BaseActivity() {
         try {
             bundle.putParcelable("data", Network.apiService.getDefault().await())
             bundle.putParcelable("stepGodData", Network.apiService.getStepGod().await())
-            Log.d("TAGB",  bundle.toString())
             jumpToMainActivity(bundle)
         } catch (e: Exception) {
             Log.d("TAGAA",  e.message.toString())

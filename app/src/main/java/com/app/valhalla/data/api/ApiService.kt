@@ -2,6 +2,8 @@ package com.app.valhalla.data.api
 
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.StepBaseResult
+import com.app.valhalla.data.model.StepContentBaseResult
+import com.app.valhalla.data.model.StepContentObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,7 +18,7 @@ interface ApiService {
     fun getStepGod(): Call<StepBaseResult>
 
     @GET("api_getstep.php")
-    fun getStepContent(): Call<StepBaseResult>
+    fun getStepContent(): Call<StepContentBaseResult>
 
 
     @GET("things/{item}")

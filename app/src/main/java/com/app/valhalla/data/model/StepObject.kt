@@ -22,5 +22,5 @@ data class StepObject (
 data class StepBaseResult (
     var result: String = "",
     var message: String = "",
-    val data : StepObject
+    var data : StepObject
 ) : Parcelable

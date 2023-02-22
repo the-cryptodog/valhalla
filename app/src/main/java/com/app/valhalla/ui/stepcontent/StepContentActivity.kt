@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityStepContentBinding
 import com.app.valhalla.util.FontUtil
@@ -52,6 +53,10 @@ class StepContentActivity : BaseActivity() {
 
             })
             .into(binding.stepImg)
+        stepContentViewModel.getStepContentData.observe(this){
+            binding.textStepcontent.setText(stepContentViewModel.getStepContentData.value)
+        }
+        stepContentViewModel.f_getContent()
     }
     private fun getbundleData(){
         val bundle = intent.extras
