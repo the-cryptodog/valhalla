@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityDrawLotsBinding
+import com.app.valhalla.ui.stepcontent.StepContentActivity
 import com.app.valhalla.ui.webview.CommonWebViewActivity
 import com.app.valhalla.util.FontUtil
 import com.app.valhalla.util.GifUtil
@@ -70,10 +71,11 @@ class DrawLotsActivity : BaseActivity() {
             if(it){
                 var bundle:Bundle = Bundle()
                 bundle.putString("StepKey",str_stepAnswer)
-                val intent =Intent(this,CommonWebViewActivity::class.java).apply {
+                val intent =Intent(this,StepContentActivity::class.java).apply {
                     putExtras(bundle)
                 }
                 startActivity(intent)
+                finish()
             }
         }
         binding.viewSubfunction.setOnClickListener{
