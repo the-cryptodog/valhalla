@@ -17,13 +17,13 @@ class CommonWebViewActivity:BaseActivity() {
         setContentView(binding.root)
         showLoading()
         getbundleData()
-        setWebView(Constant.BASE_URL+"api_getstep.php?step_count="+str_stepNO)
+        //setWebView(Constant.BASE_URL+"api_getstep.php?step_count="+str_stepNO)
     }
 
     private fun getbundleData(){
         val bundle = intent.extras
         if (bundle != null) {
-            str_stepNO = bundle.getString("StepKey")?:"1"
+
         }
     }
 

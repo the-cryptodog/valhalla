@@ -35,6 +35,7 @@ class DrawLotsActivity : BaseActivity() {
     private val drawLotsViewModel by viewModels<DrawLotsViewModel>()
     private var int_counttotal:Int=1
     private var str_stepAnswer:String =""
+    private var str_stepUrl:String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDrawLotsBinding.inflate(layoutInflater)
@@ -71,6 +72,7 @@ class DrawLotsActivity : BaseActivity() {
             if(it){
                 var bundle:Bundle = Bundle()
                 bundle.putString("StepKey",str_stepAnswer)
+                bundle.putString("StepResourceUrl",str_stepUrl)
                 val intent =Intent(this,StepContentActivity::class.java).apply {
                     putExtras(bundle)
                 }
@@ -105,6 +107,7 @@ class DrawLotsActivity : BaseActivity() {
         drawLotsViewModel.getStepGodData.observe(this,Observer{
             binding.textTitleHeart.text=it.data.name
             int_counttotal=it.data.step_count
+            str_stepUrl=it.data.StepResource()
             Glide.with(this)
                 .load(it.data.imgUrl())
                 .into(binding.godImg)

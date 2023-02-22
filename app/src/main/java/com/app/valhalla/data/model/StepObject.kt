@@ -7,10 +7,14 @@ import kotlinx.parcelize.Parcelize
 data class StepObject (
     var name: String = "",
     var img_url: String,
-    var step_count: Int
+    var step_count: Int,
+    var step_source: String
 ) : Parcelable{
     fun imgUrl(): String {
         return Constant.BASE_URL+img_url
+    }
+    fun StepResource(): String{
+        return Constant.BASE_URL+step_source
     }
 }
 

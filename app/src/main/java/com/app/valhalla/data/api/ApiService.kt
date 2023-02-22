@@ -15,6 +15,9 @@ interface ApiService {
     @GET("api_getstepgod.php")
     fun getStepGod(): Call<StepBaseResult>
 
+    @GET("api_getstep.php")
+    fun getStepContent(): Call<StepBaseResult>
+
 
     @GET("things/{item}")
     fun getItems(@Path("item") uid: String): Call<BaseResult>
