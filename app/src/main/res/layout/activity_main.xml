@@ -36,6 +36,7 @@
         android:elevation="1dp"
         android:src="@drawable/radio"
         android:visibility="visible"
+        android:background="@drawable/bg_round_corner_btn_red"
         app:layout_constraintBottom_toBottomOf="@+id/img_drawing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_drawing"
@@ -181,6 +182,7 @@
         android:layout_height="0dp"
         android:scaleType="fitXY"
         android:visibility="visible"
+        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_drawing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -206,11 +208,11 @@
     <ImageView
         android:id="@+id/img_incense_burner"
         android:layout_width="75dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:elevation="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/insenceburner"
-        android:translationY="35dp"
+        android:translationY="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_joss"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -222,7 +224,7 @@
         android:layout_height="100dp"
         android:elevation="15dp"
         android:src="@drawable/c00"
-        android:translationY="-5dp"
+        android:translationY="-15dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toEndOf="@+id/img_incense_burner"
         app:layout_constraintStart_toStartOf="@+id/img_incense_burner" />
@@ -245,7 +247,7 @@
         android:elevation="15dp"
         android:scaleType="fitEnd"
         android:src="@drawable/vase"
-        android:translationY="20dp"
+        android:translationY="15dp"
         app:layout_constraintBottom_toTopOf="@+id/img_table"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -256,7 +258,7 @@
         android:elevation="15dp"
         android:scaleType="fitEnd"
         android:src="@drawable/vase"
-        android:translationY="20dp"
+        android:translationY="15dp"
         app:layout_constraintBottom_toTopOf="@+id/img_table"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -270,6 +272,8 @@
         android:src="@drawable/step_cam"
         android:textSize="24sp"
         android:translationY="25dp"
+        android:clickable="true"
+        android:background="@drawable/bg_round_corner_btn_red"
         app:layout_constraintBottom_toTopOf="@id/img_table_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5" />
@@ -284,6 +288,8 @@
         android:rotation="121"
         android:rotationX="30"
         android:src="@drawable/bamboobook1"
+        android:clickable="true"
+        android:background="@drawable/bg_round_corner_btn_red"
         android:textSize="24sp"
         android:translationX="-20dp"
         android:translationY="50dp"
@@ -319,6 +325,7 @@
             android:gravity="center"
             android:text="功能1"
             android:textSize="24sp"
+            android:background="@drawable/bg_round_corner_btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_function_two"
             app:layout_constraintHorizontal_bias="0.5"
@@ -349,6 +356,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/step_cam"
             android:text="功能3"
+            android:background="@drawable/bg_round_corner_btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
