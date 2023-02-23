@@ -7,6 +7,7 @@ import com.app.valhalla.data.model.StepContentObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService {
@@ -18,7 +19,7 @@ interface ApiService {
     fun getStepGod(): Call<StepBaseResult>
 
     @GET("api_getstep.php")
-    fun getStepContent(): Call<StepContentBaseResult>
+    fun getStepContent(@Query("step_no") step_no:String): Call<StepContentBaseResult>
 
 
     @GET("things/{item}")

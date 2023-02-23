@@ -23,6 +23,15 @@ class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
         super.onCreate(savedInstanceState)
         showLoading()
         binding.textStepcontent.typeface= FontUtil.f_chinese_traditional(this)
+
+        stepContentViewModel.getIsImgCanVisible.observe(this){
+            binding.stepImg.isVisible = it
+        }
+        stepContentViewModel.getIsContentCanVisible.observe(this){
+            binding.blockStepContent.isVisible = it
+        }
+
+        stepContentViewModel.f_controlvisible(true,false)
         getbundleData()
         Glide.with(this)
             .load(str_stepUrl+str_stepNO+".jpg")
@@ -53,7 +62,14 @@ class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
         stepContentViewModel.getStepContentData.observe(this){
             binding.textStepcontent.text=stepContentViewModel.getStepContentData.value
         }
-        stepContentViewModel.f_getContent()
+        stepContentViewModel.f_getContent(str_stepNO)
+
+        binding.stepImg.setOnClickListener{
+            stepContentViewModel.f_controlvisible(false,true)
+        }
+        binding.btnBack.setOnClickListener{
+            stepContentViewModel.f_controlvisible(true,false)
+        }
     }
 
     override fun getViewBinding(): ActivityStepContentBinding {
