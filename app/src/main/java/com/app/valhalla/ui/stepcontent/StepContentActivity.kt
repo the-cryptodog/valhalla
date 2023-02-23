@@ -15,15 +15,12 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
-class StepContentActivity : BaseActivity() {
-    private lateinit var binding: ActivityStepContentBinding
+class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
     private val stepContentViewModel by viewModels<StepContentViewModel>()
     var str_stepNO:String = ""
     var str_stepUrl:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityStepContentBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         showLoading()
         binding.textStepcontent.typeface= FontUtil.f_chinese_traditional(this)
         getbundleData()
@@ -54,10 +51,15 @@ class StepContentActivity : BaseActivity() {
             })
             .into(binding.stepImg)
         stepContentViewModel.getStepContentData.observe(this){
-            binding.textStepcontent.setText(stepContentViewModel.getStepContentData.value)
+            binding.textStepcontent.text=stepContentViewModel.getStepContentData.value
         }
         stepContentViewModel.f_getContent()
     }
+
+    override fun getViewBinding(): ActivityStepContentBinding {
+        return ActivityStepContentBinding.inflate(layoutInflater)
+    }
+
     private fun getbundleData(){
         val bundle = intent.extras
         if (bundle != null) {

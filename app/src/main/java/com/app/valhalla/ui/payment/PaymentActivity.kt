@@ -5,15 +5,14 @@ import android.util.Log
 import com.android.billingclient.api.*
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
+import com.app.valhalla.databinding.ActivityPaymentBinding
 
-class PaymentActivity : BaseActivity(), PurchasesUpdatedListener {
+class PaymentActivity : BaseActivity<ActivityPaymentBinding>(), PurchasesUpdatedListener {
 
     private lateinit var billingClient: BillingClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_payment)
-
         // 创建 BillingClient 对象
         billingClient = BillingClient.newBuilder(this)
             .setListener(this)
@@ -47,6 +46,10 @@ class PaymentActivity : BaseActivity(), PurchasesUpdatedListener {
                 Log.d("PaymentActivity", "Billing service disconnected")
             }
         })
+    }
+
+    override fun getViewBinding(): ActivityPaymentBinding {
+        return ActivityPaymentBinding.inflate(layoutInflater)
     }
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {

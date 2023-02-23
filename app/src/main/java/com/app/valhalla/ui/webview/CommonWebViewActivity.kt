@@ -8,16 +8,17 @@ import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityWebviewBinding
 import com.app.valhalla.util.Constant
 
-class CommonWebViewActivity:BaseActivity() {
-    private lateinit var binding: ActivityWebviewBinding
+class CommonWebViewActivity:BaseActivity<ActivityWebviewBinding>() {
     var str_stepNO:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWebviewBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         showLoading()
         getbundleData()
         //setWebView(Constant.BASE_URL+"api_getstep.php?step_count="+str_stepNO)
+    }
+
+    override fun getViewBinding(): ActivityWebviewBinding {
+        return ActivityWebviewBinding.inflate(layoutInflater)
     }
 
     private fun getbundleData(){

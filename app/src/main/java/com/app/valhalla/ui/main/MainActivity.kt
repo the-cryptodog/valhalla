@@ -34,37 +34,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemClickListener,
+class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemFragment.OnDialogItemClickListener,
     SensorEventListener {
-    private lateinit var binding: ActivityMainBinding
     private val mainViewModel by viewModels<MainViewModel>()
     private val bundle: Bundle = Bundle()
-
     private lateinit var sensorManager: SensorManager
     private var accelerometerSensor: Sensor? = null
 
 
-    override fun onResume() {
-        super.onResume()
-        accelerometerSensor?.let {
-            sensorManager.registerListener(
-                this,
-                it,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // 解除註冊加速度計傳感器監聽器
-        sensorManager.unregisterListener(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         initOnClick()
 
         intent.getBundleExtra("response")?.let {
@@ -307,6 +286,29 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
         getStepGodData()
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        accelerometerSensor?.let {
+            sensorManager.registerListener(
+                this,
+                it,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+        }
+    }
+
+    override fun getViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // 解除註冊加速度計傳感器監聽器
+        sensorManager.unregisterListener(this)
+    }
+
+
 
 
     private fun initItemDialog(itemList: List<GameObject>) {

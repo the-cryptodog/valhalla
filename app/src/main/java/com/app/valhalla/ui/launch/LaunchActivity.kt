@@ -16,17 +16,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.await
 
-class LaunchActivity : BaseActivity() {
+class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
 
-    private lateinit var binding: ActivityLaunchBinding
     private lateinit var mediaPlayer:MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_launch)
-        binding = ActivityLaunchBinding.inflate(layoutInflater)
-
-
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 initData()
@@ -43,6 +37,10 @@ class LaunchActivity : BaseActivity() {
                 R.drawable.logo_launch
             )
         )
+    }
+
+    override fun getViewBinding(): ActivityLaunchBinding {
+        return ActivityLaunchBinding.inflate(layoutInflater)
     }
 
     private suspend fun initData() {

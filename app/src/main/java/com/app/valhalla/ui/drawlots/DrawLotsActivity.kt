@@ -30,16 +30,13 @@ import kotlin.random.Random
 /**
  * 求籤頁面
  */
-class DrawLotsActivity : BaseActivity() {
-    private lateinit var binding: ActivityDrawLotsBinding
+class DrawLotsActivity : BaseActivity<ActivityDrawLotsBinding>() {
     private val drawLotsViewModel by viewModels<DrawLotsViewModel>()
     private var int_counttotal:Int=1
     private var str_stepAnswer:String =""
     private var str_stepUrl:String =""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDrawLotsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         f_initData()
         binding.imgStepshake.setImageDrawable(GifUtil.f_generateGif(this,R.drawable.step_shake))
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
@@ -100,6 +97,11 @@ class DrawLotsActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
     }
+
+    override fun getViewBinding(): ActivityDrawLotsBinding {
+        return ActivityDrawLotsBinding.inflate(layoutInflater)
+    }
+
     fun f_initData(){
         intent.getBundleExtra("responsestepgod")?.let {
             drawLotsViewModel.f_DecodeStepData(it)
