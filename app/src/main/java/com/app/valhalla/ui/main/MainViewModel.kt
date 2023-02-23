@@ -23,11 +23,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel : ViewModel() {
+class MainViewModel: ViewModel() {
 
     private val repository: MainRepository by lazy {
         MainRepository(MainDataSource())
     }
+
+
 
     //    @Volatile
     private var loadingCount = 0

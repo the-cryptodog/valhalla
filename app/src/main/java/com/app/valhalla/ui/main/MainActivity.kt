@@ -21,6 +21,7 @@ import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
+import com.app.valhalla.ui.main.dialog.MusicListDialog
 import com.app.valhalla.util.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -328,6 +329,7 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
         binding.imgVaseRight.setOnClickListener(this)
         binding.imgTable.setOnClickListener(this)
         binding.btnFunctionThree.setOnClickListener(this)
+        binding.imgRadio.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -366,8 +368,16 @@ class MainActivity : BaseActivity(), OnClickListener, ItemFragment.OnDialogItemC
                 binding.imgJossBackground.id -> {
                     mainViewModel.jossBackgroundSelected()
                 }
+
+                binding.imgRadio.id -> {
+                    initRadioDialog()
+                }
             }
         }
+    }
+
+    private fun initRadioDialog() {
+        MusicListDialog().show(supportFragmentManager, "MusicListDialog")
     }
 
     override fun onDialogItemClick(itemType: String, itemId: String, dialog: DialogFragment) {

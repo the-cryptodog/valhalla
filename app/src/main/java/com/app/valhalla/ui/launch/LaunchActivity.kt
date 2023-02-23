@@ -67,6 +67,7 @@ class LaunchActivity : BaseActivity() {
         if(mediaPlayer != null){
             mediaPlayer.stop()
         }
+
     }
 
 
