@@ -18,9 +18,9 @@ class StepContentViewModel : ViewModel(),StepContentRepository.ReturnContentList
     val getStepContentData: LiveData<String> get() = _saveStepContentData
     val getIsImgCanVisible: LiveData<Boolean> get() = _saveIsImgCanVisible
     val getIsContentCanVisible: LiveData<Boolean> get() = _saveIsContentCanVisible
-    fun f_getContent(step_no:String){
+    fun f_getContent(step_name:String,step_no:String){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.get_Content(step_no)
+            repository.get_Content(step_name,step_no)
         }
     }
     fun f_controlvisible(imgVisible:Boolean,contentVisible:Boolean){

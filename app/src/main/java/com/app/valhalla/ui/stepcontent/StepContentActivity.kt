@@ -19,6 +19,7 @@ class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
     private val stepContentViewModel by viewModels<StepContentViewModel>()
     var str_stepNO:String = ""
     var str_stepUrl:String = ""
+    var str_stepGod:String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showLoading()
@@ -62,7 +63,8 @@ class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
         stepContentViewModel.getStepContentData.observe(this){
             binding.textStepcontent.text=stepContentViewModel.getStepContentData.value
         }
-        stepContentViewModel.f_getContent(str_stepNO)
+        Log.d("step",str_stepGod)
+        stepContentViewModel.f_getContent(str_stepGod,str_stepNO)
 
         binding.stepImg.setOnClickListener{
             stepContentViewModel.f_controlvisible(false,true)
@@ -79,6 +81,7 @@ class StepContentActivity : BaseActivity<ActivityStepContentBinding>() {
     private fun getbundleData(){
         val bundle = intent.extras
         if (bundle != null) {
+            str_stepGod = bundle.getString("StepGod")?:""
             str_stepNO = bundle.getString("StepKey")?:"1"
             str_stepUrl = bundle.getString("StepResourceUrl")?:""
         }

@@ -11,10 +11,10 @@ data class StepObject (
     var step_source: String
 ) : Parcelable{
     fun imgUrl(): String {
-        return Constant.BASE_URL+img_url
+        return img_url
     }
     fun StepResource(): String{
-        return Constant.BASE_URL+step_source
+        return step_source
     }
 }
 

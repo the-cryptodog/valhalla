@@ -7,12 +7,12 @@ import kotlinx.coroutines.withContext
 import retrofit2.await
 
 class StepContentRepository(private val listener:ReturnContentListener) {
-    suspend fun get_Content(step_no:String){
+    suspend fun get_Content(step_name:String,step_no:String){
         try {
-            var test=Network.apiService.getStepContent(step_no).await()
-            Log.d("stepContent",test.message)
+            var stepcontentquery=Network.apiService.getStepContent(step_name,step_no).await()
+            Log.d("stepContent",stepcontentquery.message)
             withContext(Dispatchers.Main){
-                listener.onStepContentCallback(test.message)
+                listener.onStepContentCallback(stepcontentquery.message)
             }
         } catch (e: Exception) {
             Log.d("stepContent",  e.message.toString())

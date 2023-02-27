@@ -10,7 +10,8 @@ object Constant {
     const val BUTTON_RIGHT = "99"
     const val VIEW_OPEN = 100
     const val VIEW_CLOSE = 101
-    const val BASE_URL = "https://wantkenny.000webhostapp.com/goodbye/"
+    const val BASE_URL_KEY = "AKfycbxkL3ujqRcPj1L9jYrC5SiHX46jPmB-0y7zxBw4CoofnEumHi2crKxt3LY8xgc_FEx52A"
+    const val BASE_URL = "https://script.google.com/macros/s/"+BASE_URL_KEY+"/"
     const val OBJ_TABLE = "h"
     const val OBJ_TABLE_SMALL = "i"
     const val OBJ_INCENSE_BURNER_ID = "d"

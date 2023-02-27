@@ -28,7 +28,7 @@ data class GameObject (
 //    var favoriteCount: Int = 0,
 ) : Parcelable{
     fun imgUrl(): String {
-        return Constant.BASE_URL+img_url
+        return img_url
     }
 }
 

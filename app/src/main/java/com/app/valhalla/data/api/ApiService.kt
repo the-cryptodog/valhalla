@@ -3,7 +3,6 @@ package com.app.valhalla.data.api
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.data.model.StepContentBaseResult
-import com.app.valhalla.data.model.StepContentObject
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,14 +11,14 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("things/default")
+    @GET("exec?method=getthings")
     fun getDefault(): Call<BaseResult>
 
-    @GET("api_getstepgod.php")
+    @GET("exec?method=gettodaystepgod")
     fun getStepGod(): Call<StepBaseResult>
 
-    @GET("api_getstep.php")
-    fun getStepContent(@Query("step_no") step_no:String): Call<StepContentBaseResult>
+    @GET("exec?method=getstepcontent")
+    fun getStepContent(@Query("stepname")stepname:String,@Query("stepno")step_no:String): Call<StepContentBaseResult>
 
 
     @GET("things/{item}")
