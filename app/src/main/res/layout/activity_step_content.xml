@@ -15,6 +15,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/flower_down"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/block_step_content"
