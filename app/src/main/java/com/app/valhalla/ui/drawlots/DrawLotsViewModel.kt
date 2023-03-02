@@ -42,7 +42,7 @@ class DrawLotsViewModel : ViewModel() {
          */
         f_subfunctionVisibleControl(true, false, false)
         viewModelScope.launch(Dispatchers.IO) {
-            delay(3 * 1000)
+            delay(1 * 1000)
             withContext(Dispatchers.Main) {
                 f_subfunctionVisibleControl(false, true, false)
             }
