@@ -16,7 +16,6 @@ import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
 import com.app.valhalla.databinding.ActivityDrawLotsBinding
 import com.app.valhalla.ui.stepcontent.StepContentActivity
-import com.app.valhalla.ui.webview.CommonWebViewActivity
 import com.app.valhalla.util.FontUtil
 import com.app.valhalla.util.GifUtil
 import com.app.valhalla.util.fadeIn
@@ -25,12 +24,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import pl.droidsonroids.gif.GifDrawable
-import kotlin.random.Random
 
 /**
  * 求籤頁面
@@ -49,7 +42,6 @@ class DrawLotsActivity : BaseActivity<ActivityDrawLotsBinding>() {
         binding.textTitleHeart.typeface=FontUtil.f_chinese_traditional(this)
         binding.textStepanswer.typeface=FontUtil.f_chinese_traditional(this)
         binding.textTitleStepNumber.typeface=FontUtil.f_chinese_traditional(this)
-
         drawLotsViewModel.getStepShakeData.observe(this){
             binding.viewStepshake.isVisible = it
         }
