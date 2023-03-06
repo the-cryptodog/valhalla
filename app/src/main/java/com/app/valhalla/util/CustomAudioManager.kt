@@ -7,37 +7,33 @@ import com.app.valhalla.R
 object CustomAudioManager {
 
     private var currentMediaPlayer : MediaPlayer? = null
-    private var index : Int = 0
+    private var currentIndex : Int = 0
 
-    fun genMusic_1(context: Context) : MediaPlayer? {
-        if(currentMediaPlayer == null) {
-            currentMediaPlayer = MediaPlayer.create(context, R.raw.freeloop)
-            index =1
+    fun playMusic(context: Context, index :Int){
+        if(currentMediaPlayer == null || currentIndex != index) {
+            currentIndex = index
+            currentMediaPlayer?.stop()
+            when (index) {
+                0 -> {
+                    currentMediaPlayer = MediaPlayer.create(context, R.raw.freeloop)
+                    currentMediaPlayer?.start()
+                }
+                1 -> {
+                    currentMediaPlayer = MediaPlayer.create(context, R.raw.dao_music_1)
+                    currentMediaPlayer?.start()
+                }
+                2 -> {}
+                3 -> {}
+                4 -> {}
+                5 -> {}
+            }
         }
-        return currentMediaPlayer
+        else {
+            if(currentMediaPlayer?.isPlaying == true){
+                currentMediaPlayer?.pause()
+            }else{
+                currentMediaPlayer?.start()
+            }
+        }
     }
-
-
-    fun start(){
-        currentMediaPlayer?.start()
-    }
-
-    fun pause() {
-        currentMediaPlayer?.pause()
-    }
-
-    fun isPlaying() : Boolean? {
-        return currentMediaPlayer?.isPlaying
-    }
-
-    fun getInstance(): MediaPlayer? {
-        return currentMediaPlayer
-    }
-
-    fun index(): Int {
-        return index
-    }
-
-
-
 }

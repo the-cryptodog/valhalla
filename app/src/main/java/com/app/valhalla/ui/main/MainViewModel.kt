@@ -17,6 +17,7 @@ import com.app.valhalla.data.model.BaseUi
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.util.Constant
+import com.app.valhalla.util.CustomAudioManager
 import com.app.valhalla.util.notifyObserver
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +68,19 @@ class MainViewModel: ViewModel() {
     //itemDialog狀態
     private val _itemDialog = MutableLiveData<Int>()
     val itemDialog: LiveData<Int> = _itemDialog
+
+
+
+
+    //MusicDialog 顯示狀態
+    private val showMusicDialog = MutableLiveData(false)
+    val _showMusicDialog: LiveData<Boolean> = showMusicDialog
+
+    //MusicDialog 內部狀態
+    private val isMusicPlaying = MutableLiveData(false)
+    val _isMusicPlaying: LiveData<Boolean> = isMusicPlaying
+
+
 
     init {
 //        fetchData()
@@ -212,4 +226,14 @@ class MainViewModel: ViewModel() {
             _isLoadingFinish.postValue(true)
         }
     }
+    fun toggleMusicDialog() {
+        if(showMusicDialog.value == true){
+            showMusicDialog.postValue(false)
+        }else{
+            showMusicDialog.postValue(true)
+        }
+    }
+
+
+
 }

@@ -31,11 +31,11 @@
         android:id="@+id/img_radio"
         android:layout_width="80dp"
         android:layout_height="50dp"
+        android:background="@drawable/bg_round_corner_btn_red"
         android:clickable="true"
         android:elevation="1dp"
         android:src="@drawable/radio"
         android:visibility="visible"
-        android:background="@drawable/bg_round_corner_btn_red"
         app:layout_constraintBottom_toBottomOf="@+id/img_drawing"
 
         app:layout_constraintStart_toEndOf="@+id/img_drawing"
@@ -98,9 +98,9 @@
     <ImageView
         android:id="@+id/img_table"
         android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginStart="-100dp"
         android:layout_marginEnd="-100dp"
-        android:layout_height="100dp"
         android:elevation="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/table_big"
@@ -179,9 +179,9 @@
         android:id="@+id/img_upper_wall"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="0dp"
         android:scaleType="fitXY"
         android:visibility="visible"
-        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/img_drawing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -189,7 +189,6 @@
         app:layout_constraintTop_toTopOf="@+id/img_totalBackground"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/wall2" />
-
 
     <ImageView
         android:id="@+id/img_flag"
@@ -206,16 +205,17 @@
 
     <ImageView
         android:id="@+id/img_incense_burner"
-        android:layout_width="75dp"
-        android:layout_height="40dp"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:elevation="10dp"
-        android:scaleType="fitXY"
         android:src="@drawable/insenceburner"
-        android:translationY="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_joss"
+        android:layout_marginBottom="-20dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_table"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_incense"
+        app:layout_constraintVertical_bias="0.1" />
 
     <ImageView
         android:id="@+id/img_incense"
@@ -223,10 +223,13 @@
         android:layout_height="100dp"
         android:elevation="15dp"
         android:src="@drawable/c00"
-        android:translationY="-15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/img_incense_burner"
+        android:translationY="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_incense_burner"
         app:layout_constraintEnd_toEndOf="@+id/img_incense_burner"
-        app:layout_constraintStart_toStartOf="@+id/img_incense_burner" />
+        app:layout_constraintStart_toStartOf="@+id/img_incense_burner"
+        app:layout_constraintTop_toBottomOf="@+id/img_drawing"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ImageView
         android:id="@+id/img_candle_left"
@@ -266,13 +269,13 @@
         android:id="@+id/btn_function_four"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:background="@drawable/bg_round_corner_btn_red"
+        android:clickable="true"
         android:elevation="20dp"
         android:gravity="center"
         android:src="@drawable/step_cam"
         android:textSize="24sp"
         android:translationY="25dp"
-        android:clickable="true"
-        android:background="@drawable/bg_round_corner_btn_red"
         app:layout_constraintBottom_toTopOf="@id/img_table_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5" />
@@ -282,13 +285,13 @@
         android:id="@+id/btn_function_five"
         android:layout_width="80dp"
         android:layout_height="100dp"
+        android:background="@drawable/bg_round_corner_btn_red"
+        android:clickable="true"
         android:elevation="25dp"
         android:gravity="start"
         android:rotation="121"
         android:rotationX="30"
         android:src="@drawable/bamboobook1"
-        android:clickable="true"
-        android:background="@drawable/bg_round_corner_btn_red"
         android:textSize="24sp"
         android:translationX="-20dp"
         android:translationY="50dp"
@@ -321,10 +324,10 @@
             android:id="@+id/btn_function_one"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/bg_round_corner_btn_red"
             android:gravity="center"
             android:text="功能1"
             android:textSize="24sp"
-            android:background="@drawable/bg_round_corner_btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_function_two"
             app:layout_constraintHorizontal_bias="0.5"
@@ -351,11 +354,11 @@
             android:id="@+id/btn_function_three"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:background="@drawable/bg_round_corner_btn_red"
             android:gravity="center"
             android:scaleType="fitXY"
             android:src="@drawable/step_cam"
             android:text="功能3"
-            android:background="@drawable/bg_round_corner_btn_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

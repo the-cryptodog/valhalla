@@ -9,9 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.activity.viewModels
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.app.valhalla.R
 import com.app.valhalla.databinding.DialogMusicListBinding
+import com.app.valhalla.ui.main.MainViewModel
 import com.app.valhalla.util.CustomAudioManager
 
 
@@ -19,8 +22,7 @@ class MusicListDialog : DialogFragment() {
     private lateinit var binding: DialogMusicListBinding
     private lateinit var audioManager: AudioManager
     private lateinit var volumeSeekBar: SeekBar
-    private lateinit var mediaPlayer: MediaPlayer
-    private var isPlaying: Boolean = false
+    private var viewModel : MainViewModel? = null
 
     init {
 
@@ -33,6 +35,9 @@ class MusicListDialog : DialogFragment() {
     ): View? {
         binding = DialogMusicListBinding.inflate(inflater, container, false)
         Log.d("TAG", "MusicListDialog")
+
+        val pro = ViewModelProvider(requireActivity())
+        viewModel = pro[MainViewModel::class.java]
         return binding.root
     }
 
@@ -47,25 +52,21 @@ class MusicListDialog : DialogFragment() {
 
         syncButton()
 
-
-
         binding.music1.setOnClickListener {
-            CustomAudioManager.genMusic_1(requireContext())
-
-            if (CustomAudioManager.isPlaying() == true) {
-                CustomAudioManager.pause()
-                binding.music1Btn.setBackgroundResource(R.drawable.play_icon)
-
-            } else {
-                CustomAudioManager.start()
-                binding.music1Btn.setBackgroundResource(R.drawable.pause_icon)
-            }
+            CustomAudioManager.playMusic(requireContext(),0)
         }
+
+        binding.music2.setOnClickListener {
+            CustomAudioManager.playMusic(requireContext(),1)
+        }
+
+
+
 
         // 設置此監聽器的 SeekBar 為讓用者拖曳決定音量的進度條
         val seekBarListener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                CustomAudioManager.getInstance()?.setVolume(progress / 10f, progress / 10f)
+//                CustomAudioManager.getInstance()?.setVolume(progress / 10f, progress / 10f)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -76,16 +77,16 @@ class MusicListDialog : DialogFragment() {
     }
 
     fun syncButton() {
-        when (CustomAudioManager.index()) {
-            1 -> {
-                if (CustomAudioManager.isPlaying() == true) {
-                    binding.music1Btn.setBackgroundResource(R.drawable.pause_icon)
-                } else {
-                    binding.music1Btn.setBackgroundResource(R.drawable.play_icon)
-                }
-            }
-
-        }
+//        when (CustomAudioManager.index()) {
+//            1 -> {
+//                if (CustomAudioManager.isPlaying() == true) {
+//                    binding.music1Btn.setBackgroundResource(R.drawable.pause_icon)
+//                } else {
+//                    binding.music1Btn.setBackgroundResource(R.drawable.play_icon)
+//                }
+//            }
+//
+//        }
 
     }
 }

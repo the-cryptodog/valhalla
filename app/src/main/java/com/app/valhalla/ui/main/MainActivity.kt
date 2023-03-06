@@ -82,6 +82,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
             initItemDialog(it)
         })
 
+
+        mainViewModel._showMusicDialog.observe(this, Observer { show->
+            if(show){
+                MusicListDialog().show(supportFragmentManager, "MusicListDialog")
+            }else{
+
+            }
+        })
+
         mainViewModel.defaultGameObjList.observe(this, Observer { list ->
             Glide.with(this)
                 .load(list.find { it.type == Constant.OBJ_TABLE }?.imgUrl())
@@ -288,6 +297,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
     }
 
+    private fun closeRadioDialog() {
+        TODO("Not yet implemented")
+    }
+
     override fun onResume() {
         super.onResume()
         accelerometerSensor?.let {
@@ -372,7 +385,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
                 }
 
                 binding.imgRadio.id -> {
-                    initRadioDialog()
+                    mainViewModel.toggleMusicDialog()
                 }
             }
         }
