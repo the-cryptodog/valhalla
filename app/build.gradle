@@ -72,4 +72,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     //Google Play Payment
     implementation "com.android.billingclient:billing:5.1.0"
+
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 }
