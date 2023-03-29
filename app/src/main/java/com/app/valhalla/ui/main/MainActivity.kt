@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -22,9 +21,11 @@ import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MusicListDialog
-import com.app.valhalla.util.*
+import com.app.valhalla.util.Constant
+import com.app.valhalla.util.GifUtil
+import com.app.valhalla.util.fadeIn
+import com.app.valhalla.util.fadeOut
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -33,11 +34,14 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemFragment.OnDialogItemClickListener,
+class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
+    ItemFragment.OnDialogItemClickListener,
     SensorEventListener {
-    private val mainViewModel by viewModels<MainViewModel>()
+
+    private val mainViewModel: MainViewModel by inject()
     private val bundle: Bundle = Bundle()
     private lateinit var sensorManager: SensorManager
     private var accelerometerSensor: Sensor? = null
@@ -45,12 +49,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initOnClick()
 
-        intent.getBundleExtra("response")?.let {
-            Log.d("TAGB", "bundle: $it")
-            mainViewModel.loadData(it)
-        }
+//        mainViewModel.loadData()
 
         // 獲取 SensorManager 實例
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -83,10 +85,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
         })
 
 
-        mainViewModel._showMusicDialog.observe(this, Observer { show->
-            if(show){
+        mainViewModel._showMusicDialog.observe(this, Observer { show ->
+            if (show) {
                 MusicListDialog().show(supportFragmentManager, "MusicListDialog")
-            }else{
+            } else {
 
             }
         })
@@ -297,6 +299,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
     }
 
+
     private fun closeRadioDialog() {
         TODO("Not yet implemented")
     }
@@ -321,8 +324,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
         // 解除註冊加速度計傳感器監聽器
         sensorManager.unregisterListener(this)
     }
-
-
 
 
     private fun initItemDialog(itemList: List<GameObject>) {

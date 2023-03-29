@@ -7,65 +7,61 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
-import com.app.valhalla.data.api.Network
 import com.app.valhalla.databinding.ActivityLaunchBinding
 import com.app.valhalla.ui.main.MainActivity
 import com.app.valhalla.util.GifUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.await
+import org.koin.android.ext.android.inject
 
 class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
 
-    private lateinit var mediaPlayer:MediaPlayer
+    private val launchViewModel: LaunchViewModel by inject()
+    private lateinit var mediaPlayer: MediaPlayer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                initData()
-            }
-        }
 
-        mediaPlayer = MediaPlayer.create(this,R.raw.launch_music)
-        if(mediaPlayer != null){
+        //開頭動畫 前 加載資料
+        launchViewModel.initData()
+
+
+        //開啟動畫音效
+        mediaPlayer = MediaPlayer.create(this, R.raw.launch_music)
+        if (mediaPlayer != null) {
             mediaPlayer.start()
         }
+        //開啟動畫Giff
         binding.imgLogoAnimation.setImageDrawable(
             GifUtil.f_generateGif(
                 this,
                 R.drawable.logo_launch
             )
         )
+        //觀察 網路請求成功後回調值 轉跳
+        launchViewModel.loadingViewStatePublisher.observe(
+            this
+        ) {
+            Log.d("LaunchActivity", it.javaClass.name) //僅有 Success 或 Error 兩個類
+            jumpToMainActivity()
+        }
     }
+
 
     override fun getViewBinding(): ActivityLaunchBinding {
         return ActivityLaunchBinding.inflate(layoutInflater)
     }
 
-    private suspend fun initData() {
-        val bundle = Bundle()
-        try {
-            bundle.putParcelable("data", Network.apiService.getDefault().await())
-            bundle.putParcelable("stepGodData", Network.apiService.getStepGod().await())
-            jumpToMainActivity(bundle)
-        } catch (e: Exception) {
-            Log.d("TAGAA",  e.message.toString())
-        }
-    }
-
-    private fun jumpToMainActivity(bundle: Bundle) {
-        startActivity(Intent(this, MainActivity::class.java).putExtra("response", bundle))
+    private fun jumpToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(mediaPlayer != null){
+        if (mediaPlayer != null) {
             mediaPlayer.stop()
         }
-
     }
 
+    //待修正 ：mediaPlayer 寫進 Base 類（？
 
 }

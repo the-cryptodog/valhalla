@@ -1,7 +1,7 @@
 package com.app.valhalla.data
 
-import android.os.Bundle
 import com.app.valhalla.data.model.BaseResult
+import com.app.valhalla.data.model.StepBaseResult
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -10,33 +10,40 @@ import com.app.valhalla.data.model.BaseResult
 
 class MainRepository(private val dataSource: MainDataSource) {
 
-    // in-memory cache of the loggedInUser object
-    var userData: BaseResult? = null
+    // 初始化之所有桌面物件，玩家資料
+    var defaultData: BaseResult? = null
         private set
 
-    val isLoggedIn: Boolean
-        get() = userData != null
+    var stepGodData: StepBaseResult? = null
+        private set
 
-    init {
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-        userData = null
-    }
 
-    suspend fun fetchData(): Result<BaseResult> {
-
-        val result = dataSource.fetchData("")
-
-        if (result is Result.Success) {
-            setUserData(result.baseResult)
+    suspend fun initDefaultData(): MainDataSource.NetworkResult<BaseResult?> {
+        return when (val result = dataSource.initDefaultData()) {
+            is MainDataSource.NetworkResult.Success -> {
+                val data = result.data
+                if (data != null) {
+                    setDefaultData(data)
+                }
+                MainDataSource.NetworkResult.Success(data)
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
         }
-        return result
     }
 
 
-    fun setUserData(userData: BaseResult) {
-        this.userData = userData
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+    private fun setDefaultData(defaultData: BaseResult) {
+        this.defaultData = defaultData
+    }
+
+    fun setStepGodData(stepGodData: StepBaseResult) {
+        this.stepGodData = stepGodData
+    }
+
+    fun getDataSource(): MainDataSource{
+        return dataSource
     }
 }

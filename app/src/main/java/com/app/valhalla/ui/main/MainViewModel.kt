@@ -1,35 +1,17 @@
 package com.app.valhalla.ui.main
 
-import android.os.Build
-import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.app.valhalla.R
-import com.app.valhalla.data.MainDataSource
 import com.app.valhalla.data.MainRepository
-import com.app.valhalla.data.Result
-import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.BaseUi
 import com.app.valhalla.data.model.GameObject
-import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.util.Constant
-import com.app.valhalla.util.CustomAudioManager
 import com.app.valhalla.util.notifyObserver
-import com.blankj.utilcode.util.ToastUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainViewModel: ViewModel() {
-
-    private val repository: MainRepository by lazy {
-        MainRepository(MainDataSource())
-    }
-
+class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
 
     //    @Volatile
@@ -70,8 +52,6 @@ class MainViewModel: ViewModel() {
     val itemDialog: LiveData<Int> = _itemDialog
 
 
-
-
     //MusicDialog 顯示狀態
     private val showMusicDialog = MutableLiveData(false)
     val _showMusicDialog: LiveData<Boolean> = showMusicDialog
@@ -81,48 +61,15 @@ class MainViewModel: ViewModel() {
     val _isMusicPlaying: LiveData<Boolean> = isMusicPlaying
 
 
-
     init {
 //        fetchData()
         initFunctionButton()
-    }
-
-    fun loadData(bundle: Bundle) {
-        val data: BaseResult? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable("data", BaseResult::class.java)
-        } else {
-            bundle.getParcelable("data")
-        }
-        _itemStepDataList.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable("stepGodData", StepBaseResult::class.java)
-        } else {
-            bundle.getParcelable("stepGodData")
-        }
-        Log.d("TAGB", "loadData: $data")
-        Log.d("Goddata", "$get_itemStepDataList")
-        repository.setUserData(data!!)
         initAllItem()
         initDefaultGameObj()
     }
 
     private fun initAllItem() {
-        _gameObjList.value = repository.userData?.data?.toMutableList()
-    }
-
-    private fun fetchData() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val result = repository.fetchData()
-                if (result is Result.Success) {
-                    withContext(Dispatchers.Main) {
-                        _gameObjList.value = result.baseResult.data.toMutableList()
-                        initDefaultGameObj()
-                    }
-                } else {
-                    ToastUtils.showShort(R.string.login_failed)
-                }
-            }
-        }
+        _gameObjList.value = repository.defaultData?.data?.toMutableList()
     }
 
     private fun initDefaultGameObj() {
@@ -226,14 +173,14 @@ class MainViewModel: ViewModel() {
             _isLoadingFinish.postValue(true)
         }
     }
+
     fun toggleMusicDialog() {
-        if(showMusicDialog.value == true){
+        if (showMusicDialog.value == true) {
             showMusicDialog.postValue(false)
-        }else{
+        } else {
             showMusicDialog.postValue(true)
         }
     }
-
 
 
 }
