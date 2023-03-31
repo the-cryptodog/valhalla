@@ -4,27 +4,26 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.model.BaseUi
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.notifyObserver
 
-class MainViewModel(private val repository: MainRepository) : ViewModel() {
+class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
 
 
     //    @Volatile
     private var loadingCount = 0
 
-    private var currentSelectedId: String = ""
-
     private var currentSelectedType: String = ""
 
-    private val _isLoadingFinished = MutableLiveData<Boolean>()
-    val isLoadingFinishedFlow: LiveData<Boolean> = _isLoadingFinished
 
+    private val _objectSelectedEvent = MutableLiveData<String>()
+    val objectSelectedEvent: LiveData<String> = _objectSelectedEvent
 
+    //TODO 將MutableList修改的方式改為賦予新List
     private val _defaultGameObjList = MutableLiveData<MutableList<GameObject>>()
     val defaultGameObjList: LiveData<MutableList<GameObject>> = _defaultGameObjList
 
@@ -34,17 +33,14 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     private val _btnFunction = MutableLiveData<MutableMap<String, BaseUi>>()
     val btnFunction: LiveData<MutableMap<String, BaseUi>> = _btnFunction
 
-    private val _dialogGameObj = MutableLiveData<MutableList<GameObject>>()
-    val dialogGameObj: LiveData<MutableList<GameObject>> = _dialogGameObj
+    private val _dialogGameObj = MutableLiveData<List<GameObject>>()
+    val dialogGameObj: LiveData<List<GameObject>> = _dialogGameObj
 
     private val _itemDataList = MutableLiveData<MutableList<GameObject>>()
     val itemDataList: LiveData<MutableList<GameObject>> = _itemDataList
 
     private val _itemStepDataList = MutableLiveData<Parcelable>()
     val get_itemStepDataList: LiveData<Parcelable> = _itemStepDataList
-
-    private val _isLoadingFinish = MutableLiveData<Boolean>()
-    val isLoadingFinish: LiveData<Boolean> = _isLoadingFinish
 
 
     //itemDialog狀態
@@ -73,31 +69,27 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
 
     private fun initDefaultGameObj() {
-
         val list = _gameObjList.value?.filter { it.is_default }
         _defaultGameObjList.postValue(list?.toMutableList())
     }
 
+    //篩選同物件的list傳給dialog使用
     private fun openItemBag(itemType: String) {
-        val list = _gameObjList.value?.filter { it.type == itemType }
-        _dialogGameObj.postValue(list?.toMutableList())
+        val list = gameObjList.value?.filter { it.type == itemType }
+        _dialogGameObj.value = list?.toMutableList()
     }
 
     private fun objectSelected(itemType: String) {
-        //從類別與預設值去搜尋
+        //defaultGameObjList 是一個固定長度的容器， 存放當前呈現在桌面的物件資料，一但有替換，及改變此值
         _defaultGameObjList.value?.find { it.type == itemType }.let {
-            Log.d("TAGG", it?.img_url.toString())
-
 
             if (it != null) {
-                updateFunctionIcon(it)
-            }
+                //通知activity換圖
+                _objectSelectedEvent.value = it.imgUrl()
+                //當前選取的物件類別（）
+                currentSelectedType = it.type
 
-            //暫存選定物件之id與type
-            currentSelectedId = it?.id.toString()
-            currentSelectedType = it?.type.toString()
-            Log.d("TAGG", "1+$currentSelectedId")
-            Log.d("TAGG", "2+$currentSelectedType")
+            }
         }
     }
 
@@ -110,15 +102,14 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         //先從預設設定組中尋找對應類別物件的index
         val index = _defaultGameObjList.value?.indexOfFirst { it.type == itemType }
         //先從dialog list物件中找到該id物件
-        val obj = _dialogGameObj.value?.find { it.id == itemId }
+        val obj = _dialogGameObj.value?.find {
+            it.id == itemId }.also {
+            _objectSelectedEvent.value = it?.imgUrl()
+        }
         //更新預設設定組
         Log.d("TAGG", obj.toString())
         _defaultGameObjList.value?.set(index!!, obj!!)
         _defaultGameObjList.notifyObserver()
-
-        if (obj != null) {
-            updateFunctionIcon(obj)
-        }
     }
 
     //更新功能圖icon
@@ -170,9 +161,10 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         loadingCount++
         Log.d("TAGB", "loadingCountViewModel = $loadingCount")
         if (loadingCount == Constant.ALL_MAIN_ITEM_COUNT) {
-            _isLoadingFinish.postValue(true)
+            loadingViewStatePublisher.value = LoadingViewState.MainActivityImageLoadingDone
         }
     }
+
 
     fun toggleMusicDialog() {
         if (showMusicDialog.value == true) {

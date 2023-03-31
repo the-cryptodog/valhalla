@@ -18,11 +18,10 @@ import com.app.valhalla.ui.main.MainViewModel
 import com.app.valhalla.util.CustomAudioManager
 
 
-class MusicListDialog : DialogFragment() {
+class MusicListDialog(private val viewModel: MainViewModel) : DialogFragment() {
     private lateinit var binding: DialogMusicListBinding
     private lateinit var audioManager: AudioManager
     private lateinit var volumeSeekBar: SeekBar
-    private var viewModel : MainViewModel? = null
 
     init {
 
@@ -35,9 +34,6 @@ class MusicListDialog : DialogFragment() {
     ): View? {
         binding = DialogMusicListBinding.inflate(inflater, container, false)
         Log.d("TAG", "MusicListDialog")
-
-        val pro = ViewModelProvider(requireActivity())
-        viewModel = pro[MainViewModel::class.java]
         return binding.root
     }
 

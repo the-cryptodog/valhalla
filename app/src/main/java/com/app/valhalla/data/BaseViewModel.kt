@@ -13,7 +13,8 @@ open class BaseViewModel : ViewModel() {
         ) : LoadingViewState()
 
         object HideLoadingView : LoadingViewState()
-        object LoadingDone : LoadingViewState()
+
+        object MainActivityImageLoadingDone : LoadingViewState()
     }
 
     public val loadingViewStatePublisher = MutableLiveData<LoadingViewState>()
