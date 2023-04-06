@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
+import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.databinding.ActivityLaunchBinding
 import com.app.valhalla.ui.main.MainActivity
 import com.app.valhalla.util.GifUtil
@@ -40,8 +41,14 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         launchViewModel.loadingViewStatePublisher.observe(
             this
         ) {
-            Log.d("LaunchActivity", it.javaClass.name) //僅有 Success 或 Error 兩個類
-            jumpToMainActivity()
+            when(it){
+                is BaseViewModel.LoadingViewState.HideLoadingView ->{
+                    Log.d("LaunchActivity", it.javaClass.name) //僅有 Success 或 Error 兩個類
+                    jumpToMainActivity()
+                }
+                is BaseViewModel.LoadingViewState.MainActivityImageLoadingDone -> TODO()
+                is BaseViewModel.LoadingViewState.ShowLoadingView -> TODO()
+            }
         }
     }
 

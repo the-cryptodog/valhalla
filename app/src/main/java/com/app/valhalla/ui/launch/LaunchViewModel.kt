@@ -30,7 +30,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                 withContext(Dispatchers.IO) {
                     when (repository.initDefaultData()) {
                         is MainDataSource.NetworkResult.Success -> {
-                            loadingViewStatePublisher.postValue(LoadingViewState.ShowLoadingView())
+                            loadingViewStatePublisher.postValue(LoadingViewState.HideLoadingView)
                         }
                         is MainDataSource.NetworkResult.Error -> {
 

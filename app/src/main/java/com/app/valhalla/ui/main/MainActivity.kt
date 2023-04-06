@@ -79,13 +79,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
             initItemDialog(it)
         })
 
-        mainViewModel._showMusicDialog.observe(this, Observer { show ->
-            if (show) {
-                MusicListDialog(mainViewModel).show(supportFragmentManager, "MusicListDialog")
-            } else {
-
+        mainViewModel.mediaState.observe(this) {
+            when (it) {
+                is MainViewModel.MediaState.ShowDialog -> {
+                    initRadioDialog()
+                }
+                is MainViewModel.MediaState.Playing -> TODO()
+                is MainViewModel.MediaState.Pausing -> TODO()
             }
-        })
+        }
 
         //觀察 網路請求成功後回調值 轉跳
         mainViewModel.loadingViewStatePublisher.observe(
@@ -111,13 +113,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
             for (gameObject in list) {
                 when (gameObject.type) {
                     Constant.OBJ_TABLE -> loadWithGlide(gameObject.img_url, binding.imgTable)
-                    Constant.OBJ_INCENSE_BURNER_ID -> loadWithGlide(gameObject.img_url, binding.imgIncenseBurner)
-                    Constant.OBJ_VASE -> loadWithGlide(gameObject.img_url, binding.imgVaseRight
+                    Constant.OBJ_INCENSE_BURNER_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgIncenseBurner
+                    )
+                    Constant.OBJ_VASE -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgVaseRight
                     ).also { loadWithGlide(gameObject.img_url, binding.imgVaseLeft) }
                     Constant.OBJ_JOSS -> loadWithGlide(gameObject.img_url, binding.imgJoss)
-                    Constant.OBJ_JOSS_BACKGROUND_ID -> loadWithGlide(gameObject.img_url, binding.imgJossBackground
+                    Constant.OBJ_JOSS_BACKGROUND_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgJossBackground
                     )
-                    Constant.OBJ_CANDLE_ID -> loadWithGlide(gameObject.img_url, binding.imgCandleRight
+                    Constant.OBJ_CANDLE_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgCandleRight
                     ).also { loadWithGlide(gameObject.img_url, binding.imgCandleLeft) }
                 }
             }
@@ -249,7 +260,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
     }
 
     private fun initRadioDialog() {
-        MusicListDialog(viewModel = this.mainViewModel).show(
+        MusicListDialog(viewModel = this.mainViewModel,this).show(
             supportFragmentManager,
             "MusicListDialog"
         )

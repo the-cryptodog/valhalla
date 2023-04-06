@@ -1,0 +1,19 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+
+  <!-- Pause button -->
+  <path
+      android:fillColor="#011627"
+      android:pathData="M9.5,7.5h1.5v9h-1.5zM13,7.5h1.5v9h-1.5z"/>
+
+  <!-- Circle border -->
+  <path
+      android:strokeWidth="0.6"
+      android:strokeColor="#011627"
+      android:pathData="M12,2a10,10 0,1,1 -0.001,20.001A10,10 0,1,1 12,2z"/>
+
+</vector>
