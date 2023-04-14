@@ -20,7 +20,6 @@ interface ApiService {
     @GET("exec?method=getstepcontent")
     fun getStepContent(@Query("stepname")stepname:String,@Query("stepno")step_no:String): Call<StepContentBaseResult>
 
-
     @GET("things/{item}")
     fun getItems(@Path("item") uid: String): Call<BaseResult>
 
