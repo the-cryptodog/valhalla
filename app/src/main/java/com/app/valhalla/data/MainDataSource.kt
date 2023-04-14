@@ -1,11 +1,10 @@
 package com.app.valhalla.data
 
-import androidx.lifecycle.Lifecycle
 import com.app.valhalla.data.api.Network
 import com.app.valhalla.data.model.BaseResult
-import com.app.valhalla.data.model.LoggedInUser
-import kotlinx.coroutines.coroutineScope
+import com.app.valhalla.data.model.GameObject
 import retrofit2.await
+import retrofit2.awaitResponse
 import java.io.IOException
 
 /**
@@ -13,16 +12,18 @@ import java.io.IOException
  */
 class MainDataSource{
 
-    suspend fun fetchData(token: String): Result<BaseResult> {
-        try {
-            val data = Network.apiService.getDefault().await()
-            return Result.Success(data)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error data", e))
+    suspend fun initDefaultData(): NetworkResult<BaseResult?> {
+        val response = Network.apiService.getDefault().awaitResponse()
+        return if(response.isSuccessful){
+            NetworkResult.Success(response.body())
+        }else{
+            NetworkResult.Error(response.message())
         }
     }
 
-    fun logout() {
-        // TODO: revoke authentication
+    sealed class NetworkResult<out T> {
+        data class Success<out T>(val data: T) : NetworkResult<T>()
+        data class Error(val exception: String) : NetworkResult<Nothing>()
     }
+
 }

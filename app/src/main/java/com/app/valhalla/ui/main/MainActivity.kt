@@ -10,21 +10,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
-import androidx.activity.viewModels
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.app.valhalla.R
 import com.app.valhalla.base.BaseActivity
+import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MusicListDialog
-import com.app.valhalla.util.*
+import com.app.valhalla.util.Constant
+import com.app.valhalla.util.GifUtil
+import com.app.valhalla.util.fadeIn
+import com.app.valhalla.util.fadeOut
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -33,11 +36,14 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemFragment.OnDialogItemClickListener,
+class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
+    ItemFragment.OnDialogItemClickListener,
     SensorEventListener {
-    private val mainViewModel by viewModels<MainViewModel>()
+
+    private val mainViewModel: MainViewModel by inject()
     private val bundle: Bundle = Bundle()
     private lateinit var sensorManager: SensorManager
     private var accelerometerSensor: Sensor? = null
@@ -45,12 +51,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initOnClick()
 
-        intent.getBundleExtra("response")?.let {
-            Log.d("TAGB", "bundle: $it")
-            mainViewModel.loadData(it)
-        }
+//        mainViewModel.loadData()
 
         // 獲取 SensorManager 實例
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -63,238 +67,105 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
         binding.adView.loadAd(AdRequest.Builder().build())
 
-        mainViewModel.isLoadingFinish.observe(this) { isFinished ->
-            if (isFinished) {
-                binding.loadingCover.fadeOut(1000)
-            }
-        }
-
-        mainViewModel.btnFunction.observe(this, Observer {
-            val img = it[Constant.BUTTON_LEFT]!!.imgUrl()
-            Log.d("TAG", "in activity $img")
+        //觀察包包鍵的變化
+        mainViewModel.objectSelectedEvent.observe(this) { imgUrl ->
             Glide.with(this)
-                .load(img)
+                .load(imgUrl)
                 .into(binding.btnFunctionOne)
-        })
+        }
 
         mainViewModel.dialogGameObj.observe(this, Observer {
             Log.d("TAGS", it.toString())
             initItemDialog(it)
         })
 
+        mainViewModel.mediaState.observe(this) {
+            when (it) {
+                is MainViewModel.MediaState.ShowDialog -> {
+                    initRadioDialog()
+                }
+                is MainViewModel.MediaState.Playing -> TODO()
+                is MainViewModel.MediaState.Pausing -> TODO()
+            }
+        }
 
-        mainViewModel._showMusicDialog.observe(this, Observer { show->
-            if(show){
-                MusicListDialog().show(supportFragmentManager, "MusicListDialog")
-            }else{
+        //觀察 網路請求成功後回調值 轉跳
+        mainViewModel.loadingViewStatePublisher.observe(
+            this
+        ) {
+            when (it) {
+                is BaseViewModel.LoadingViewState.MainActivityImageLoadingDone -> {
+                    //進入主頁踩入讀片結束
+                    binding.loadingCover.fadeOut(1000)
+                }
+                is BaseViewModel.LoadingViewState.HideLoadingView -> {
+                    TODO()
+                }
+                is BaseViewModel.LoadingViewState.ShowLoadingView -> {
+                    TODO()
+                }
+            }
+        }
 
+
+
+        mainViewModel.defaultGameObjList.observe(this, Observer { list ->
+            for (gameObject in list) {
+                when (gameObject.type) {
+                    Constant.OBJ_TABLE -> loadWithGlide(gameObject.img_url, binding.imgTable)
+                    Constant.OBJ_INCENSE_BURNER_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgIncenseBurner
+                    )
+                    Constant.OBJ_VASE -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgVaseRight
+                    ).also { loadWithGlide(gameObject.img_url, binding.imgVaseLeft) }
+                    Constant.OBJ_JOSS -> loadWithGlide(gameObject.img_url, binding.imgJoss)
+                    Constant.OBJ_JOSS_BACKGROUND_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgJossBackground
+                    )
+                    Constant.OBJ_CANDLE_ID -> loadWithGlide(
+                        gameObject.img_url,
+                        binding.imgCandleRight
+                    ).also { loadWithGlide(gameObject.img_url, binding.imgCandleLeft) }
+                }
             }
         })
 
-        mainViewModel.defaultGameObjList.observe(this, Observer { list ->
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_TABLE }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
 
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgTable)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_INCENSE_BURNER_ID }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgIncenseBurner)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_VASE }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgVaseRight)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_VASE }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgVaseLeft)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_JOSS }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgJoss)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_JOSS_BACKGROUND_ID }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgJossBackground)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_CANDLE_ID }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgCandleRight)
-            Glide.with(this)
-                .load(list.find { it.type == Constant.OBJ_CANDLE_ID }?.imgUrl())
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false; // Allow calling onLoadFailed on the Target.
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        mainViewModel.addLoadingCount()
-                        return false; // Allow calling onResourceReady on the Target.
-                    }
-
-                })
-                .into(binding.imgCandleLeft)
-        })
         getStepGodData()
 
+    }
+
+
+    private fun loadWithGlide(url: String, view: ImageView) {
+        Glide.with(this)
+            .load(url)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false; // Allow calling onLoadFailed on the Target.
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    mainViewModel.addLoadingCount()
+                    return false; // Allow calling onResourceReady on the Target.
+                }
+
+            })
+            .into(view)
     }
 
     private fun closeRadioDialog() {
@@ -321,8 +192,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
         // 解除註冊加速度計傳感器監聽器
         sensorManager.unregisterListener(this)
     }
-
-
 
 
     private fun initItemDialog(itemList: List<GameObject>) {
@@ -383,7 +252,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
                 binding.imgJossBackground.id -> {
                     mainViewModel.jossBackgroundSelected()
                 }
-
                 binding.imgRadio.id -> {
                     mainViewModel.toggleMusicDialog()
                 }
@@ -392,7 +260,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
     }
 
     private fun initRadioDialog() {
-        MusicListDialog().show(supportFragmentManager, "MusicListDialog")
+        MusicListDialog(viewModel = this.mainViewModel,this).show(
+            supportFragmentManager,
+            "MusicListDialog"
+        )
     }
 
     override fun onDialogItemClick(itemType: String, itemId: String, dialog: DialogFragment) {
@@ -401,7 +272,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
     }
 
 
-    fun testMove() {
+    private fun testMove() {
         //按下按鈕出現手
         if (binding.byeFix.isVisible || binding.byeGif.isVisible) {
             return
@@ -411,7 +282,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
 
     }
 
-    fun bye() {
+    private fun bye() {
         //搖晃開始拜
         if (binding.byeFix.isVisible) {
             binding.byeFix.visibility = View.GONE
@@ -435,7 +306,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener, ItemF
         }
     }
 
-    fun getStepGodData() {
+    private fun getStepGodData() {
         mainViewModel.get_itemStepDataList.observe(this) {
             bundle.putParcelable("stepGodData", it)
         }
