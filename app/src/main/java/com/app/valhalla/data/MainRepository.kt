@@ -1,7 +1,9 @@
 package com.app.valhalla.data
 
+import android.util.Log
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.StepBaseResult
+import com.app.valhalla.util.Constant
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -34,6 +36,52 @@ class MainRepository(private val dataSource: MainDataSource) {
         }
     }
 
+    suspend fun getNextApi(): MainDataSource.NetworkResult<BaseResult?> {
+        return when (val result = dataSource.getNextApi()) {
+            is MainDataSource.NetworkResult.Success -> {
+                MainDataSource.NetworkResult.Success(result.data)
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
+        }
+    }
+
+    suspend fun checkMember(uId: String): MainDataSource.NetworkResult<BaseResult?> {
+        return when (val result = dataSource.checkMember(uId)) {
+            is MainDataSource.NetworkResult.Success -> {
+                MainDataSource.NetworkResult.Success(result.data)
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
+        }
+    }
+
+    suspend fun addMember(
+        uId: String,
+        email: String,
+        nickname: String
+    ): MainDataSource.NetworkResult<BaseResult?> {
+        return when (val result = dataSource.addMember(uId, email, nickname)) {
+            is MainDataSource.NetworkResult.Success -> {
+                Log.d("FFF", "新增成功result=$result.data")
+                MainDataSource.NetworkResult.Success(result.data)
+                //TODO 新增主委後的流程
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
+        }
+    }
+
+    suspend fun login() {
+
+    }
+
 
     private fun setDefaultData(defaultData: BaseResult) {
         this.defaultData = defaultData
@@ -43,7 +91,7 @@ class MainRepository(private val dataSource: MainDataSource) {
         this.stepGodData = stepGodData
     }
 
-    fun getDataSource(): MainDataSource{
+    fun getDataSource(): MainDataSource {
         return dataSource
     }
 }

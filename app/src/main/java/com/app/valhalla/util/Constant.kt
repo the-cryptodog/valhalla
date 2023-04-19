@@ -11,7 +11,11 @@ object Constant {
     const val VIEW_OPEN = 100
     const val VIEW_CLOSE = 101
     const val BASE_URL_KEY = "AKfycbxkL3ujqRcPj1L9jYrC5SiHX46jPmB-0y7zxBw4CoofnEumHi2crKxt3LY8xgc_FEx52A"
-    const val BASE_URL = "https://script.google.com/macros/s/"+BASE_URL_KEY+"/"
+    const val BASE_URL = "https://script.google.com/macros/s/AKfycbxkL3ujqRcPj1L9jYrC5SiHX46jPmB-0y7zxBw4CoofnEumHi2crKxt3LY8xgc_FEx52A"
+    var SAVED_URL_VALUE= ""
+    var SAVED_URL_NAME = "OLD_URL_NAME"
+    var SAVED_UID = ""
+    var SAVE_UID_NAME = "SAVE_UID_NAME"
     const val OBJ_TABLE = "h"
     const val OBJ_TABLE_SMALL = "i"
     const val OBJ_INCENSE_BURNER_ID = "d"

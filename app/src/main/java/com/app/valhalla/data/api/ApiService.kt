@@ -3,13 +3,21 @@ package com.app.valhalla.data.api
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.data.model.StepContentBaseResult
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface ApiService {
+
+    @GET("exec?method=nextapi")
+    fun getNextApi(): Call<BaseResult>
+
+    @POST("exec")
+    fun checkMember(@Body body:RequestBody): Call<BaseResult>
+
+    @POST("exec")
+    fun addMember(@Body body:RequestBody): Call<BaseResult>
 
     @GET("exec?method=getthings")
     fun getDefault(): Call<BaseResult>
