@@ -54,14 +54,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
 
         initOnClick()
 
-//        mainViewModel.loadData()
-
         // 獲取 SensorManager 實例
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
         // 獲取加速度計傳感器實例
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-
 
         MobileAds.initialize(this) {}
 

@@ -20,19 +20,7 @@ data class GameObject(
     var isSelected: Boolean = false,
     @SerializedName("is_default")
     var is_default: Boolean
-//    var description: String = "",
-//    var image: String = "",
-//    var price: Double = 0.0,
-//    var rating: Double = 0.0,
-//    var type: String = "",
-//    var category: String = "",
-//    var tags: List<String> = emptyList(),
-//    var status: String = "",
-//    var createdAt: String = "",
-//    var updatedAt: String = "",
-//    var deletedAt: String = "",
-//    var favorite: Boolean = false,
-//    var favoriteCount: Int = 0,
+
 ) : Parcelable {
     fun imgUrl(): String {
         return img_url
@@ -61,10 +49,27 @@ data class AppStatus(
     @SerializedName("isMustUpdate")
     val isMustUpdate: Int,
     @SerializedName("MarketUrl")
-    val marketUrl: String
+    val marketUrl: String,
+    @SerializedName("isfix")
+    val isFixing: Int
 ) : Parcelable
 
 @Parcelize
 data class PropertyContents(
-    val id:Int
+
+    val id: Int,
+
+    @SerializedName("ApiResult")
+    val ApiList: String,
+
+    @SerializedName("is_hassameproperty")
+    val isHasSameProperty: String,
+
+    @SerializedName("hint")
+    val hint: String,
+
+    @SerializedName("scores")
+    val scores: Int
+
 ) : Parcelable
+

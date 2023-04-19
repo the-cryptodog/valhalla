@@ -2,7 +2,10 @@ package com.app.valhalla.data.api
 
 import android.util.Base64
 import com.app.valhalla.util.Constant
+import com.app.valhalla.util.PrefUtil
 import com.blankj.utilcode.util.DeviceUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -12,9 +15,10 @@ import java.util.concurrent.TimeUnit
 import okhttp3.logging.HttpLoggingInterceptor
 
 object Network {
+
     val apiService: ApiService
         get() = Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
+            .baseUrl(Constant.SAVED_URL_VALUE+"/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(initClient())
             .build()
