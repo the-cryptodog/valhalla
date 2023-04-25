@@ -80,7 +80,11 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
         }
     }
 
-     fun addMember(context: Context,email:String,nickName:String) {
+    fun test(){
+        123456789
+    }
+
+    fun addMember(context: Context,email:String,nickName:String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d("FFF", "還沒有帳戶")
