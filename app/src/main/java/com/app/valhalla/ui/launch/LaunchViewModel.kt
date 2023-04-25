@@ -81,7 +81,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     }
 
     fun test(){
-        123
+        123456
     }
 
      fun addMember(context: Context,email:String,nickName:String) {
