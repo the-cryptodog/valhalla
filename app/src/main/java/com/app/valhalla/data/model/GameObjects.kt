@@ -1,9 +1,19 @@
 package com.app.valhalla.data.model
 
 import android.os.Parcelable
-import com.app.valhalla.util.Constant
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class GameObjects(
+    @SerializedName("category_id")
+    var category_id: String = "",
+    @SerializedName("things_data")
+    var things_data: List<GameObject>
+    ): Parcelable
+
+
+
 
 @Parcelize
 data class GameObject(
@@ -11,16 +21,17 @@ data class GameObject(
     var id: String = "",
     @SerializedName("things_name")
     var name: String = "",
-    @SerializedName("category_id")
-    var type: String = "",
     @SerializedName("img_url")
     var img_url: String,
     @SerializedName("timer")
     var timer: Int = 0,
     var isSelected: Boolean = false,
     @SerializedName("is_default")
-    var is_default: Boolean
-
+    var is_default: Boolean,
+    @SerializedName("dollars")
+    var dollars: Int,
+    @SerializedName("use_status")
+    var use_status: Int
 ) : Parcelable {
     fun imgUrl(): String {
         return img_url
@@ -39,7 +50,7 @@ data class BaseResult(
     @SerializedName("property_contents")
     val property_contents: PropertyContents? = null,
     @SerializedName("data")
-    val data: List<GameObject>
+    val data: List<GameObjects>
 ) : Parcelable
 
 @Parcelize
@@ -64,6 +75,9 @@ data class PropertyContents(
 
     @SerializedName("is_hassameproperty")
     val isHasSameProperty: String,
+
+    @SerializedName("nickname")
+    val nickname: String,
 
     @SerializedName("hint")
     val hint: String,

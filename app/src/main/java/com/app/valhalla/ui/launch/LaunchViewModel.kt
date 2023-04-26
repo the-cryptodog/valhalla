@@ -33,6 +33,15 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
+    private val _loginResultViewState = MutableLiveData<LoginResultViewState>()
+    val loginResultViewState: LiveData<LoginResultViewState> = _loginResultViewState
+    sealed class LoginResultViewState{
+        data class LoginSuccessButtonState(
+            val buttonString : String
+        ): LoginResultViewState()
+        object LoginFailedState : LoginResultViewState()
+    }
+
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
@@ -68,27 +77,24 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
             withContext(Dispatchers.IO) {
                 val result = repository.checkMember(getSavedUid(context))
                 Log.d("FFF", "checkMember ＩＤ＝$result")
-                if (result is MainDataSource.NetworkResult.Success) {
-                    if (result.data?.property_contents?.isHasSameProperty == "0") {
-                        Log.d("FFF", "重新 登入 畫面" + result.data.toString())
-                        _loginForm.postValue(LoginFormState(isShow = true))
-                    } else {
-                        Log.d("FFF", "已有帳戶 登入" + result.data.toString())
+                withContext(Dispatchers.Main){
+                    if (result is MainDataSource.NetworkResult.Success) {
+                        if (result.data?.property_contents?.isHasSameProperty == "0") {
+                            _loginForm.postValue(LoginFormState(isShow = true))
+                            _loginResultViewState.value = LoginResultViewState.LoginFailedState
+                        } else {
+                            loadingViewStatePublisher.value = LoadingViewState.HideLoadingView
+                            _loginForm.postValue(LoginFormState(isShow = false))
+                            _loginResultViewState.value = LoginResultViewState.LoginSuccessButtonState(result.data?.property_contents!!.nickname)
+                        }
                     }
                 }
             }
         }
     }
 
-    fun test(){
-        123456789
-    }
-
-    fun test2(){
-        123456789
-    }
-
     fun addMember(context: Context,email:String,nickName:String) {
+        loadingViewStatePublisher.value = LoadingViewState.ShowLoadingView("")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d("FFF", "還沒有帳戶")

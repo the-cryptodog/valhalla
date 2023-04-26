@@ -1,16 +1,21 @@
 package com.app.valhalla.ui.main
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -47,6 +52,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
     private val bundle: Bundle = Bundle()
     private lateinit var sensorManager: SensorManager
     private var accelerometerSensor: Sensor? = null
+    private var gameObjectList: MutableList<View> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,17 +70,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
 
         binding.adView.loadAd(AdRequest.Builder().build())
 
+        //切換物品替換
+        mainViewModel.mainItemViewState.observe(this) {
+            when (it) {
+                is MainViewModel.MainItemViewState.ShowSwitchDialog -> {
+                    initItemDialog(it.data)
+                }
+                is MainViewModel.MainItemViewState.CloseSwitchDialog -> TODO()
+            }
+        }
+
         //觀察包包鍵的變化
         mainViewModel.objectSelectedEvent.observe(this) { imgUrl ->
             Glide.with(this)
                 .load(imgUrl)
                 .into(binding.btnFunctionOne)
         }
-
-        mainViewModel.dialogGameObj.observe(this, Observer {
-            Log.d("TAGS", it.toString())
-            initItemDialog(it)
-        })
 
         mainViewModel.mediaState.observe(this) {
             when (it) {
@@ -108,7 +119,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
 
         mainViewModel.defaultGameObjList.observe(this, Observer { list ->
             for (gameObject in list) {
-                when (gameObject.type) {
+                when (gameObject.id.first().toString()) {
                     Constant.OBJ_TABLE -> loadWithGlide(gameObject.img_url, binding.imgTable)
                     Constant.OBJ_INCENSE_BURNER_ID -> loadWithGlide(
                         gameObject.img_url,
@@ -130,9 +141,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
                 }
             }
         })
-
-
         getStepGodData()
+    }
+
+    private fun setGameObjectViewGroup() {
 
     }
 
@@ -217,7 +229,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
         if (v != null) {
             when (v.id) {
                 binding.btnFunctionOne.id -> {
-                    mainViewModel.leftFunctionLaunch()
+                    mainViewModel.showSwitchDialog()
                 }
                 binding.btnFunctionTwo.id -> {
                     testMove()
@@ -232,22 +244,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
                 }
 
                 binding.imgTable.id -> {
-                    mainViewModel.tableSelected()
+
                 }
                 binding.imgIncenseBurner.id -> {
-                    mainViewModel.incenseBurnerSelected()
+
                 }
                 binding.imgVaseLeft.id, binding.imgVaseRight.id -> {
-                    mainViewModel.vaseSelected()
+
                 }
                 binding.imgCandleLeft.id, binding.imgCandleRight.id -> {
-                    mainViewModel.candleSelected()
+
                 }
                 binding.imgJoss.id -> {
-                    mainViewModel.jossSelected()
+
                 }
                 binding.imgJossBackground.id -> {
-                    mainViewModel.jossBackgroundSelected()
+
                 }
                 binding.imgRadio.id -> {
                     mainViewModel.toggleMusicDialog()
@@ -257,7 +269,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
     }
 
     private fun initRadioDialog() {
-        MusicListDialog(viewModel = this.mainViewModel,this).show(
+        MusicListDialog(viewModel = this.mainViewModel, this).show(
             supportFragmentManager,
             "MusicListDialog"
         )

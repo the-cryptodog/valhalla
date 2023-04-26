@@ -51,6 +51,10 @@ class MainRepository(private val dataSource: MainDataSource) {
     suspend fun checkMember(uId: String): MainDataSource.NetworkResult<BaseResult?> {
         return when (val result = dataSource.checkMember(uId)) {
             is MainDataSource.NetworkResult.Success -> {
+                val data = result.data
+                if (data != null) {
+                    setDefaultData(data)
+                }
                 MainDataSource.NetworkResult.Success(result.data)
             }
             is MainDataSource.NetworkResult.Error -> {

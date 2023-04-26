@@ -9,6 +9,7 @@ import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.model.BgmManager
 import com.app.valhalla.data.model.GameObject
+import com.app.valhalla.data.model.GameObjects
 import com.app.valhalla.util.Constant
 
 class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
@@ -17,10 +18,28 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     //    @Volatile
     private var loadingCount = 0
 
+    private var isSwitchingModeOn: Boolean = false
+
     private var currentSelectedType: String = ""
 
+    sealed class MainItemViewState {
+        data class ShowSwitchDialog(
+            val data: List<GameObject>
+        ) : MainItemViewState()
+
+        object CloseSwitchDialog: MainItemViewState()
+    }
+
+
+    private val _mainItemViewState = MutableLiveData<MainItemViewState>()
+    val mainItemViewState: LiveData<MainItemViewState> = _mainItemViewState
+
+
     private val _musicList = MutableLiveData<List<BgmManager.ByeMusic>>()
-    val musicList : LiveData<List<BgmManager.ByeMusic>> = _musicList
+    val musicList: LiveData<List<BgmManager.ByeMusic>> = _musicList
+
+    private val _gameObjList = MutableLiveData<List<GameObjects>>()
+    val gameObjList: LiveData<List<GameObjects>> = _gameObjList
 
     private val _objectSelectedEvent = MutableLiveData<String>()
     val objectSelectedEvent: LiveData<String> = _objectSelectedEvent
@@ -29,11 +48,8 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     private val _defaultGameObjList = MutableLiveData<List<GameObject>>()
     val defaultGameObjList: LiveData<List<GameObject>> = _defaultGameObjList
 
-    private val _gameObjList = MutableLiveData<List<GameObject>>()
-    val gameObjList: LiveData<List<GameObject>> = _gameObjList
-
-    private val _dialogGameObj = MutableLiveData<List<GameObject>>()
-    val dialogGameObj: LiveData<List<GameObject>> = _dialogGameObj
+    private val _dialogGameObjList = MutableLiveData<List<GameObject>>()
+    val dialogGameObjList: LiveData<List<GameObject>> = _dialogGameObjList
 
     private val _itemStepDataList = MutableLiveData<Parcelable>()
     val get_itemStepDataList: LiveData<Parcelable> = _itemStepDataList
@@ -55,77 +71,52 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     }
 
     private fun initAllItem() {
+        Log.d("FFF", repository.defaultData?.toString().toString())
         _gameObjList.value = repository.defaultData?.data?.toMutableList()
     }
 
     private fun initDefaultGameObj() {
-        _defaultGameObjList.postValue(_gameObjList.value?.filter { it.is_default })
+        val defaultList: List<GameObject> =
+            _gameObjList.value?.flatMap { it.things_data }!!.filter {
+                it.is_default
+            }
+        _defaultGameObjList.value = defaultList
     }
 
     //篩選同物件的list傳給dialog使用
-    private fun openItemBag(itemType: String) {
-        val list = gameObjList.value?.filter { it.type == itemType }
-        _dialogGameObj.value = list?.toMutableList()
+    fun getTypeList(itemType: String) : List<GameObject> {
+        //map{}每個元素轉換成為新元素，取代原集合，大小一樣，flatMap{}用原集合的元素，去組成一個新集合，操
+        val list = _gameObjList.value?.filter { it.category_id == itemType }!!.flatMap { it.things_data }
+        _dialogGameObjList.value = list
+        return list
     }
 
-    private fun objectSelected(itemType: String) {
-        //defaultGameObjList 是一個固定長度的容器， 存放當前呈現在桌面的物件資料，一但有替換，及改變此值
-        _defaultGameObjList.value?.find { it.type == itemType }.let {
 
-            if (it != null) {
-                //通知activity換圖
-                _objectSelectedEvent.value = it.imgUrl()
-                //當前選取的物件類別（）
-                currentSelectedType = it.type
-
-            }
-        }
-    }
-
-    fun leftFunctionLaunch() {
+    fun showSwitchDialog(itemType: String = "") {
         //先從預設設定組中尋找對應類別物件的id
-        openItemBag(currentSelectedType)
+        val tempItemType : String = if(itemType ==""){
+            Constant.OBJ_JOSS
+        }else{
+            itemType
+        }
+        _mainItemViewState.value = MainItemViewState.ShowSwitchDialog(getTypeList(tempItemType))
     }
 
     fun updateCurrentSelectedItem(itemType: String, itemId: String) {
         //先從預設設定組中尋找對應類別物件的index
-        val index = _defaultGameObjList.value?.indexOfFirst { it.type == itemType }
-        //先從dialog list物件中找到該id物件
-        val obj = _dialogGameObj.value?.find {
-            it.id == itemId
-        }.also {
-            _objectSelectedEvent.value = it?.imgUrl()
-        }
-        _defaultGameObjList.value?.toMutableList()?.apply {
-            set(index!!, obj!!)
-            _defaultGameObjList.value = this
-        }
+//        val index = _defaultGameObjList.value?.indexOfFirst { it.type == itemType }
+//        //先從dialog list物件中找到該id物件
+//        val obj = _dialogGameObj.value?.find {
+//            it.id == itemId
+//        }.also {
+//            _objectSelectedEvent.value = it?.imgUrl()
+//        }
+//        _defaultGameObjList.value?.toMutableList()?.apply {
+//            set(index!!, obj!!)
+//            _defaultGameObjList.value = this
+//        }
     }
 
-    fun vaseSelected() {
-        objectSelected(Constant.OBJ_VASE)
-    }
-
-
-    fun incenseBurnerSelected() {
-        objectSelected(Constant.OBJ_INCENSE_BURNER_ID)
-    }
-
-    fun tableSelected() {
-        objectSelected(Constant.OBJ_TABLE)
-    }
-
-    fun jossBackgroundSelected() {
-        objectSelected(Constant.OBJ_JOSS_BACKGROUND_ID)
-    }
-
-    fun jossSelected() {
-        objectSelected(Constant.OBJ_JOSS)
-    }
-
-    fun candleSelected() {
-        objectSelected(Constant.OBJ_CANDLE_ID)
-    }
 
     fun addLoadingCount() {
         loadingCount++
@@ -137,7 +128,7 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
 
 
     fun toggleMusicDialog() {
-        when (mediaState.value ) {
+        when (mediaState.value) {
             is MediaState.Playing -> _mediaState.value = MediaState.Pausing
             is MediaState.Pausing -> _mediaState.value = MediaState.Playing
             else -> {
@@ -146,7 +137,7 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
         }
     }
 
-    fun setMusic(){
+    fun setMusic() {
         _musicList.value = listOf<BgmManager.ByeMusic>(
             BgmManager.ByeMusic("歌曲3", R.raw.dao_music_1),
             BgmManager.ByeMusic("歌曲5", R.raw.freeloop),

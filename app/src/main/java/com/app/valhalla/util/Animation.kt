@@ -105,9 +105,18 @@ fun View.fadeOut(duration:Long){
     animate().alpha(0f).setDuration(duration).start()
 }
 
-/** 淡出 **/
+/** 淡入 **/
+fun View.fadeIn(duration:Long){
+    alpha = 0f
+    visibility = View.VISIBLE
+    animate().alpha(1f).setDuration(duration).start()
+}
+
+
+/** 淡入 **/
 fun ImageView.fadeIn(duration:Long){
     alpha = 0f
+    visibility = View.VISIBLE
     animate().alpha(1f).setDuration(duration).start()
 }
 

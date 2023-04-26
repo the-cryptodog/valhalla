@@ -2,10 +2,12 @@ package com.app.valhalla.ui.launch
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Resources
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +17,8 @@ import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.databinding.ActivityLaunchBinding
 import com.app.valhalla.ui.main.MainActivity
 import com.app.valhalla.util.GifUtil
+import com.app.valhalla.util.fadeIn
+import com.app.valhalla.util.fadeOut
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -23,49 +27,90 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
 
     private val launchViewModel: LaunchViewModel by inject()
     private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        showLoading()
 
         //開頭動畫 前 加載資料
         launchViewModel.checkSavedDomain(this)
 
-
-        //開啟動畫音效
-        mediaPlayer = MediaPlayer.create(this, R.raw.launch_music)
-        mediaPlayer.start()
-
-        //開啟動畫Giff
-        binding.imgLogoAnimation.setImageDrawable(
-            GifUtil.f_generateGif(
-                this,
-                R.drawable.logo_launch
-            )
-        )
-        //觀察 網路請求成功後回調值 轉跳
         launchViewModel.loadingViewStatePublisher.observe(
+            this
+        ){
+            handleLoadingViewState(it)
+        }
+
+
+        //登入成功設定View
+        launchViewModel.loginResultViewState.observe(
             this
         ) {
             when (it) {
-                is BaseViewModel.LoadingViewState.HideLoadingView -> {
-                    Log.d("LaunchActivity", it.javaClass.name) //僅有 Success 或 Error 兩個類
-                    jumpToMainActivity()
+                is LaunchViewModel.LoginResultViewState.LoginSuccessButtonState -> {
+
+                    hideLoading()
+
+                    binding.edEmail.apply {
+                        fadeOut(500L)
+                    }
+                    binding.edNickname.apply {
+                        fadeOut(500L)
+                    }
+                    binding.login.apply {
+                        fadeOut(500L)
+                    }
+
+                    //開啟動畫Giff 啟動畫音效
+                    mediaPlayer = MediaPlayer.create(this, R.raw.launch_music)
+                    mediaPlayer.start()
+                    binding.imgLogoAnimation.apply {
+                        fadeIn(1500L)
+                        setImageDrawable(
+                            GifUtil.f_generateGif(
+                                this@LaunchActivity,
+                                R.drawable.logo_launch
+                            )
+                        )
+                    }
+                    binding.btnEnter.apply {
+                        fadeIn(2000L)
+                        isEnabled = true
+                        text = getString(R.string.text_login_greeting, it.buttonString)
+                    }
                 }
-                is BaseViewModel.LoadingViewState.MainActivityImageLoadingDone -> TODO()
-                is BaseViewModel.LoadingViewState.ShowLoadingView -> TODO()
+
+                is LaunchViewModel.LoginResultViewState.LoginFailedState -> {
+                    hideLoading()
+                        binding.edEmail.apply {
+                            fadeIn(1000L)
+                        }
+                        binding.edNickname.apply {
+                            fadeIn(1000L)
+                        }
+                        binding.login.apply {
+                            fadeIn(1000L)
+                        }
+                }
             }
         }
+
+
 
         val edEmail = binding.edEmail
         val edNickname = binding.edNickname
         val login = binding.login
         val loading = binding.imgLogoAnimation
         val resume = binding.btnResume
+        val enter = binding.btnEnter
 
         launchViewModel.loginFormState.observe(this@LaunchActivity, Observer {
-            if(it.isShow){
-                edEmail.visibility =View.VISIBLE
-                edNickname.visibility =View.VISIBLE
-                login.visibility =View.VISIBLE
+            if (it.isShow) {
+                edEmail.visibility = View.VISIBLE
+                edNickname.visibility = View.VISIBLE
+                login.visibility = View.VISIBLE
             }
 
 
@@ -111,6 +156,10 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
                 launchViewModel.clearLocalData(this@LaunchActivity)
             }
         }
+        enter.setOnClickListener {
+            jumpToMainActivity()
+        }
+
     }
 
 
@@ -130,6 +179,16 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         }
     }
 
-    //待修正 ：mediaPlayer 寫進 Base 類（？
+    private fun handleLoadingViewState(loadingViewState: BaseViewModel.LoadingViewState) {
+        when (loadingViewState) {
+            is BaseViewModel.LoadingViewState.ShowLoadingView -> {
+                showLoading()
+            }
+            BaseViewModel.LoadingViewState.HideLoadingView -> {
+                hideLoading()
+            }
+            BaseViewModel.LoadingViewState.MainActivityImageLoadingDone -> hideLoading()
+        }
+    }
 
 }

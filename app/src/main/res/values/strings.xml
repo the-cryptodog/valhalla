@@ -17,4 +17,7 @@
     <string name="text_title_throw_negative">陰筊\n請重新求籤</string>
     <string name="text_title_throw_laugh">笑筊\n請重新求籤</string>
     <string name="text_title_throw_positve">聖筊</string>
+
+    <!--登入頁-->
+    <string name="text_login_greeting">歡迎 %s 按此進入遊戲</string>
 </resources>

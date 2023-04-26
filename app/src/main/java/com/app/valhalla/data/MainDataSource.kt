@@ -34,7 +34,7 @@ class MainDataSource {
     suspend fun checkMember(uId: String): NetworkResult<BaseResult?> {
         val body = JSONObject().apply {
             put("method", "checkmember")
-            put("id", uId)
+            put("id", "863920050083678")
         }.toString().toRequestBody(JSON_MEDIA_TYPE)
         val response = Network.apiService.checkMember(body).awaitResponse()
         return if (response.isSuccessful) {

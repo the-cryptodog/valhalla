@@ -8,7 +8,6 @@ open class BaseViewModel : ViewModel() {
 
     sealed class LoadingViewState {
         data class ShowLoadingView(
-            @StringRes val stringResId: Int? = null,
             val message: String? = null
         ) : LoadingViewState()
 
