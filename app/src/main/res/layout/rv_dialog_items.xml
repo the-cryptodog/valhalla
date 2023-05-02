@@ -8,9 +8,10 @@
 
     <RadioGroup
         android:id="@+id/radio_group"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,26 +19,46 @@
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_option1"
+            android:background="@drawable/radio_dialog_selection"
+            android:button="@null"
             android:layout_width="wrap_content"
+            android:text="佛"
+            android:gravity="center"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_option2"
+            android:background="@drawable/radio_dialog_selection"
+            android:button="@null"
+            android:text="花"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_option3"
             android:layout_width="wrap_content"
+            android:background="@drawable/radio_dialog_selection"
+            android:button="@null"
+            android:text="燭"
+            android:gravity="center"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_option4"
+            android:background="@drawable/radio_dialog_selection"
+            android:button="@null"
+            android:text="爐"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/radio_option5"
+            android:background="@drawable/radio_dialog_selection"
+            android:button="@null"
+            android:text="聯"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
