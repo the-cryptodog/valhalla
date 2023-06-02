@@ -83,6 +83,10 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
         _defaultGameObjList.value = defaultList
     }
 
+   fun setDefaultGameObj(list:List<GameObject>) {
+        _defaultGameObjList.value = list
+    }
+
     //篩選同物件的list傳給dialog使用
     fun getTypeList(itemType: String) : List<GameObject> {
         //map{}每個元素轉換成為新元素，取代原集合，大小一樣，flatMap{}用原集合的元素，去組成一個新集合，操
@@ -144,4 +148,6 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
             BgmManager.ByeMusic("歌曲6", R.raw.launch_music)
         )
     }
+
+
 }

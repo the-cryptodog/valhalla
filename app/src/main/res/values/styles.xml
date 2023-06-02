@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomRadioButton" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:button">@drawable/radio_dialog_selection</item>
+    </style>
+
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="colorPrimary">@color/transparent</item>
+        <item name="android:textColor">@android:color/holo_green_dark</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

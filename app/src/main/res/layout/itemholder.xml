@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:padding="20dp"
     android:background="@color/transparent"
     android:layout_height="wrap_content">
 
@@ -14,7 +13,7 @@
         app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/is_using"
         app:layout_constraintVertical_chainStyle="packed"
         tools:srcCompat="@drawable/step_shake" />
 
@@ -23,18 +22,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
+        android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id"
+        app:layout_constraintTop_toBottomOf="@+id/item_img"
         tools:text="------" />
 
     <TextView
         android:id="@+id/is_using"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="使用中"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="使用中"
-        app:layout_constraintTop_toTopOf="@+id/id" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

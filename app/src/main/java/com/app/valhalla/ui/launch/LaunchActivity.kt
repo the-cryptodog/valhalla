@@ -21,6 +21,7 @@ import com.app.valhalla.util.fadeIn
 import com.app.valhalla.util.fadeOut
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
