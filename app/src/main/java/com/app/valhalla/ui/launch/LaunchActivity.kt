@@ -32,7 +32,6 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         showLoading()
 
         //開頭動畫 前 加載資料
