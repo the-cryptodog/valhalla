@@ -3,8 +3,6 @@ package com.app.valhalla.ui.launch
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
-import android.util.Patterns
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -43,11 +41,11 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     val launchViewState: LiveData<LaunchViewState> = _launchViewState
 
     sealed class LoginResultViewState {
-        data class LoginSuccessButtonState(
+        data class AutoLoginSuccessButtonState(
             val buttonString: String
         ) : LoginResultViewState()
 
-        data class LoginFailedState(
+        data class AutoLoginFailedState(
             val isLoginFailed: Boolean
         ) : LoginResultViewState()
     }
@@ -69,21 +67,27 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     }
 
 
-    fun checkInputAndLoginOrRegistry(context: Context, email: String?, username: String?, password: String?) {
+    fun checkInputAndLoginOrRegistry(
+        context: Context,
+        email: String?,
+        username: String?,
+        password: String?
+    ) {
         var isEmailValid = true
         var isNicknameValid = true
         var isPasswordValid = true
 
         email?.let {
-            isEmailValid = isEmailValid(it)
+            isEmailValid = AccountUtil.isEmailValid(it)
         }
 
         username?.let {
-            isNicknameValid = isNickNameValid(it) && _launchViewState.value is LaunchViewState.RegisterMode
+            isNicknameValid =
+                AccountUtil.isNickNameValid(it) && _launchViewState.value is LaunchViewState.RegisterMode
         }
 
         password?.let {
-            isPasswordValid = isPasswordValid(it)
+            isPasswordValid = AccountUtil.isPasswordValid(it)
         }
         val isDataValid: Boolean = if (_launchViewState.value is LaunchViewState.LoginMode) {
             isEmailValid && isPasswordValid
@@ -100,17 +104,17 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
         )
 
 
-        if(isDataValid){
-            if(_launchViewState.value == LaunchViewState.LoginMode){
-                Log.d("QQQ", "${ _launchViewState.value == LaunchViewState.LoginMode}")
+        if (isDataValid) {
+            if (_launchViewState.value == LaunchViewState.LoginMode) {
+                Log.d("QQQ", "${_launchViewState.value == LaunchViewState.LoginMode}")
                 checkMember(
                     context = context,
                     email,
                     password,
                     true
                 )
-            }else{
-                Log.d("QQQ", "${ _launchViewState.value == LaunchViewState.RegisterMode}")
+            } else {
+                Log.d("QQQ", "${_launchViewState.value == LaunchViewState.RegisterMode}")
                 addMember(
                     context,
                     email!!,
@@ -122,30 +126,16 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     }
 
 
-    // 驗證電子郵件地址
-    private fun isEmailValid(email: String): Boolean {
-        val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+$")
-        return email.matches(emailRegex)
-    }
-
-    // 密碼至少包含六個英文字母或數字
-    private fun isPasswordValid(password: String): Boolean {
-        val regex = Regex("^[a-zA-Z0-9]{5,}$")
-        return password.matches(regex) && password.length >= 5
-    }
-
-    // 暱稱至少包含一個中文字且長度在1到6個字之間
-    private fun isNickNameValid(nickName: String): Boolean {
-        val regex = Regex("^[a-zA-Z0-9]{1,16}$")
-        return nickName.matches(regex)
-    }
-
-
     fun genSound(context: Context) {
         MediaPlayer.create(context, R.raw.launch_music)?.start()
     }
 
-    private fun checkMember(context: Context, email: String?, pwd: String?, isManualLogin: Boolean) {
+    private fun checkMember(
+        context: Context,
+        email: String?,
+        pwd: String?,
+        isManualLogin: Boolean
+    ) {
         viewModelScope.launch {
             loadingViewStatePublisher.value = LoadingViewState.ShowLoadingView("")
             withContext(Dispatchers.IO) {
@@ -157,13 +147,13 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                             //isHasSameProperty == "0"
                             if (result.data?.property_contents?.isHasSameProperty == "0") {
                                 _loginResultViewState.value =
-                                    LoginResultViewState.LoginFailedState(isManualLogin)
+                                    LoginResultViewState.AutoLoginFailedState(isManualLogin)
                                 _launchViewState.value = LaunchViewState.LoginMode
                             } else {
                                 //成功
                                 loadingViewStatePublisher.value = LoadingViewState.HideLoadingView
                                 _loginResultViewState.value =
-                                    LoginResultViewState.LoginSuccessButtonState(result.data?.property_contents!!.nickname)
+                                    LoginResultViewState.AutoLoginSuccessButtonState(result.data?.property_contents!!.nickname)
                             }
                         }
                         is MainDataSource.NetworkResult.Error -> {
@@ -180,20 +170,33 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
         loadingViewStatePublisher.value = LoadingViewState.ShowLoadingView("")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = repository.addMember(getSavedUid(context), email, nickName, pwd)
-                if (result is MainDataSource.NetworkResult.Success) {
-                    Log.d("FFF", "註冊回傳Success")
-                    val resultMsg = result.data?.property_contents?.isHasSameProperty
-                    if (resultMsg == "1") {
-                        //新增成功 轉跳checkMember
-                        checkMember(context, email, nickName, false)
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            _registerResultViewState.value =
-                                resultMsg?.let { RegisterResultViewState.RegisterFailedState(it) }
+                when (val result =
+                    repository.addMember(getSavedUid(context), email, nickName, pwd)) {
+                    is MainDataSource.NetworkResult.Success -> {
+                        Log.d("FFF", "註冊回傳Success")
+                        val resultMsg = result.data?.property_contents?.isHasSameProperty
+                        if (resultMsg == "1") {
+                            //新增成功 轉跳checkMember
+                            checkMember(context, email, nickName, false)
+                        } else {
+                            //網路沒問題 新增未成功
+                            withContext(Dispatchers.Main) {
+                                _registerResultViewState.value =
+                                    resultMsg?.let {
+                                        RegisterResultViewState.RegisterFailedState(
+                                            result.data.property_contents.hint
+                                        )
+                                    }
+                            }
                         }
                     }
-                } else {
+                    is MainDataSource.NetworkResult.Error -> {
+                        //網路異常 新增失敗
+                        withContext(Dispatchers.Main) {
+                            _registerResultViewState.value =
+                                RegisterResultViewState.RegisterFailedState(result.exception)
+                        }
+                    }
                 }
             }
         }
@@ -245,27 +248,6 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
             Log.d("LaunchViewModel", e.message.toString())
         }
         return BASE_URL
-    }
-
-    fun initData() {
-        try {
-            viewModelScope.launch {
-                withContext(Dispatchers.IO) {
-                    when (repository.initDefaultData()) {
-                        is MainDataSource.NetworkResult.Success -> {
-                            loadingViewStatePublisher.postValue(LoadingViewState.HideLoadingView)
-                        }
-                        is MainDataSource.NetworkResult.Error -> {
-
-                        }
-                    }
-//                    repository.setUserData(Network.apiService.getDefault().await())
-                    //repository.setStepGodData(Network.apiService.getStepGod().await())
-                }
-            }
-        } catch (e: Exception) {
-            Log.d("LaunchViewModel", e.message.toString())
-        }
     }
 
     fun toggleLoginOrRegisterMode() {

@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -20,7 +19,6 @@ import com.app.valhalla.util.fadeOut
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
@@ -36,185 +34,13 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         //開頭動畫 前 加載資料
         launchViewModel.checkSavedDomain(this)
 
-        launchViewModel.loadingViewStatePublisher.observe(
-            this
-        ) {
-            handleLoadingViewState(it)
-        }
-        launchViewModel.launchViewState.observe(
-            this
-        ) {
-            clearAllInput()
-            if (it is LaunchViewModel.LaunchViewState.LoginMode) {
-                binding.edNickname.apply {
-                    visibility = View.GONE
-                }
-                binding.login.visibility = View.VISIBLE
-                binding.register.visibility = View.GONE
-                binding.switcher.text = "我要註冊"
-            }
-            if (it is LaunchViewModel.LaunchViewState.RegisterMode) {
-                binding.edNickname.apply {
-                    visibility = View.VISIBLE
-                }
-                binding.login.visibility = View.GONE
-                binding.register.visibility = View.VISIBLE
-                binding.switcher.text = "我要登入"
-            }
-        }
+        //設定讀取圖示觀察
+        handleLoadingObservation()
 
-        launchViewModel.registerResultViewState.observe(
-            this
-        ) {
-            if (it is LaunchViewModel.RegisterResultViewState.RegisterFailedState) {
-                ToastUtils.showLong("註冊失敗 is_hassameproperty=$it.errorMessage")
-                hideLoading()
-            }
-        }
+        //設定基本元件邏輯
+        handleButtonAndEditTextViewState(binding)
 
 
-        //登入成功設定View
-        launchViewModel.loginResultViewState.observe(
-            this
-        ) {
-            when (it) {
-                is LaunchViewModel.LoginResultViewState.LoginSuccessButtonState -> {
-
-                    hideLoading()
-
-                    binding.edEmail.apply {
-                        fadeOut(500L)
-                    }
-                    binding.edNickname.apply {
-                        fadeOut(500L)
-                    }
-                    binding.edPwd.apply {
-                        fadeOut(500L)
-                    }
-                    binding.login.apply {
-                        fadeOut(500L)
-                    }
-                    binding.register.apply {
-                        fadeOut(500L)
-                    }
-                    binding.switcher.apply {
-                        fadeOut(500L)
-                    }
-
-                    //開啟動畫Giff 啟動畫音效
-                    mediaPlayer = MediaPlayer.create(this, R.raw.launch_music)
-                    mediaPlayer.start()
-                    binding.imgLogoAnimation.apply {
-                        fadeIn(1500L)
-                        setImageDrawable(
-                            GifUtil.f_generateGif(
-                                this@LaunchActivity,
-                                R.drawable.logo_launch
-                            )
-                        )
-                    }
-                    binding.btnEnter.apply {
-                        fadeIn(2000L)
-                        isEnabled = true
-                        text = getString(R.string.text_login_greeting, it.buttonString)
-                    }
-                }
-
-                is LaunchViewModel.LoginResultViewState.LoginFailedState -> {
-                    if (it.isLoginFailed) {
-                        showAlertDialog()
-                    }
-                    hideLoading()
-                    binding.edEmail.apply {
-                        fadeIn(1000L)
-                    }
-                    binding.edPwd.apply {
-                        fadeIn(1000L)
-                    }
-                    binding.login.apply {
-                        fadeIn(1000L)
-                    }
-                }
-            }
-        }
-
-
-        val edEmail = binding.edEmail
-        val edNickname = binding.edNickname
-        val login = binding.login
-        val register = binding.register
-        val edPwd = binding.edPwd
-        val loading = binding.imgLogoAnimation
-        val resume = binding.btnResume
-        val enter = binding.btnEnter
-        val switcher = binding.switcher
-
-        launchViewModel.loginFormState.observe(this@LaunchActivity, Observer { loginState ->
-
-            Log.d(
-                "QQQ",
-                "${loginState.emailError} , ${loginState.nicknameError} , ${loginState.pwdError}"
-            )
-
-            if (loginState.emailError != null) {
-                edEmail.error = getString(loginState.emailError)
-            }
-
-            if (loginState.nicknameError != null) {
-                edNickname.error = getString(loginState.nicknameError)
-            }
-
-            if (loginState.pwdError != null) {
-                edPwd.error = getString(loginState.pwdError)
-            }
-        })
-
-        edEmail.addTextChangedListener {
-            edEmail.error = null
-        }
-
-        edNickname.addTextChangedListener {
-            edNickname.error = null
-        }
-
-        edPwd.addTextChangedListener {
-            edPwd.error = null
-        }
-
-        switcher.setOnClickListener {
-            launchViewModel.toggleLoginOrRegisterMode()
-        }
-
-        register.setOnClickListener {
-            launchViewModel.checkInputAndLoginOrRegistry(
-                this,
-                edEmail.text.toString(),
-                edNickname.text.toString(),
-                edPwd.text.toString()
-            )
-        }
-        resume.setOnClickListener {
-            lifecycleScope.launch {
-                launchViewModel.clearLocalData(this@LaunchActivity)
-            }
-            this@LaunchActivity.restartActivity()
-        }
-        enter.setOnClickListener {
-            jumpToMainActivity()
-        }
-
-        login.setOnClickListener {
-            Log.d(
-                "QQQ",
-                "${edEmail.text.toString()} , ${edNickname.text.toString()} , ${edPwd.text.toString()}"
-            )
-            launchViewModel.checkInputAndLoginOrRegistry(
-                this,
-                edEmail.text.toString(),
-                edNickname.text.toString(),
-                edPwd.text.toString()
-            )
-        }
     }
 
 
@@ -222,6 +48,163 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         return ActivityLaunchBinding.inflate(layoutInflater)
     }
 
+    private fun handleLoadingObservation() {
+        launchViewModel.loadingViewStatePublisher.observe(
+            this
+        ) {
+            handleLoadingViewState(it)
+        }
+    }
+
+    private fun handleButtonAndEditTextViewState(binding: ActivityLaunchBinding) {
+        with(binding) {
+            //切換註冊與登入
+            launchViewModel.launchViewState.observe(
+                this@LaunchActivity
+            ) {
+                clearAllInput()
+                if (it is LaunchViewModel.LaunchViewState.LoginMode) {
+                    edNickname.apply {
+                        visibility = View.GONE
+                    }
+                    login.visibility = View.VISIBLE
+                    register.visibility = View.GONE
+                    switcher.text = "我要註冊"
+                }
+                if (it is LaunchViewModel.LaunchViewState.RegisterMode) {
+                    edNickname.apply {
+                        visibility = View.VISIBLE
+                    }
+                    login.visibility = View.GONE
+                    register.visibility = View.VISIBLE
+                    switcher.text = "我要登入"
+                }
+            }
+            //輸入框檢查
+            launchViewModel.loginFormState.observe(this@LaunchActivity, Observer { loginState ->
+                if (loginState.emailError != null) {
+                    edEmail.error = getString(loginState.emailError)
+                }
+
+                if (loginState.nicknameError != null) {
+                    edNickname.error = getString(loginState.nicknameError)
+                }
+
+                if (loginState.pwdError != null) {
+                    edPwd.error = getString(loginState.pwdError)
+                }
+            })
+
+            //註冊結果
+            launchViewModel.registerResultViewState.observe(
+                this@LaunchActivity
+            ) {
+                if (it is LaunchViewModel.RegisterResultViewState.RegisterFailedState) {
+                    ToastUtils.showLong("註冊失敗 is_hassameproperty=$it.errorMessage")
+                    hideLoading()
+                }
+            }
+
+            //自動登入結果
+            launchViewModel.loginResultViewState.observe(
+                this@LaunchActivity
+            ) {
+                hideLoading()
+                when (it) {
+                    //自動登入成功，畫面切換為預備進入遊戲畫面
+                    is LaunchViewModel.LoginResultViewState.AutoLoginSuccessButtonState -> {
+                        edEmail.apply { fadeOut(500L) }
+                        edNickname.apply { fadeOut(500L) }
+                        edPwd.apply { fadeOut(500L) }
+                        login.apply { fadeOut(500L) }
+                        register.apply { fadeOut(500L) }
+                        switcher.apply { fadeOut(500L) }
+
+                        //開啟動畫Giff 啟動畫音效
+                        mediaPlayer = MediaPlayer.create(this@LaunchActivity, R.raw.launch_music)
+                        mediaPlayer.start()
+                        imgLogoAnimation.apply {
+                            fadeIn(1500L)
+                            setImageDrawable(
+                                GifUtil.f_generateGif(
+                                    this@LaunchActivity,
+                                    R.drawable.logo_launch
+                                )
+                            )
+                        }
+                        btnEnter.apply {
+                            fadeIn(2000L)
+                            isEnabled = true
+                            text = getString(R.string.text_login_greeting, it.buttonString)
+                        }
+                    }
+
+                    //自動登入失敗，畫面切換為登入畫面
+                    is LaunchViewModel.LoginResultViewState.AutoLoginFailedState -> {
+                        if (it.isLoginFailed) {
+                            ToastUtils.showLong("自動登入失敗")
+                        }
+                        edEmail.apply {
+                            fadeIn(1000L)
+                        }
+                        edPwd.apply {
+                            fadeIn(1000L)
+                        }
+                        login.apply {
+                            fadeIn(1000L)
+                        }
+                    }
+                }
+            }
+
+            //新增改動監聽
+            edEmail.addTextChangedListener {
+                edEmail.error = null
+            }
+
+            edNickname.addTextChangedListener {
+                edNickname.error = null
+            }
+
+            edPwd.addTextChangedListener {
+                edPwd.error = null
+            }
+
+            //點擊事件
+            switcher.setOnClickListener {
+                launchViewModel.toggleLoginOrRegisterMode()
+            }
+
+            register.setOnClickListener {
+                launchViewModel.checkInputAndLoginOrRegistry(
+                    this@LaunchActivity,
+                    edEmail.text.toString(),
+                    edNickname.text.toString(),
+                    edPwd.text.toString()
+                )
+            }
+            btnResume.setOnClickListener {
+                lifecycleScope.launch {
+                    launchViewModel.clearLocalData(this@LaunchActivity)
+                }
+                this@LaunchActivity.restartActivity()
+            }
+            btnEnter.setOnClickListener {
+                jumpToMainActivity()
+            }
+
+            login.setOnClickListener {
+                launchViewModel.checkInputAndLoginOrRegistry(
+                    this@LaunchActivity,
+                    edEmail.text.toString(),
+                    edNickname.text.toString(),
+                    edPwd.text.toString()
+                )
+            }
+        }
+    }
+
+    //api回調提醒dialog
     private fun showAlertDialog() {
         val alertDialogBuilder = AlertDialog.Builder(this@LaunchActivity)
         alertDialogBuilder.setTitle("你還沒有成為主委喔")
@@ -251,6 +234,7 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
         super.onDestroy()
     }
 
+    //處理loading UI
     private fun handleLoadingViewState(loadingViewState: BaseViewModel.LoadingViewState) {
         when (loadingViewState) {
             is BaseViewModel.LoadingViewState.ShowLoadingView -> {
