@@ -8,6 +8,7 @@ import com.app.valhalla.util.Constant
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import retrofit2.Response
 import retrofit2.await
 import retrofit2.awaitResponse
 import java.io.IOException
@@ -31,54 +32,66 @@ class MainDataSource {
         }
     }
 
-    suspend fun checkMember(uId: String): NetworkResult<BaseResult?> {
+    suspend fun checkMember(
+        uId: String,
+        mail: String?,
+        pwd: String?
+    ): NetworkResult<BaseResult?> {
         val body = JSONObject().apply {
             put("method", "checkmember")
-            put("deviceid", "863920050083679")
-            put("email", "")
-            put("pwd", "")
-        }.toString().toRequestBody(JSON_MEDIA_TYPE)
-        val response = Network.apiService.checkMember(body).awaitResponse()
-        return if (response.isSuccessful) {
+            put("deviceid", uId)
+            put("email", mail ?: "")
+            put("pwd", pwd ?: "")
+        }
+        Log.d("FFFK",body.toString())
+        val response = Network.apiService.checkMember(  body. toString().toRequestBody(JSON_MEDIA_TYPE)).awaitResponse()
+        return if (isRequestSuccessful(response)) {
             NetworkResult.Success(response.body())
         } else {
-            NetworkResult.Error(response.message())
+            NetworkResult.Error(response.body().toString())
         }
     }
+
 
     suspend fun addMember(
         uId: String,
         email: String,
-        nickname: String
+        nickname: String,
+        pwd:String
     ): NetworkResult<BaseResult?> {
         val body = JSONObject().apply {
             put("method", "addmember")
             put("deviceid", uId)
+            put("pwd", pwd)
             put("email", email)
             put("nickname", nickname)
 
         }.toString().toRequestBody(JSON_MEDIA_TYPE)
         val response = Network.apiService.addMember(body).awaitResponse()
-        return if (response.isSuccessful) {
+        return if (isRequestSuccessful(response)) {
             NetworkResult.Success(response.body())
         } else {
-            NetworkResult.Error(response.message())
+            NetworkResult.Error(response.body().toString())
         }
     }
 
 
     suspend fun initDefaultData(): NetworkResult<BaseResult?> {
         val response = Network.apiService.getDefault().awaitResponse()
-        return if (response.isSuccessful) {
+        return if (isRequestSuccessful(response)) {
             NetworkResult.Success(response.body())
         } else {
-            NetworkResult.Error(response.message())
+            NetworkResult.Error(response.body().toString())
         }
     }
 
     sealed class NetworkResult<out T> {
         data class Success<out T>(val data: T) : NetworkResult<T>()
         data class Error(val exception: String) : NetworkResult<Nothing>()
+    }
+
+    private fun isRequestSuccessful(response:Response<BaseResult>) :Boolean{
+        return (response.isSuccessful && (response.body()?.result == "200"))
     }
 
 }

@@ -48,8 +48,9 @@ class MainRepository(private val dataSource: MainDataSource) {
         }
     }
 
-    suspend fun checkMember(uId: String): MainDataSource.NetworkResult<BaseResult?> {
-        return when (val result = dataSource.checkMember(uId)) {
+    suspend fun checkMember(uId: String, email: String?, pwd:String?): MainDataSource.NetworkResult<BaseResult?> {
+        Log.d("FFF", "email＝$email pwd＝$pwd  id＝$uId" )
+        return when (val result = dataSource.checkMember(uId,email,pwd)) {
             is MainDataSource.NetworkResult.Success -> {
                 val data = result.data
                 if (data != null) {
@@ -64,14 +65,16 @@ class MainRepository(private val dataSource: MainDataSource) {
         }
     }
 
+
     suspend fun addMember(
         uId: String,
         email: String,
-        nickname: String
+        nickname: String,
+        pwd:String
     ): MainDataSource.NetworkResult<BaseResult?> {
-        return when (val result = dataSource.addMember(uId, email, nickname)) {
+        return when (val result = dataSource.addMember(uId, email, nickname,pwd)) {
             is MainDataSource.NetworkResult.Success -> {
-                Log.d("FFF", "新增成功result=$result.data")
+                Log.d("FFF", "result=$result.data")
                 MainDataSource.NetworkResult.Success(result.data)
                 //TODO 新增主委後的流程
             }

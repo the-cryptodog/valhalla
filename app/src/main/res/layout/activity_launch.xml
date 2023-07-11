@@ -14,9 +14,9 @@
         android:layout_marginTop="96dp"
         android:autofillHints="@string/prompt_email"
         android:hint="@string/prompt_email"
-        android:visibility="gone"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="Nickname"
-        android:maxLength="5"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:selectAllOnFocus="true"
@@ -36,42 +35,84 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ed_email" />
 
+    <EditText
+        android:id="@+id/ed_pwd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="pwd"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ed_nickname" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="64dp"
-        android:enabled="false"
+        android:enabled="true"
+        android:text="主委登入"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:text="以此資料登記新主委"
+        app:layout_constraintBottom_toTopOf="@+id/register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:visibility="gone"
+        android:text="註冊新主委"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/switcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:text="我要註冊"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/img_logo_animation"
-        android:layout_margin="100dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="100dp"
         android:src="@drawable/logo_launch"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/btn_enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/img_logo_animation"
-        android:visibility="gone"
         android:enabled="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/img_logo_animation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="歡迎使用者" />
@@ -81,11 +122,9 @@
         android:id="@+id/btn_resume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="刪除本地資料"
+        android:text="刪除本地資料並重啟"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
