@@ -25,18 +25,19 @@ import java.util.*
 
 class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() {
 
-
+    //輸入框檢查
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
+    //登入結果
     private val _loginResultViewState = MutableLiveData<LoginResultViewState>()
     val loginResultViewState: LiveData<LoginResultViewState> = _loginResultViewState
 
-
+    //註冊結果
     private val _registerResultViewState = MutableLiveData<RegisterResultViewState>()
     val registerResultViewState: LiveData<RegisterResultViewState> = _registerResultViewState
 
-
+    //登入-註冊兩個模式切換
     private val _launchViewState = MutableLiveData<LaunchViewState>()
     val launchViewState: LiveData<LaunchViewState> = _launchViewState
 
@@ -66,7 +67,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
         ) : RegisterResultViewState()
     }
 
-
+    //登入或註冊時會先跑這個
     fun checkInputAndLoginOrRegistry(
         context: Context,
         email: String?,
@@ -177,7 +178,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                         val resultMsg = result.data?.property_contents?.isHasSameProperty
                         if (resultMsg == "1") {
                             //新增成功 轉跳checkMember
-                            checkMember(context, email, nickName, false)
+                            checkMember(context, email, pwd, false)
                         } else {
                             //網路沒問題 新增未成功
                             withContext(Dispatchers.Main) {
