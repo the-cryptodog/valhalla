@@ -41,13 +41,16 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
     private val _launchViewState = MutableLiveData<LaunchViewState>()
     val launchViewState: LiveData<LaunchViewState> = _launchViewState
 
+    private var hasAutoLogin :Boolean = true
+
     sealed class LoginResultViewState {
-        data class AutoLoginSuccessButtonState(
+        data class LoginSuccessButtonState(
             val buttonString: String
         ) : LoginResultViewState()
 
-        data class AutoLoginFailedState(
-            val isLoginFailed: Boolean
+        data class LoginFailedState(
+            val isAutoLoginFailed: Boolean,
+            val hint: String
         ) : LoginResultViewState()
     }
 
@@ -145,16 +148,21 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                 withContext(Dispatchers.Main) {
                     when (result) {
                         is MainDataSource.NetworkResult.Success -> {
-                            //isHasSameProperty == "0"
-                            if (result.data?.property_contents?.isHasSameProperty == "0") {
-                                _loginResultViewState.value =
-                                    LoginResultViewState.AutoLoginFailedState(isManualLogin)
-                                _launchViewState.value = LaunchViewState.LoginMode
-                            } else {
+                            //isHasSameProperty = 1就是成功 0是完全沒這個人，-1是因為密碼登入失敗
+                            val errorCheck = result.data?.property_contents
+                            if (errorCheck?.isHasSameProperty == "1") {
                                 //成功
                                 loadingViewStatePublisher.value = LoadingViewState.HideLoadingView
                                 _loginResultViewState.value =
-                                    LoginResultViewState.AutoLoginSuccessButtonState(result.data?.property_contents!!.nickname)
+                                    LoginResultViewState.LoginSuccessButtonState(result.data?.property_contents!!.nickname)
+                            } else {
+                                _loginResultViewState.value =
+                                    errorCheck?.let {
+                                        LoginResultViewState.LoginFailedState(hasAutoLogin,
+                                            it.hint)
+                                    }
+                                hasAutoLogin =false
+                                _launchViewState.value = LaunchViewState.LoginMode
                             }
                         }
                         is MainDataSource.NetworkResult.Error -> {
@@ -174,11 +182,16 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                 when (val result =
                     repository.addMember(getSavedUid(context), email, nickName, pwd)) {
                     is MainDataSource.NetworkResult.Success -> {
+                        //isHasSameProperty =
+                        // 1:成功註測
+                        //-1:已經有用戶存在(這是從androidid去判斷有沒有重覆)
+                        //-2:nickname重覆
+                        //-3:email重覆
                         Log.d("FFF", "註冊回傳Success")
                         val resultMsg = result.data?.property_contents?.isHasSameProperty
                         if (resultMsg == "1") {
                             //新增成功 轉跳checkMember
-                            checkMember(context, email, pwd, false)
+                            checkMember(context, email, nickName, false)
                         } else {
                             //網路沒問題 新增未成功
                             withContext(Dispatchers.Main) {

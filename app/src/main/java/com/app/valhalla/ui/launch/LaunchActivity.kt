@@ -112,7 +112,7 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
                 hideLoading()
                 when (it) {
                     //自動登入成功，畫面切換為預備進入遊戲畫面
-                    is LaunchViewModel.LoginResultViewState.AutoLoginSuccessButtonState -> {
+                    is LaunchViewModel.LoginResultViewState.LoginSuccessButtonState -> {
                         edEmail.apply { fadeOut(500L) }
                         edNickname.apply { fadeOut(500L) }
                         edPwd.apply { fadeOut(500L) }
@@ -140,18 +140,20 @@ class LaunchActivity : BaseActivity<ActivityLaunchBinding>() {
                     }
 
                     //自動登入失敗，畫面切換為登入畫面
-                    is LaunchViewModel.LoginResultViewState.AutoLoginFailedState -> {
-                        if (it.isLoginFailed) {
-                            ToastUtils.showLong("自動登入失敗")
-                        }
-                        edEmail.apply {
-                            fadeIn(1000L)
-                        }
-                        edPwd.apply {
-                            fadeIn(1000L)
-                        }
-                        login.apply {
-                            fadeIn(1000L)
+                    is LaunchViewModel.LoginResultViewState.LoginFailedState -> {
+                        if (it.isAutoLoginFailed) {
+                            ToastUtils.showLong(it.hint)
+                            edEmail.apply {
+                                fadeIn(1000L)
+                            }
+                            edPwd.apply {
+                                fadeIn(1000L)
+                            }
+                            login.apply {
+                                fadeIn(1000L)
+                            }
+                        }else{
+                            ToastUtils.showLong(it.hint)
                         }
                     }
                 }
