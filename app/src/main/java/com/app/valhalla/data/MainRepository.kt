@@ -107,12 +107,27 @@ class MainRepository(private val dataSource: MainDataSource) {
 
     }
 
+    suspend fun getStepGod(): MainDataSource.NetworkResult<StepBaseResult?>{
+        return when (val result = dataSource.getStepGod()) {
+            is MainDataSource.NetworkResult.Success -> {
+                Log.d("FFF", "Today Step God result=$result.data")
+                MainDataSource.NetworkResult.Success(result.successObjectData)
+                //TODO 求籤頁取得當日神明
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
+        }
+    }
+
+
 
     private fun setDefaultData(defaultData: BaseResult) {
         this.defaultData = defaultData
     }
 
-    fun setStepGodData(stepGodData: StepBaseResult) {
+    fun setStepGodData(stepGodData: StepBaseResult?) {
         this.stepGodData = stepGodData
     }
 

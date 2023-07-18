@@ -9,10 +9,7 @@ import com.app.valhalla.R
 import com.app.valhalla.data.BaseViewModel
 import com.app.valhalla.data.MainDataSource
 import com.app.valhalla.data.MainRepository
-import com.app.valhalla.data.model.BgmManager
-import com.app.valhalla.data.model.GameObject
-import com.app.valhalla.data.model.GameObjects
-import com.app.valhalla.data.model.MoralityItem
+import com.app.valhalla.data.model.*
 import com.app.valhalla.util.Constant
 import com.app.valhalla.util.GlobalUID
 import com.app.valhalla.util.TimerManager
@@ -69,6 +66,9 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     private val _itemStepDataList = MutableLiveData<Parcelable>()
     val get_itemStepDataList: LiveData<Parcelable> = _itemStepDataList
 
+    private val _stepGodObjList = MutableLiveData<List<StepBaseResult>>()
+    val get_stepGodObjList: LiveData<List<StepBaseResult>> = _stepGodObjList
+
     //MusicDialog 顯示狀態
     private val _mediaState = MutableLiveData<MediaState>()
     val mediaState: LiveData<MediaState> = _mediaState
@@ -89,6 +89,7 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
         initAllItem()//must be set before initDefaultGameObj()
         initDefaultGameObj()
         initMorality()
+        initTodayStepGod()
     }
 
     private fun initAllItem() {
@@ -112,12 +113,17 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
         }else{
             if(repository.defaultData?.morality!!.isNotEmpty()){
                 Log.d("FFF", "要倒數+ ${repository.defaultData?.morality!![0].deadDatetime}")
-            TimerManager.startCountDown(repository.defaultData?.morality!![0].deadDatetime)
+                TimerManager.startCountDown(repository.defaultData?.morality!![0].deadDatetime)
             }
         }
     }
 
-   fun setDefaultGameObj(list:List<GameObject>) {
+    private fun initTodayStepGod(){
+        Log.d("FFF", repository.stepGodData?.toString().toString())
+        _gameObjList.value = repository.stepGodData?.data?.toMutableList()
+    }
+
+    fun setDefaultGameObj(list:List<GameObject>) {
         _defaultGameObjList.value = list
     }
 

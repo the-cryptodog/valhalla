@@ -2,20 +2,22 @@ package com.app.valhalla.ui.drawlots
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.valhalla.R
+import com.app.valhalla.data.BaseViewModel
+import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.model.StepBaseResult
-import com.app.valhalla.data.model.StepObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
-class DrawLotsViewModel : ViewModel() {
+class DrawLotsViewModel(private val repository: MainRepository): BaseViewModel() {
     private val _saveStepShakeVisible = MutableLiveData<Boolean>()//籤筒判斷
     private val _saveDivinationBlocks = MutableLiveData<Boolean>()//籤判斷
     private val _saveStepThrowVisible = MutableLiveData<Boolean>()//筊判斷
@@ -118,12 +120,9 @@ class DrawLotsViewModel : ViewModel() {
             return R.drawable.throw_positive
         }
     }
-    fun f_DecodeStepData(bundle:Bundle){
-        _saveStepGodData.value = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable("stepGodData", StepBaseResult::class.java)
-        } else {
-            bundle.getParcelable("stepGodData")
-        }
+    fun f_DecodeStepData(){
+        Log.d("draw","${repository.stepGodData?.property_contents}")
+        _saveStepGodData.value = repository.stepGodData
     }
     fun f_randomtogetStep(stepCount:Int):Int{
         val randomStep = (1..stepCount).shuffled().last()

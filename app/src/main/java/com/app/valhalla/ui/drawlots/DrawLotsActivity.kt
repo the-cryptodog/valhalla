@@ -24,12 +24,13 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import org.koin.android.ext.android.inject
 
 /**
  * 求籤頁面
  */
 class DrawLotsActivity : BaseActivity<ActivityDrawLotsBinding>() {
-    private val drawLotsViewModel by viewModels<DrawLotsViewModel>()
+    private val drawLotsViewModel:DrawLotsViewModel by inject()
     private var int_counttotal:Int=1
     private var str_stepAnswer:String =""
     private var str_stepUrl:String =""
@@ -103,16 +104,14 @@ class DrawLotsActivity : BaseActivity<ActivityDrawLotsBinding>() {
     }
 
     fun f_initData(){
-        intent.getBundleExtra("responsestepgod")?.let {
-            drawLotsViewModel.f_DecodeStepData(it)
-        }
+        drawLotsViewModel.f_DecodeStepData()
         drawLotsViewModel.getStepGodData.observe(this,Observer{
-            binding.textTitleHeart.text=it.data.name
-            str_stepGod = it.data.name
-            int_counttotal=it.data.step_count
-            str_stepUrl=it.data.StepResource()
+            binding.textTitleHeart.text=it.property_contents.GodName
+            str_stepGod = it.property_contents.GodName
+            int_counttotal=it.property_contents.StepCount
+            str_stepUrl=it.property_contents.StepSource
             Glide.with(this)
-                .load(it.data.imgUrl())
+                .load(it.property_contents.ImgUrl)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -138,5 +137,6 @@ class DrawLotsActivity : BaseActivity<ActivityDrawLotsBinding>() {
                 })
                 .into(binding.godImg)
         })
+
     }
 }

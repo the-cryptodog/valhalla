@@ -171,6 +171,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                             ToastUtils.showLong(result.exception)
                         }
                     }
+                    getStepGod()
                 }
             }
         }
@@ -281,5 +282,18 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
             }
         }
     }
+    fun getStepGod() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = repository.getStepGod()
+                if (result is MainDataSource.NetworkResult.Success) {
+                    repository.setStepGodData(result.successObjectData)
+                } else {
+
+                }
+            }
+        }
+    }
+
 
 }

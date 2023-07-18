@@ -5,6 +5,7 @@ import com.app.valhalla.data.api.Network
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.data.model.RemoteByeResponse
+import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.util.Constant
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -111,5 +112,14 @@ class MainDataSource {
     private fun isRequestSuccessful(response:Response<BaseResult>) :Boolean{
         return (response.isSuccessful && (response.body()?.result == "200"))
     }
+    suspend fun getStepGod(): NetworkResult<StepBaseResult?> {
+        val response = Network.apiService.getStepGod().awaitResponse()
+        return if (response.isSuccessful) {
+            NetworkResult.Success(response.body())
+        } else {
+            NetworkResult.Error(response.message())
+        }
+    }
+
 
 }
