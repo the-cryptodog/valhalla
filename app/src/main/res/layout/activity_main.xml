@@ -375,4 +375,17 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.15" />
 
+    <TextView
+        android:id="@+id/morality_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/img_table"
+        app:layout_constraintEnd_toEndOf="@+id/loading_cover"
+        app:layout_constraintStart_toStartOf="@+id/loading_cover"
+        app:layout_constraintTop_toBottomOf="@+id/img_joss" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

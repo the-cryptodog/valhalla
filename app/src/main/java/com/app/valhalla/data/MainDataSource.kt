@@ -4,6 +4,7 @@ import android.util.Log
 import com.app.valhalla.data.api.Network
 import com.app.valhalla.data.model.BaseResult
 import com.app.valhalla.data.model.GameObject
+import com.app.valhalla.data.model.RemoteByeResponse
 import com.app.valhalla.util.Constant
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -22,6 +23,23 @@ class MainDataSource {
     companion object {
         private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaTypeOrNull()
     }
+
+
+    suspend fun remoteBye(id:String, categoryId:String,thingsId:String): NetworkResult<RemoteByeResponse?> {
+        val body = JSONObject().apply {
+            put("method", "insertmorality")
+            put("id", id)
+            put("category_id", categoryId )
+            put("things_id", thingsId)
+        }.toString().toRequestBody(JSON_MEDIA_TYPE)
+        val response = Network.apiService.getRemoteBye(body).awaitResponse()
+        return if (response.isSuccessful) {
+            NetworkResult.Success(response.body())
+        } else {
+            NetworkResult.Error(response.message())
+        }
+    }
+
 
     suspend fun getNextApi(): NetworkResult<BaseResult?> {
         val response = Network.apiService.getNextApi().awaitResponse()
@@ -86,7 +104,7 @@ class MainDataSource {
     }
 
     sealed class NetworkResult<out T> {
-        data class Success<out T>(val data: T) : NetworkResult<T>()
+        data class Success<out T>(val successObjectData: T) : NetworkResult<T>()
         data class Error(val exception: String) : NetworkResult<Nothing>()
     }
 

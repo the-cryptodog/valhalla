@@ -1,6 +1,7 @@
 package com.app.valhalla.data.model
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -50,7 +51,9 @@ data class BaseResult(
     @SerializedName("property_contents")
     val property_contents: PropertyContents? = null,
     @SerializedName("data")
-    val data: List<GameObjects>
+    val data: List<GameObjects>,
+    @SerializedName("morality")
+    val morality: List<MoralityItem>
 ) : Parcelable
 
 @Parcelize

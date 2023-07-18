@@ -4,13 +4,23 @@ import android.os.Parcelable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.app.valhalla.R
 import com.app.valhalla.data.BaseViewModel
+import com.app.valhalla.data.MainDataSource
 import com.app.valhalla.data.MainRepository
 import com.app.valhalla.data.model.BgmManager
 import com.app.valhalla.data.model.GameObject
 import com.app.valhalla.data.model.GameObjects
+import com.app.valhalla.data.model.MoralityItem
 import com.app.valhalla.util.Constant
+import com.app.valhalla.util.GlobalUID
+import com.app.valhalla.util.TimerManager
+import com.blankj.utilcode.util.ToastUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Timer
 
 class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
 
@@ -21,6 +31,11 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     private var isSwitchingModeOn: Boolean = false
 
     private var currentSelectedType: String = ""
+
+    //拜拜 倒數時間顯示狀態
+    val countdownTime: LiveData<String> = TimerManager.countdownTime
+
+    val isCounting: LiveData<Boolean>  = TimerManager.isCounting
 
     sealed class MainItemViewState {
         data class ShowSwitchDialog(
@@ -58,6 +73,11 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     private val _mediaState = MutableLiveData<MediaState>()
     val mediaState: LiveData<MediaState> = _mediaState
 
+    //Morality
+    private val _morality = MutableLiveData<List<MoralityItem>>()
+    val morality: LiveData<List<MoralityItem>> = _morality
+
+
     sealed class MediaState {
         object Playing : MediaState()
         object Pausing : MediaState()
@@ -68,6 +88,7 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
     init {
         initAllItem()//must be set before initDefaultGameObj()
         initDefaultGameObj()
+        initMorality()
     }
 
     private fun initAllItem() {
@@ -81,6 +102,19 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
                 it.is_default
             }
         _defaultGameObjList.value = defaultList
+    }
+
+    private fun initMorality() {
+        if(repository.defaultData?.morality?.isEmpty() == true){
+            Log.d("FFF", "不用倒數")
+            TimerManager.isCounting.postValue(false)
+            TimerManager.countdownTime.postValue("可以拜拜啦")
+        }else{
+            if(repository.defaultData?.morality!!.isNotEmpty()){
+                Log.d("FFF", "要倒數+ ${repository.defaultData?.morality!![0].deadDatetime}")
+            TimerManager.startCountDown(repository.defaultData?.morality!![0].deadDatetime)
+            }
+        }
     }
 
    fun setDefaultGameObj(list:List<GameObject>) {
@@ -149,5 +183,32 @@ class MainViewModel(private val repository: MainRepository) : BaseViewModel() {
         )
     }
 
+    fun remoteBye() {
+        viewModelScope.launch {
+            Log.d("FFF", "GlobalUID.getSavedUID() = "+GlobalUID.getSavedUID())
+            withContext(Dispatchers.IO){
+                val result = repository.remoteBye(GlobalUID.getSavedUID(),"l","l00")
+                withContext(Dispatchers.Main) {
+                    when(result){
+                        is MainDataSource.NetworkResult.Success->{
+                            if(result.successObjectData?.morality?.isNotEmpty() == true){
+                                startCountDown(result.successObjectData.morality[0].deadDatetime)
+                            }else{
+                                //這裡只有登入時會判斷
+                                TimerManager.countdownTime.postValue("可以拜拜了")
+                            }
+                        }
+                        is MainDataSource.NetworkResult.Error -> {
+                            ToastUtils.showLong("資料錯誤")
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+
+    private fun startCountDown(inputDateTime: String?) {
+        TimerManager.startCountDown(inputDateTime)
+    }
 }

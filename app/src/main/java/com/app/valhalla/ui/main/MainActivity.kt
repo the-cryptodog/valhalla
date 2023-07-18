@@ -28,10 +28,7 @@ import com.app.valhalla.databinding.ActivityMainBinding
 import com.app.valhalla.ui.drawlots.DrawLotsActivity
 import com.app.valhalla.ui.main.dialog.ItemFragment
 import com.app.valhalla.ui.main.dialog.MusicListDialog
-import com.app.valhalla.util.Constant
-import com.app.valhalla.util.GifUtil
-import com.app.valhalla.util.fadeIn
-import com.app.valhalla.util.fadeOut
+import com.app.valhalla.util.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -69,6 +66,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
         MobileAds.initialize(this) {}
 
         binding.adView.loadAd(AdRequest.Builder().build())
+
+
+        mainViewModel.countdownTime.observe(this) {
+            Log.d("FFF", "time = $it")
+            binding.moralityTimer.text = it
+        }
+
+        mainViewModel.isCounting.observe(this) {
+            if(it == false){
+                binding.btnFunctionTwo.isEnabled = !it
+                binding.btnFunctionTwo.setImageResource(R.drawable.byebye_btn)
+            }else{
+                binding.btnFunctionTwo.isEnabled = !it
+                binding.btnFunctionTwo.setImageResource(R.drawable.icon_pause_button)
+            }
+        }
+
+//        mainViewModel.morality.observe(this) {
+//            if(it.isNotEmpty()){
+//                binding.btnFunctionTwo.isEnabled = false
+//                binding.btnFunctionTwo.setBackgroundColor(R.drawable.icon_pause_button)
+//            }else{
+//                binding.btnFunctionTwo.isEnabled = true
+//                binding.btnFunctionTwo.setBackgroundColor(R.drawable.byebye_btn)
+//            }
+//        }
 
         //切換物品替換
         mainViewModel.mainItemViewState.observe(this) {
@@ -294,6 +317,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), OnClickListener,
     private fun bye() {
         //搖晃開始拜
         if (binding.byeFix.isVisible) {
+            mainViewModel.remoteBye()
             binding.byeFix.visibility = View.GONE
             binding.byeGif.setImageDrawable(
                 GifUtil.f_generateGif(

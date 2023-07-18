@@ -2,6 +2,7 @@ package com.app.valhalla.data
 
 import android.util.Log
 import com.app.valhalla.data.model.BaseResult
+import com.app.valhalla.data.model.RemoteByeResponse
 import com.app.valhalla.data.model.StepBaseResult
 import com.app.valhalla.util.Constant
 
@@ -20,10 +21,27 @@ class MainRepository(private val dataSource: MainDataSource) {
         private set
 
 
+    suspend fun remoteBye(
+        id: String,
+        categoryId: String,
+        thingsId: String
+    ): MainDataSource.NetworkResult<RemoteByeResponse?> {
+        return when (val result = dataSource.remoteBye(id, categoryId, thingsId)) {
+            is MainDataSource.NetworkResult.Success -> {
+                Log.d("FFF", "result=$result")
+                MainDataSource.NetworkResult.Success(result.successObjectData)
+            }
+            is MainDataSource.NetworkResult.Error -> {
+                val exception = result.exception
+                MainDataSource.NetworkResult.Error(exception)
+            }
+        }
+    }
+
     suspend fun initDefaultData(): MainDataSource.NetworkResult<BaseResult?> {
         return when (val result = dataSource.initDefaultData()) {
             is MainDataSource.NetworkResult.Success -> {
-                val data = result.data
+                val data = result.successObjectData
                 if (data != null) {
                     setDefaultData(data)
                 }
@@ -39,7 +57,7 @@ class MainRepository(private val dataSource: MainDataSource) {
     suspend fun getNextApi(): MainDataSource.NetworkResult<BaseResult?> {
         return when (val result = dataSource.getNextApi()) {
             is MainDataSource.NetworkResult.Success -> {
-                MainDataSource.NetworkResult.Success(result.data)
+                MainDataSource.NetworkResult.Success(result.successObjectData)
             }
             is MainDataSource.NetworkResult.Error -> {
                 val exception = result.exception
@@ -52,11 +70,11 @@ class MainRepository(private val dataSource: MainDataSource) {
         Log.d("FFF", "email＝$email pwd＝$pwd  id＝$uId" )
         return when (val result = dataSource.checkMember(uId,email,pwd)) {
             is MainDataSource.NetworkResult.Success -> {
-                val data = result.data
+                val data = result.successObjectData
                 if (data != null) {
                     setDefaultData(data)
                 }
-                MainDataSource.NetworkResult.Success(result.data)
+                MainDataSource.NetworkResult.Success(result.successObjectData)
             }
             is MainDataSource.NetworkResult.Error -> {
                 val exception = result.exception
@@ -75,7 +93,7 @@ class MainRepository(private val dataSource: MainDataSource) {
         return when (val result = dataSource.addMember(uId, email, nickname,pwd)) {
             is MainDataSource.NetworkResult.Success -> {
                 Log.d("FFF", "result=$result.data")
-                MainDataSource.NetworkResult.Success(result.data)
+                MainDataSource.NetworkResult.Success(result.successObjectData)
                 //TODO 新增主委後的流程
             }
             is MainDataSource.NetworkResult.Error -> {

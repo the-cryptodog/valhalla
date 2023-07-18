@@ -15,6 +15,7 @@ import com.app.valhalla.util.Constant.BASE_URL
 import com.app.valhalla.util.Constant.SAVED_URL_NAME
 import com.app.valhalla.util.Constant.SAVED_URL_VALUE
 import com.app.valhalla.util.Constant.SAVE_UID_NAME
+import com.app.valhalla.util.GlobalUID
 import com.app.valhalla.util.PrefUtil
 import com.blankj.utilcode.util.ToastUtils
 import kotlinx.coroutines.Dispatchers
@@ -149,12 +150,12 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                     when (result) {
                         is MainDataSource.NetworkResult.Success -> {
                             //isHasSameProperty = 1就是成功 0是完全沒這個人，-1是因為密碼登入失敗
-                            val errorCheck = result.data?.property_contents
+                            val errorCheck = result.successObjectData?.property_contents
                             if (errorCheck?.isHasSameProperty == "1") {
                                 //成功
                                 loadingViewStatePublisher.value = LoadingViewState.HideLoadingView
                                 _loginResultViewState.value =
-                                    LoginResultViewState.LoginSuccessButtonState(result.data?.property_contents!!.nickname)
+                                    LoginResultViewState.LoginSuccessButtonState(result.successObjectData?.property_contents!!.nickname)
                             } else {
                                 _loginResultViewState.value =
                                     errorCheck?.let {
@@ -188,7 +189,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                         //-2:nickname重覆
                         //-3:email重覆
                         Log.d("FFF", "註冊回傳Success")
-                        val resultMsg = result.data?.property_contents?.isHasSameProperty
+                        val resultMsg = result.successObjectData?.property_contents?.isHasSameProperty
                         if (resultMsg == "1") {
                             //新增成功 轉跳checkMember
                             checkMember(context, email, nickName, false)
@@ -198,7 +199,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
                                 _registerResultViewState.value =
                                     resultMsg?.let {
                                         RegisterResultViewState.RegisterFailedState(
-                                            result.data.property_contents.hint
+                                            result.successObjectData.property_contents.hint
                                         )
                                     }
                             }
@@ -218,10 +219,13 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
 
 
     private suspend fun getSavedUid(context: Context): String {
-        val uid = PrefUtil(context).getString(SAVE_UID_NAME)
-        Log.d("FFF", "id = $uid")
-        return PrefUtil(context).getString(SAVE_UID_NAME).ifEmpty {
+        val id = PrefUtil(context).getString(SAVE_UID_NAME)
+        return if(id.isNotEmpty()){
+            GlobalUID.updateSavedUID(id)
+            id
+        }else{
             val uniqueID = UUID.randomUUID().toString()
+            GlobalUID.updateSavedUID(uniqueID)
             PrefUtil(context).putString(SAVE_UID_NAME, uniqueID)
             uniqueID
         }
@@ -253,7 +257,7 @@ class LaunchViewModel(private val repository: MainRepository) : BaseViewModel() 
         try {
             val result = repository.getNextApi()
             if (result is MainDataSource.NetworkResult.Success) {
-                val resultUrl = result.data?.property_contents?.ApiList.toString()
+                val resultUrl = result.successObjectData?.property_contents?.ApiList.toString()
                 if (resultUrl != BASE_URL) {
                     return resultUrl
                 }
