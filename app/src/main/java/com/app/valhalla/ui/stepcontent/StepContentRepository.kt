@@ -10,9 +10,9 @@ class StepContentRepository(private val listener:ReturnContentListener) {
     suspend fun get_Content(step_name:String,step_no:String){
         try {
             var stepcontentquery=Network.apiService.getStepContent(step_name,step_no).await()
-            Log.d("stepContent",stepcontentquery.message)
+            Log.d("stepContent",stepcontentquery.property_contents.step_content)
             withContext(Dispatchers.Main){
-                listener.onStepContentCallback(stepcontentquery.message)
+                listener.onStepContentCallback(stepcontentquery.property_contents.step_content)
             }
         } catch (e: Exception) {
             Log.d("stepContent",  e.message.toString())
